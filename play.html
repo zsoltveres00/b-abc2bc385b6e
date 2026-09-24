@@ -74,6 +74,8 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 .bar button img.nic{width:30px;height:30px;object-fit:contain}
 .bar button.on img.nic{filter:drop-shadow(0 0 4px color-mix(in srgb,var(--brand) 60%,transparent))}
 .node .dot img.simg{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.node .dot img.nic{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.node .dot img.nic.lk{width:22px;height:22px;opacity:.85;filter:none}
 .card-bal img.tbig{width:48px;height:48px;object-fit:contain;flex:none}
 .shop .ic img{width:56px;height:56px;object-fit:contain;display:block}
 /* The review card of a finished station pops out of the station itself, not up from the bottom. */
@@ -1262,9 +1264,9 @@ function pathHtml(){
         var inner='';
         if(kind==='chest'){ inner=chestHtml(d,44); }
         else if(d&&kind==='task'){ inner=starIco(slotStars(m,p,slot)); }
-        else if(kind==='story'){ inner=d?starIco(3):ico('book'); }
-        else if(unl){ inner='<span class="mark"></span>'; }
-        else { inner=ico('lock'); }
+        else if(kind==='story'){ inner=d?starIco(3):(img('node-story','nic')||ico('book')); }
+        else if(unl){ inner=img('node-task','nic')||'<span class="mark"></span>'; }
+        else { inner=img('node-lock','nic lk')||ico('lock'); }
         var label=kind==='story'?s.stStory:kind==='chest'?s.stChest:'';
         // The hero of the part stands beside the path, level with the chest; Olivia opens the quest once the chest is done.
         var heroHtml='';
