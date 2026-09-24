@@ -135,6 +135,7 @@ img.mascot{object-fit:contain}
 .jump svg{width:22px;height:22px;fill:#fff}
 .goal{display:flex;align-items:center;gap:8px;margin:-4px 0 12px;padding:8px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-size:13px;font-weight:700}
 .goal svg{width:16px;height:16px;fill:var(--brand);flex:none}
+.goal img.gic{width:26px;height:26px;object-fit:contain;flex:none}
 /* A cel maga egy sorban maradjon telefonon is; a jobb oldali megjegyzes torhet. */
 .goal>span{white-space:nowrap;flex:none}
 .goal.ok{border-color:var(--correct)}.goal.ok svg{fill:var(--correct)}
@@ -1124,7 +1125,7 @@ function lessonTag(m,l){ var s=T(); if(l.hero){ var hr=heroById(m,l.hero); retur
   return '<span class="ltag">'+(img(m.icon||('unit-'+m.id),'hmini')||'')+'<b>'+(l.pi+1)+'. '+esc(s.part.toLowerCase())+'</b> · '+esc(lbl)+'</span>'; }
 // One green bar for the whole station; review questions extend the total so the bar only fills at the very end.
 function progressHtml(){ var s=T(), total=lesson.grand||lesson.queue.length, done=lesson.doneCount||0, pct=Math.round(100*done/total); return '<div class="pbar '+(lesson.reviewing?'rev':'')+'"><i style="width:'+pct+'%"></i></div>'+(lesson.reviewing?'<div class="rt">'+ico('redo')+esc(s.reviewTag)+'</div>':''); }
-function goalHtml(){ var s=T(), ok=studiedToday(); return '<div class="goal '+(ok?'ok':'')+'">'+ico(ok?'check':'flag')+'<span>'+esc(ok?s.goalDone:s.goalTodo)+'</span><b>'+esc(s.studyDays(studyDays()))+(daysToNextStage()?' · '+esc(s.stageProgress(daysToNextStage())):' · '+esc(s.stageMax))+'</b></div>'; }
+function goalHtml(){ var s=T(), ok=studiedToday(); return '<div class="goal '+(ok?'ok':'')+'">'+(img(ok?'icon-goal-done':'icon-goal','gic')||ico(ok?'check':'flag'))+'<span>'+esc(ok?s.goalDone:s.goalTodo)+'</span><b>'+esc(s.studyDays(studyDays()))+(daysToNextStage()?' · '+esc(s.stageProgress(daysToNextStage())):' · '+esc(s.stageMax))+'</b></div>'; }
 function renderStory(){
   var s=T(), m=C.modules[lesson.ui], p=m.parts[lesson.pi], d=assessing()?'m':(S.diff||'m');
   var txt=(p.story&&(p.story[d]||p.story.m||p.story.e||p.story.h))||'', h='';
