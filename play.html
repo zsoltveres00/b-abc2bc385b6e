@@ -1125,7 +1125,9 @@ function finish(){ var u=C.modules[lesson.ui], ok=!lesson.failed, gain=lesson.fi
 // gyakorolhatja. Amire itt elsore jol felel, az lekerul a listarol.
 // A bejelentesek ide futnak be. Amig ures, csak a keszuleken gyulnek.
 // A formId a Google Urlap cimebol, a mezok a kitoltott minta-linkbol jonnek.
-var REPORT_FORM={ formId:'', mezo:{ ok:'', kerdes:'', hol:'', tipus:'', verzio:'' } };
+// The reports go into the "BibleTravel - hibabejelentesek" Google Form, and from there into its response sheet.
+var REPORT_FORM={ formId:'1FAIpQLSdCWzkf0e-wtXNmgkCMAEmek2qHX4BAyzz9xSLJs2fuvQMTlw',
+  mezo:{ ok:'entry.922843493', kerdes:'entry.498602444', hol:'entry.1669139837', tipus:'entry.1877104504', verzio:'entry.1196088696' } };
 function reportUrl(){ return REPORT_FORM.formId?('https://docs.google.com/forms/d/e/'+REPORT_FORM.formId+'/formResponse'):''; }
 function sendReport(r){ var url=reportUrl(); if(!url||r.kuldve) return Promise.resolve(false);
   var fd=new FormData(), mz=REPORT_FORM.mezo;
@@ -1168,7 +1170,7 @@ function reportSheet(){ var s=T(), q=curQ(); if(!q) return;
   openSheet(h); }
 function qText(q){ return q&&q.hu?(S.lang==='hu'?q.hu.q:(q.en?q.en.q:q.hu.q)):''; }
 function saveReport(kind){ var s=T(), q=curQ();
-  S.reports=(S.reports||[]); S.reports.unshift({k:kind,q:qText(q),t:q&&q.type||'',hely:lessonWhere(),mikor:new Date().toISOString().slice(0,16).replace('T',' ')});
+  S.reports=(S.reports||[]); S.reports.unshift({k:kind,q:qText(q),t:(q&&q.type)||'mc',hely:lessonWhere(),mikor:new Date().toISOString().slice(0,16).replace('T',' ')});
   if(S.reports.length>200) S.reports.length=200; persist(); sendReport(S.reports[0]);
   openSheet('<h4>'+esc(s.reportsTitle)+'</h4><p class="rhint" style="text-align:left">'+esc(s.reportThanks)+'</p>'); }
 function lessonWhere(){ if(!lesson) return '';
