@@ -348,6 +348,26 @@ svg.fsvg{width:18px;height:18px;fill:var(--brand);vertical-align:-3px}
 .banner:disabled{opacity:.6;cursor:default}
 
 /* path */
+/* Minden resznek sajat halvany szine van; tiz szin utan ujrakezdodik a sor.
+   A szin a hatterbe van keverve, ezert sotet modban is magatol illeszkedik. */
+.pgroup{margin:0 -10px 6px;padding:4px 10px 12px;border-radius:18px;
+  background:color-mix(in srgb,var(--psz,var(--bg)) 13%,var(--bg))}
+:root[data-theme="dark"] .pgroup{background:color-mix(in srgb,var(--psz,var(--bg)) 17%,var(--bg))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pgroup{background:color-mix(in srgb,var(--psz,var(--bg)) 17%,var(--bg))}}
+.pc0{--psz:#FF8A3C}
+.pc1{--psz:#2FBF71}
+.pc2{--psz:#3CA5FF}
+.pc3{--psz:#A06BFF}
+.pc4{--psz:#FFC531}
+.pc5{--psz:#FF6B8A}
+.pc6{--psz:#8FC93A}
+.pc7{--psz:#25BFBF}
+.pc8{--psz:#C98A4B}
+.pc9{--psz:#6C7BFF}
+/* A savon belul a feliratok alatetje is a sav szinet vegye fel. */
+.pgroup .node small,.pgroup .hero-node small{background:color-mix(in srgb,var(--psz,var(--bg)) 13%,var(--bg))}
+:root[data-theme="dark"] .pgroup .node small,:root[data-theme="dark"] .pgroup .hero-node small{background:color-mix(in srgb,var(--psz,var(--bg)) 17%,var(--bg))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pgroup .node small,:root:not([data-theme="light"]) .pgroup .hero-node small{background:color-mix(in srgb,var(--psz,var(--bg)) 17%,var(--bg))}}
 .path{position:relative}
 .path .pblock{position:relative;background-size:100% auto;background-repeat:repeat-y;background-position:top center;border-radius:18px;overflow:hidden}
 .path .pblock::before{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 58%,transparent);pointer-events:none;z-index:0}
@@ -873,7 +893,7 @@ function loseHeart(){ if(S.heartLosses.length<HEARTS){ S.heartLosses.push(Date.n
 
 // ---------- progress: modul -> resz -> allomas ----------
 // Every part has 8 slots: 0 = story, 1-3 = task, 4 = chest, 5-7 = task.
-var SLOTS=8, STORY_SLOT=0, CHEST_SLOT=4;
+var SLOTS=8, STORY_SLOT=0, CHEST_SLOT=4, OLIVIA_SLOT=1;
 function slotKind(slot){ return slot===STORY_SLOT?'story':slot===CHEST_SLOT?'chest':'task'; }
 // Task slots 1,2,3,5,6,7 map to the part's 6 task stations 0..5.
 function taskIndex(slot){ return slot<CHEST_SLOT?slot-1:slot-2; }
@@ -1543,6 +1563,8 @@ function pathHtml(){
     if(win.from>0) html+='<div class="pskip">'+esc(s.partsBefore(win.from))+'</div>';
     for(var pi=win.from;pi<=win.to;pi++){
       var p=m.parts[pi], pun=partUnlocked(mi,pi), pdone=partDone(m,p);
+      // Minden resz sajat halvany szint kap; tiz szin utan ujrakezdodik a sor.
+      html+='<div class="pgroup pc'+(pi%10)+'">';
       html+='<div class="phead '+(pdone?'done':pun?'':'lock')+'" data-part="'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+NM(p))+'"><b>'+(pi+1)+'.</b> '+esc(NM(p))+(REF(p)?'<i>'+esc(REF(p))+'</i>':'')+'</div>';
       for(var slot=0;slot<SLOTS;slot++){
         var kind=slotKind(slot), d=slotDone(m,p,slot), unl=slotUnlocked(mi,pi,slot);
@@ -1556,7 +1578,8 @@ function pathHtml(){
         else if(unl){ inner=img('node-task','nic')||'<span class="mark"></span>'; }
         else { inner=img('node-lock','nic lk')||ico('lock'); }
         var label=kind==='story'?s.stStory:kind==='chest'?s.stChest:'';
-        // The hero of the part stands beside the path, level with the chest; Olivia opens the quest once the chest is done.
+        // A resz hose az osveny jobb oldalan all, a kincseslada magassagaban,
+        // Olivia pedig a bal oldalon, a masodik allomas soraban - igy nem torlodnak.
         var heroHtml='';
         if(kind==='chest'){
           (m.heroes||[]).filter(function(hq){return hq.at===pi;}).forEach(function(hr){
@@ -1565,7 +1588,8 @@ function pathHtml(){
               '<span class="hstars">'+[0,1,2].map(function(k){ return '<i class="s'+k+(hs>k?' on':'')+'">'+starIco(3)+'</i>'; }).join('')+'</span>'+
               '<span class="hf">'+(img(hr.img)||'<i>'+esc(NM(hr).charAt(0))+'</i>')+'</span><small>'+esc(NM(hr))+'</small></button>';
           });
-          // Olivia waits beside every part with her own little quest, opened by the chest.
+        }
+        if(slot===OLIVIA_SLOT){
           var ou=oliviaUnlocked(mi,pi), os=oliviaStars(m,p);
           heroHtml+='<button type="button" class="hero-node left '+(ou?'open':'locked')+(os===3?' done':'')+'" data-olivia="'+mi+','+pi+'" '+(ou?'':'disabled')+'>'+
             '<span class="hstars">'+[0,1,2].map(function(k){ return '<i class="s'+k+(os>k?' on':'')+'">'+starIco(3)+'</i>'; }).join('')+'</span>'+
@@ -1574,6 +1598,7 @@ function pathHtml(){
         html+='<div class="row"><button type="button" class="'+cls+'" data-slot="'+mi+','+pi+','+slot+'" style="--uc:'+m.color+'"'+(can?'':'disabled')+'>'+
           '<div class="dot">'+(isNext?'<span class="ring"></span>':'')+inner+'</div>'+(label?'<small>'+esc(label)+'</small>':'')+'</button>'+heroHtml+'</div>';
       }
+      html+='</div>';  // a resz szines savjanak vege
       // After every tenth part (and at the end of the module) a test that can open the whole block.
       if(blockEnd(m,pi)){ var bl=blockOf(pi), bdone=blockDone(m,bl), bpass=testPassed(mi,bl);
         html+='<div class="testrow"><button type="button" class="testnode'+(bpass?' done':bdone?' skip':'')+'" data-testbtn="'+mi+','+bl+'" style="--uc:'+m.color+'">'+
@@ -1608,10 +1633,11 @@ function syncStickyPart(){
 }
 function layoutPath(){
   var path=document.getElementById('path'); if(!path) return;
-  var w=path.clientWidth, cx=w/2, amp=Math.min(w/2-58,120), i=0;
+  var w=path.clientWidth;
   path.querySelectorAll('.node').forEach(function(n){
     var slot=+(n.dataset.slot||'0,0,0').split(',')[2];
-    n.style.left=(cx+amp*Math.sin(slot/SLOTS*2*Math.PI))+'px'; i++;
+    var sw=(n.parentNode&&n.parentNode.clientWidth)||w, cx=sw/2, amp=Math.min(sw/2-58,120);
+    n.style.left=(cx+amp*Math.sin(slot/SLOTS*2*Math.PI))+'px';
   });
   // A szintlepo kornel az ut megall a kor szelenel, es onnan indul tovabb,
   // hogy a szurke vonal ne latszodjon at a koron.
