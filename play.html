@@ -372,7 +372,7 @@ svg.fsvg{width:18px;height:18px;fill:var(--brand);vertical-align:-3px}
 .phead i{margin-left:auto;font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
 .phead.done{opacity:.65}.phead.lock{opacity:.45}
 .testrow{display:flex;justify-content:center;margin:16px 0 10px}
-.testnode{display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-tap-highlight-color:transparent}
+.testnode{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-tap-highlight-color:transparent}
 .testnode .tcirc{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(var(--surface),color-mix(in srgb,var(--uc,var(--brand)) 14%,var(--surface)));border:3px dashed var(--uc,var(--brand));box-shadow:0 5px 0 color-mix(in srgb,var(--uc,var(--brand)) 35%,transparent),0 8px 10px var(--shadow);transition:transform .08s,box-shadow .08s}
 .testnode:active .tcirc{transform:translateY(5px);box-shadow:0 1px 0 color-mix(in srgb,var(--uc,var(--brand)) 35%,transparent),0 3px 6px var(--shadow)}
 .testnode .tcirc svg{width:34px;height:34px;fill:var(--uc,var(--brand))}
@@ -1613,23 +1613,28 @@ function layoutPath(){
     var slot=+(n.dataset.slot||'0,0,0').split(',')[2];
     n.style.left=(cx+amp*Math.sin(slot/SLOTS*2*Math.PI))+'px'; i++;
   });
-  // The level-up circle sits on the road too, so the line runs through it.
-  var top=path.getBoundingClientRect(), pts=[], done=[];
+  // A szintlepo kornel az ut megall a kor szelenel, es onnan indul tovabb,
+  // hogy a szurke vonal ne latszodjon at a koron.
+  var top=path.getBoundingClientRect(), pts=[], done=[], vag=[];
   path.querySelectorAll('.node,.testnode').forEach(function(el){
     var c=el.querySelector('.dot')||el.querySelector('.tcirc'); if(!c) return;
     var r=c.getBoundingClientRect();
     pts.push([(r.left+r.right)/2-top.left,(r.top+r.bottom)/2-top.top]);
     done.push(el.classList.contains('done'));
+    vag.push(el.classList.contains('testnode')?r.height/2+5:0);
   });
   function seg(a,b){ var my=(a[1]+b[1])/2;
     return ' C '+a[0].toFixed(1)+' '+my.toFixed(1)+', '+b[0].toFixed(1)+' '+my.toFixed(1)+', '+b[0].toFixed(1)+' '+b[1].toFixed(1); }
   var d='', walked='';
   for(var k=1;k<pts.length;k++){
-    var a=pts[k-1], b=pts[k];
-    d+=(k===1?'M '+a[0].toFixed(1)+' '+a[1].toFixed(1):'')+seg(a,b);
+    // a szakasz vegpontjai a korok szelehez igazitva (a rendes allomasoknal ez nulla)
+    var a=[pts[k-1][0],pts[k-1][1]+vag[k-1]], b=[pts[k][0],pts[k][1]-vag[k]];
+    if(b[1]<=a[1]) continue;
+    var eleje='M '+a[0].toFixed(1)+' '+a[1].toFixed(1);
+    d+=eleje+seg(a,b);
     // A szakasz akkor zold, ha az az allomas mar kesz, AHONNAN indul:
     // vagyis amint tovabbhaladtunk rola a kovetkezo fele.
-    if(done[k-1]) walked+='M '+a[0].toFixed(1)+' '+a[1].toFixed(1)+seg(a,b);
+    if(done[k-1]) walked+=eleje+seg(a,b);
   }
   var svg=path.querySelector('svg.line'); svg.setAttribute('viewBox','0 0 '+w+' '+path.scrollHeight);
   svg.innerHTML='<path fill="none" stroke="var(--border)" stroke-width="5" stroke-linecap="round" d="'+d+'"/>'+
