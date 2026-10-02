@@ -453,13 +453,40 @@ button.pskip.pmore:active{transform:scale(.98)}
 .node.open.nohearts .dot{opacity:.5}
 .node.locked .dot{opacity:.55;--edge:color-mix(in srgb,var(--muted) 45%,transparent)}.node.locked .dot svg{fill:var(--muted);width:16px;height:16px;filter:none}
 .node small{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:-6px;font-size:9px;font-weight:800;color:var(--muted);white-space:nowrap;background:var(--bg);padding:1px 6px;border-radius:999px;z-index:2}
-.mbar{position:sticky;top:34px;z-index:3;display:flex;align-items:center;gap:12px;color:#fff;padding:10px 16px;border-radius:14px;box-shadow:0 4px 10px var(--shadow);margin:6px 0 2px}
+/* Modulsav – az Apple listasorainak mintajara: bal oldalt a jelveny gombja,
+   utana egy vekony elvalaszto vonal, majd a szoveg, a sor vegen a jelzes. */
+.mbar{position:sticky;top:34px;z-index:3;display:flex;align-items:center;color:#fff;padding:8px 14px 8px 8px;border-radius:16px;box-shadow:0 4px 10px var(--shadow);margin:6px 0 2px}
+.mbar .mbadge{flex:none;width:54px;height:54px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.2);overflow:hidden;transition:transform .08s}
+.mbar .mbadge img{width:46px;height:46px;object-fit:contain;display:block}
+.mbar .mbadge b{font-family:Spectral,Georgia,serif;font-size:21px;font-weight:700}
+.mbar .mbadge:active{transform:scale(.93)}
+.mbar .mdiv{flex:none;width:1px;height:36px;margin:0 13px;background:rgba(255,255,255,.4)}
 .mbar .mtx{flex:1;min-width:0}
 .mbar .mtx small{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;opacity:.9}
 .mbar .mtx b{display:block;font-family:Spectral,Georgia,serif;font-size:18px;line-height:1.2}
-.mbar span img{width:64px;height:64px;object-fit:contain;display:block}
-.mbar.lock{background:var(--surface);color:var(--muted);border:1px solid var(--border);box-shadow:none}
-.mbar.lock svg{width:20px;height:20px;fill:var(--muted)}
+.mbar>svg{flex:none;width:17px;height:17px;fill:currentColor;opacity:.75;margin-left:8px}
+/* A zart modul is a sajat szinet kapja, nem feher marad. */
+.mbar.lock{position:static;background:color-mix(in srgb,var(--mc) 15%,var(--surface));color:var(--text);
+  border:1px solid color-mix(in srgb,var(--mc) 38%,transparent);box-shadow:none;margin:8px 0 0}
+.mbar.lock .mbadge{background:var(--mc);color:#fff}
+.mbar.lock .mdiv{background:color-mix(in srgb,var(--mc) 42%,transparent)}
+.mbar.lock .mtx small{color:color-mix(in srgb,var(--mc) 60%,var(--muted))}
+.mbar.lock>svg{fill:color-mix(in srgb,var(--mc) 55%,var(--muted));opacity:1}
+/* Reszvalaszto lap: inset listastilus, mint az iOS beallitasaiban. */
+.picklist{max-height:54vh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:14px;padding:4px}
+.pickrow{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;background:none;text-align:left}
+.pickrow+.pickrow{border-top:1px solid var(--border)}
+.pickrow .pnum{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-style:normal;
+  font-size:13px;font-weight:800;background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.pickrow.done .pnum{background:var(--correct);border-color:var(--correct);color:#fff}
+.pickrow.now .pnum{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.pickrow .ptx{flex:1;min-width:0}
+.pickrow .ptx b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pickrow .ptx small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.pickrow svg{flex:none;width:14px;height:14px;fill:var(--muted)}
+.pickrow.done svg{fill:var(--correct)}
+.pickrow.lock{opacity:.5;cursor:default}
+.picknote{margin:10px 2px 2px;font-size:13px;line-height:1.45;color:var(--muted);text-align:center}
 .chest{position:absolute;top:-2px;transform:translateX(-50%);width:56px;height:56px;display:grid;place-items:center}
 .chest .ring{--uc:var(--gold);width:78px;height:72px;margin:-36px 0 0 -39px}
 .chest.locked{opacity:.55;cursor:default}.chest.locked .cbox,.chest.locked .cimg{filter:saturate(.2)}
@@ -838,6 +865,7 @@ var STR = {
     partsBefore:function(n){return '↑ '+n+' kész rész'},partsAfter:function(n){return '↓ még '+n+' rész – mutasd mind'},
     modulSoon:'Ez a szakasz hamarosan elkészül. Addig is gyakorolhatsz a korábbi részeken!',
     loadingMore:'Betöltés…',
+    partsPick:'Válassz részt',pickNote:'Koppints egy már megnyílt részre, és odaviszlek az ösvényen.',
     kindName:function(k){return ({mc:'Kérdések',tf:'Igaz vagy hamis',who:'Ki vagyok én?',fill:'Hiányzó szó',pic:'Képfelismerés',lesson:'Mit tanít?',order:'Sorrend',match:'Párosítás',timeline:'Idővonal',map:'Térkép'})[k]||'Feladat'},backHome:'‹ Vissza az ösvényhez',
     stationTag:function(n,t){return n+'/'+t+'. állomás'},next:'Következő',jumpHere:'Ugrás oda, ahol tartasz',yes:'Igaz',no:'Hamis',seeResult:'Eredmény',endLesson:'Lecke vége',
     successTitle:'Állomás teljesítve!',failTitle:'Elfogytak az életeid',failBody:'Semmi baj, a megszerzett pontjaid megmaradnak.',
@@ -874,6 +902,7 @@ var STR = {
     partsBefore:function(n){return '↑ '+n+' parts done'},partsAfter:function(n){return '↓ '+n+' more parts – show all'},
     modulSoon:'This section is coming soon. Until then you can keep practising the earlier parts!',
     loadingMore:'Loading…',
+    partsPick:'Choose a part',pickNote:'Tap a part you have already opened and I will take you there on the path.',
     kindName:function(k){return ({mc:'Questions',tf:'True or false',who:'Who am I?',fill:'Missing word',pic:'Picture quiz',lesson:'What does it teach?',order:'Order',match:'Matching',timeline:'Timeline',map:'Map'})[k]||'Task'},backHome:'‹ Back to the path',
     stationTag:function(n,t){return 'Station '+n+'/'+t},next:'Next',jumpHere:'Jump to where you are',yes:'True',no:'False',seeResult:'See result',endLesson:'End lesson',
     successTitle:'Station complete!',failTitle:'Out of hearts',failBody:'No worries, the points you earned are kept.',
@@ -1636,12 +1665,49 @@ var PART_WINDOW=40, mindResz={};
 function partWindow(mi,parts){ if(mindResz[mi]) return {from:0,to:parts.length-1};
   var nx=nextNode(), cur=(nx&&nx.mi===mi)?nx.pi:(moduleUnlocked(mi)?partsDoneIn(C.modules[mi]):0);
   return {from:0,to:Math.min(parts.length-1,Math.max(cur+PART_WINDOW,PART_WINDOW))}; }
+// A modul sava: a jelveny gomb megnyitja a resz-valasztot, utana elvalaszto vonal es a nev.
+function mbarHtml(m,mi,un){
+  var s=T(), kep=img(m.icon||('unit-'+m.id));
+  return '<div class="mbar'+(un?'':' lock')+'" style="--mc:'+m.color+(un?';background:'+m.color:'')+'">'+
+    '<button type="button" class="mbadge" data-mpick="'+mi+'" aria-label="'+esc(s.partsPick)+'">'+
+      (kep||'<b>'+(mi+1)+'</b>')+'</button>'+
+    '<i class="mdiv"></i>'+
+    '<div class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+(un?' · '+esc(NM(m)):'')+'</small>'+
+      (un?'<b class="pnow"></b>':'<b>'+esc(NM(m))+'</b>')+'</div>'+
+    (un?'':ico('lock'))+'</div>';
+}
+// Az osvenyt a valasztott resz fejlecehez gorgeti, a ragados sav ala.
+// A kepek betoltese kozben valtozik a lap magassaga, ezert tobbszor igazitunk,
+// amig a cel tenyleg a helyere nem kerul.
+function ugrasReszre(kulcs,proba){
+  var cel=view.querySelector('.phead[data-pi="'+kulcs+'"]'); if(!cel) return;
+  var el=cel.getBoundingClientRect().top-84;
+  if(el) view.scrollTop+=el;
+  var n=(proba||0)+1;
+  if(n<6&&Math.abs(cel.getBoundingClientRect().top-84)>18) setTimeout(function(){ ugrasReszre(kulcs,n); },n*120);
+}
+// Resz-valaszto: a modul osszes resze egy listaban, oda lehet ugrani egy koppintassal.
+function modulValaszto(mi){
+  var s=T(), m=C.modules[mi], nx=nextNode();
+  var h='<h4>'+esc((mi+1)+'. '+s.section+' · '+NM(m))+'</h4>';
+  if(!m.parts||!m.parts.length){ openSheet(h+'<p class="picknote">'+esc(s.modulSoon)+'</p>'); return; }
+  h+='<div class="picklist">';
+  m.parts.forEach(function(p,pi){
+    var kesz=partDone(m,p), nyit=partUnlocked(mi,pi), most=nx&&nx.mi===mi&&nx.pi===pi;
+    h+='<button type="button" class="pickrow'+(kesz?' done':'')+(most?' now':'')+(nyit?'':' lock')+'"'+
+      (nyit?' data-goto="'+mi+','+pi+'"':' disabled')+'>'+
+      '<i class="pnum">'+(pi+1)+'</i><span class="ptx"><b>'+esc(NM(p))+'</b>'+
+      (REF(p)?'<small>'+esc(REF(p))+'</small>':'')+'</span>'+
+      (kesz?ico('check'):nyit?ico('chev'):ico('lock'))+'</button>';
+  });
+  openSheet(h+'</div><p class="picknote">'+esc(s.pickNote)+'</p>','picksheet');
+}
 function pathHtml(){
   var s=T(), html='<svg class="line"></svg>', hh=hearts(), nx=nextNode();
   C.modules.forEach(function(m,mi){
     var un=moduleUnlocked(mi);
-    if(!un){ html+='<div class="mbar lock">'+ico('lock')+'<div class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+'</small><b>'+esc(NM(m))+'</b></div></div>'; return; }
-    html+='<div class="mbar" style="background:'+m.color+'"><div class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+' · '+esc(NM(m))+'</small><b class="pnow"></b></div><span>'+(img(m.icon||('unit-'+m.id))||'📖')+'</span></div>';
+    html+=mbarHtml(m,mi,un);
+    if(!un) return;
     // A megnyilt, de meg tartalom nelkuli modul ne ures helyet hagyjon az osvenyen.
     if(!m.parts||!m.parts.length){ html+='<div class="pskip">'+esc(s.modulSoon)+'</div>'; return; }
     var bgName='bg-'+m.id, hasBg=S.mapBg&&hasImg(bgName);
@@ -1655,7 +1721,7 @@ function pathHtml(){
       var zarul=blockEnd(m,pi);
       html+='<div class="pgroup'+(tapadFent?' tfent':'')+(zarul?' tlent':'')+'" style="--psz:'+partHue(pi)+'">';
       tapadFent=false;
-      html+='<div class="phead '+(pdone?'done':pun?'':'lock')+'" data-part="'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+NM(p))+'"><b>'+(pi+1)+'.</b> '+esc(NM(p))+(REF(p)?'<i>'+esc(REF(p))+'</i>':'')+'</div>';
+      html+='<div class="phead '+(pdone?'done':pun?'':'lock')+'" data-pi="'+mi+','+pi+'" data-part="'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+NM(p))+'"><b>'+(pi+1)+'.</b> '+esc(NM(p))+(REF(p)?'<i>'+esc(REF(p))+'</i>':'')+'</div>';
       for(var slot=0;slot<SLOTS;slot++){
         var kind=slotKind(slot), d=slotDone(m,p,slot), unl=slotUnlocked(mi,pi,slot);
         var isNext=nx&&nx.mi===mi&&nx.pi===pi&&nx.slot===slot;
@@ -2082,6 +2148,12 @@ document.getElementById('app').addEventListener('click',function(e){
   // es elotte kiirjuk, hogy dolgozik - kulonben ugy tunik, mintha nem tortent volna semmi.
   if(d.more!=null){ var mi=+d.more; el.textContent=T().loadingMore; el.disabled=true;
     keepScroll=view.scrollTop; setTimeout(function(){ mindResz[mi]=1; render(); },20); return; }
+  if(d.mpick!=null){ modulValaszto(+d.mpick); return; }
+  // Ugras a valasztott reszre: ha az osvenyen meg nincs kirajzolva, elobb kinyitjuk.
+  if(d.goto){ var gkulcs=d.goto, gm=+gkulcs.split(',')[0]; closeSheet(); mindResz[gm]=1; tab='home'; screen={name:'home'};
+    keepScroll=view.scrollTop; render();
+    // A kirajzolas utan a kepek meg valtoztathatjak a magassagot, ezert ketszer igazitunk.
+    ugrasReszre(gkulcs); setTimeout(function(){ ugrasReszre(gkulcs); },350); return; }
   if(el.hasAttribute('data-storydone')){ if(viaWeek(finishStory)) return; finishStory(); return; }
   if(el.hasAttribute('data-buyshield')){ buyShield(); return; }
   if(d.coltab){ colTab=d.coltab; render(); return; }
