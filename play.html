@@ -487,6 +487,14 @@ button.pskip.pmore:active{transform:scale(.98)}
 .pickrow.done svg{fill:var(--correct)}
 .pickrow.lock{opacity:.5;cursor:default}
 .picknote{margin:10px 2px 2px;font-size:13px;line-height:1.45;color:var(--muted);text-align:center}
+/* Ladabol nyert szorzo: az allapotsorban es a lada megnyitasakor. */
+.srow .st.boost{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;
+  background:color-mix(in srgb,var(--gold) 20%,var(--surface));border:1px solid var(--gold);color:var(--gold)}
+.srow .st.boost b{font-size:15px;font-weight:800}
+.srow .st.boost i{font-style:normal;font-size:10px;font-weight:700;opacity:.85}
+.boostwon{margin:8px auto 0;max-width:280px;padding:9px 14px;border-radius:12px;font-size:14px;font-weight:700;
+  background:color-mix(in srgb,var(--gold) 18%,var(--surface));border:1.5px solid var(--gold);color:var(--gold)}
+.boostwon b{font-size:19px;font-weight:800;margin-right:4px}
 .chest{position:absolute;top:-2px;transform:translateX(-50%);width:56px;height:56px;display:grid;place-items:center}
 .chest .ring{--uc:var(--gold);width:78px;height:72px;margin:-36px 0 0 -39px}
 .chest.locked{opacity:.55;cursor:default}.chest.locked .cbox,.chest.locked .cimg{filter:saturate(.2)}
@@ -838,13 +846,13 @@ var S = {
   progress: load('bq-progress',{}), heartLosses: load('bq-heart-losses',[]), streak: load('bq-streak',0),
   lastStudy: load('bq-laststudy',null), chests: load('bq-chests',{}), cards: load('bq-gift-log',[]),
   daily: load('bq-daily',{}), firstStudy: load('bq-first-study',null), stars: load('bq-stars',{}), weekChests: load('bq-week-chests',{}),
-  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
+  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
 };
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
   save('bq-laststudy',S.lastStudy); save('bq-chests',S.chests); save('bq-gift-log',S.cards);
-  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
+  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
 }
 
 // ---------- rules ----------
@@ -866,6 +874,7 @@ var STR = {
     modulSoon:'Ez a szakasz hamarosan elkészül. Addig is gyakorolhatsz a korábbi részeken!',
     loadingMore:'Betöltés…',
     partsPick:'Válassz részt',pickNote:'Koppints egy már megnyílt részre, és odaviszlek az ösvényen.',
+    boostLeft:function(n){return n+' perc'},boostWon:function(n){return ' szorzó a következő '+n+' percben!'},
     kindName:function(k){return ({mc:'Kérdések',tf:'Igaz vagy hamis',who:'Ki vagyok én?',fill:'Hiányzó szó',pic:'Képfelismerés',lesson:'Mit tanít?',order:'Sorrend',match:'Párosítás',timeline:'Idővonal',map:'Térkép'})[k]||'Feladat'},backHome:'‹ Vissza az ösvényhez',
     stationTag:function(n,t){return n+'/'+t+'. állomás'},next:'Következő',jumpHere:'Ugrás oda, ahol tartasz',yes:'Igaz',no:'Hamis',seeResult:'Eredmény',endLesson:'Lecke vége',
     successTitle:'Állomás teljesítve!',failTitle:'Elfogytak az életeid',failBody:'Semmi baj, a megszerzett pontjaid megmaradnak.',
@@ -903,6 +912,7 @@ var STR = {
     modulSoon:'This section is coming soon. Until then you can keep practising the earlier parts!',
     loadingMore:'Loading…',
     partsPick:'Choose a part',pickNote:'Tap a part you have already opened and I will take you there on the path.',
+    boostLeft:function(n){return n+' min'},boostWon:function(n){return ' multiplier for the next '+n+' minutes!'},
     kindName:function(k){return ({mc:'Questions',tf:'True or false',who:'Who am I?',fill:'Missing word',pic:'Picture quiz',lesson:'What does it teach?',order:'Order',match:'Matching',timeline:'Timeline',map:'Map'})[k]||'Task'},backHome:'‹ Back to the path',
     stationTag:function(n,t){return 'Station '+n+'/'+t},next:'Next',jumpHere:'Jump to where you are',yes:'True',no:'False',seeResult:'See result',endLesson:'End lesson',
     successTitle:'Station complete!',failTitle:'Out of hearts',failBody:'No worries, the points you earned are kept.',
@@ -1148,8 +1158,27 @@ function registerToday(){ var t=dayKey(new Date()); S.daily[t]=(S.daily[t]||0)+1
 
 // ---------- chests & cards ----------
 // Chest screen: three taps open it, the reward is paid out on the third.
+// A lada nyeremenye: a talentum neha tobb a szokasosnal, es neha szorzo is jar hozza.
+// Az ertekek utan allo szam az esely sulya - a nagy nyeremeny ritka.
+var LADA_TALENTUM=[[20,74],[50,21],[100,5]];
+var LADA_SZORZO=[[0,0,70],[1.5,30,22],[2,10,8]];
+function sorsol(tabla){ var o=0,i; for(i=0;i<tabla.length;i++) o+=tabla[i][tabla[i].length-1];
+  var r=Math.random()*o; for(i=0;i<tabla.length;i++){ r-=tabla[i][tabla[i].length-1]; if(r<0) return tabla[i]; } return tabla[0]; }
+function ladaNyeremeny(het){
+  // A heti lada mindig ad extrat: aki egesz heten tanult, az megerdemli.
+  if(het) return { talents:weekChestReward(), mult:2, perc:15 };
+  var b=sorsol(LADA_SZORZO);
+  return { talents:sorsol(LADA_TALENTUM)[0], mult:b[0], perc:b[1] };
+}
+function szorzoIndit(mult,perc){ if(!mult||!perc) return; S.boost={m:mult,until:Date.now()+perc*60000}; }
+function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
+// Az allapotsorban latszik, ha eppen szorzo van ervenyben, es mennyi ideig.
+function szorzoChip(){ var m=szorzoMost(); if(m<=1) return '';
+  return '<span class="st boost"><b>'+(m===1.5?'1,5':m)+'×</b><i>'+T().boostLeft(szorzoPerc())+'</i></span>'; }
+function szorzoPerc(){ if(!S.boost||S.boost.until<=Date.now()) return 0; return Math.max(1,Math.ceil((S.boost.until-Date.now())/60000)); }
 function tapChest(){ if(screen.name!=='chest'||screen.taps>=3) return; screen.taps++; haptic('success');
   if(screen.taps>=3){ S.talents+=screen.talents; S.cnt.chests=(S.cnt.chests||0)+1;
+    szorzoIndit(screen.mult,screen.perc);
     if(screen.kind==='part'){ var m=C.modules[screen.mi]; markSlot(m,m.parts[screen.pi],screen.slot,true); registerToday(); }
     else S.weekChests[screen.key]=true; persist(); }
   renderChest(); }
@@ -1226,7 +1255,7 @@ function startSlot(mi,pi,slot,again){
   // A new station shows a short preview card; the task itself starts from its button.
   if(!again&&slot!==CHEST_SLOT&&!slotDone(m,p,slot)){ previewSheet(mi,pi,slot); return; }
   if(slot===STORY_SLOT){ lesson={ui:mi,pi:pi,slot:slot}; screen={name:'story'}; render(); return; }
-  if(slot===CHEST_SLOT){ if(slotDone(m,p,slot)) return; screen={name:'chest',talents:TALENTS_PER_CHEST,taps:0,key:slotKey(m,p,slot),kind:'part',mi:mi,pi:pi,slot:slot}; render(); return; }
+  if(slot===CHEST_SLOT){ if(slotDone(m,p,slot)) return; var ny=ladaNyeremeny(false); screen={name:'chest',talents:ny.talents,mult:ny.mult,perc:ny.perc,taps:0,key:slotKey(m,p,slot),kind:'part',mi:mi,pi:pi,slot:slot}; render(); return; }
   if(hearts()<=0) return;
   var st=p.stations[taskIndex(slot)]; if(!st) return;
   var qs=drawQuestions(m,p,taskIndex(slot)), queue=[]; for(var i=0;i<qs.length;i++) queue.push(i);
@@ -1353,7 +1382,8 @@ function advance(){ if(!lesson) return;
   else if(!lesson.toReview.length){ finish(); return; }
   else { lesson.grand=(lesson.grand||lesson.total)+lesson.toReview.length; lesson.queue=shuffle(lesson.toReview); lesson.toReview=[]; lesson.pos=0; lesson.reviewing=true; }
   prepQ(); render(); document.getElementById('view').scrollTop=0; }
-function finish(){ var u=C.modules[lesson.ui], ok=!lesson.failed, gain=lesson.firstTry*XP_PER+(ok?BONUS:0); S.xp+=gain;
+function finish(){ var u=C.modules[lesson.ui], ok=!lesson.failed, bst=szorzoMost();
+  var gain=Math.round((lesson.firstTry*XP_PER+(ok?BONUS:0))*bst); S.xp+=gain;
   var ms=Date.now()-(lesson.t0||Date.now()), pct=lesson.total?Math.round(100*lesson.firstTry/lesson.total):0, sec=lesson.total?Math.round(ms/1000/lesson.total):0;
   var was=unitComplete(u), just=false, stars=0, tg=0, mult=multiplierFor(lesson.bestRun);
   var stageBefore=stage(); S.cnt.correct=(S.cnt.correct||0)+lesson.firstTry;
@@ -1377,7 +1407,7 @@ function finish(){ var u=C.modules[lesson.ui], ok=!lesson.failed, gain=lesson.fi
     markSlot(u,p,lesson.slot,Math.max(slotStars(u,p,lesson.slot),stars)); just=!was&&unitComplete(u);
     // Replaying a finished station only pays the full reward for a flawless run.
     if(lesson.replay&&stars<3){ S.xp-=gain; gain=REPLAY_XP; S.xp+=gain; }
-    else { tg=Math.round(TALENTS_PER_STATION*mult); S.talents+=tg; } }
+    else { tg=Math.round(TALENTS_PER_STATION*mult*bst); S.talents+=tg; } }
   else if(lesson.replay){ S.xp-=gain; gain=0; }
   var st=registerToday(); var newDiff=maybeAdjustDifficulty(); persist();
   var nx=nextNode(), chestNext=ok&&nx&&nx.mi===lesson.ui&&nx.pi===lesson.pi&&nx.kind==='chest';
@@ -1462,7 +1492,7 @@ var weekNext=null;
 // A napi sorozat kepernyoje nem ugrik fel tobbe a feladatok utan (a heti csik a fooldalon tovabbra is latszik).
 // A szeria kepernyoje a nap elso teljesitett feladata utan jon be, naponta egyszer.
 function viaWeek(fn){ if(screen.name==='result'&&screen.r.firstToday&&!screen.r.weekShown){ screen.r.weekShown=true; weekNext=fn; screen={name:'week',r:screen.r}; render(); return true; } return false; }
-function openWeekChest(){ if(!weekChestEarned()) { goHome(); return; } screen={name:'chest',talents:weekChestReward(),bonus:weekComplete()?TALENTS_PER_CHEST:0,taps:0,key:weekKey(new Date()),kind:'week'}; render(); }
+function openWeekChest(){ if(!weekChestEarned()) { goHome(); return; } var hny=ladaNyeremeny(true); screen={name:'chest',talents:hny.talents,mult:hny.mult,perc:hny.perc,bonus:weekComplete()?TALENTS_PER_CHEST:0,taps:0,key:weekKey(new Date()),kind:'week'}; render(); }
 function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges()) maybeTour(tab==='home'?'home':tab); }
 
 // ---------- rendering ----------
@@ -1508,7 +1538,7 @@ function renderPlaceResult(){ var s=T(), lvl=screen.lvl;
     '<div class="acts"><button type="button" class="primary" data-placego>'+esc(s.placeGo)+'</button></div></div>';
   view.innerHTML=h; foot.innerHTML=''; }
 function chipsHtml(){
-  return '<div class="srow"><button type="button" class="st c-gold" data-tab="stats">'+(img('icon-streak','sic')||ico('flame'))+'<span class="n">'+displayStreak()+'</span></button>'+heartChip()+'<button type="button" class="st" data-tab="collection">'+(img('talent-big','sic')||img('icon-talent','sic')||'<i class="coin"></i>')+'<span class="n">'+S.talents+'</span></button></div>';
+  return '<div class="srow">'+szorzoChip()+'<button type="button" class="st c-gold" data-tab="stats">'+(img('icon-streak','sic')||ico('flame'))+'<span class="n">'+displayStreak()+'</span></button>'+heartChip()+'<button type="button" class="st" data-tab="collection">'+(img('talent-big','sic')||img('icon-talent','sic')||'<i class="coin"></i>')+'<span class="n">'+S.talents+'</span></button></div>';
 }
 function heartChip(){ var h=hearts();
   return '<span class="st c-wrong" id="heartChip">'+(img('icon-heart','sic')||ico('heart'))+'<span class="n">'+h+'</span>'+(h<HEARTS?'<span class="tm">'+mmss(msToNextHeart())+'</span>':'')+'</span>';
@@ -2017,7 +2047,7 @@ function renderChest(){
   var cls=open?'opened':(screen.taps===0?'idle':'w'+(screen.taps%2+1)+' t'+screen.taps), parts='';
   if(screen.taps>0){ var n=open?14:5, coin=talentIco('fly'), star=starIco(3), glyphs=open?[coin,star,'✨',coin,star]:['✨',star,'✨']; for(var k=0;k<n;k++){ var a=(Math.PI*(open?2:1.2))*(k/n)+(open?0:Math.PI*-0.1)+(open?0:0), dist=open?90+Math.random()*70:50+Math.random()*30; var dx=(open?Math.cos(a):Math.cos(Math.PI+a))*dist, dy=(open?Math.sin(a):-Math.abs(Math.sin(a)))*dist-(open?0:30); parts+='<span class="p" style="--dx:'+dx.toFixed(0)+'px;--dy:'+dy.toFixed(0)+'px;--r:'+((Math.random()*160-80)|0)+'deg;animation-delay:'+(Math.random()*.15).toFixed(2)+'s">'+glyphs[k%glyphs.length]+'</span>'; } }
   h+='<button type="button" class="tapchest '+cls+'" data-tap '+(open?'disabled':'')+'><span class="glow"></span>'+chestHtml(open,150)+parts+'</button>';
-  if(open){ h+='<div class="reveal"><div class="gain">'+talentIco('spin')+'<span class="xp">'+esc(s.talentsGain(screen.talents))+'</span></div>'+(screen.bonus?'<div class="m c-gold" style="font-weight:700">'+esc(s.weekBonus(screen.bonus))+'</div>':'')+'<div class="m">'+esc(s.talentsBalance(S.talents))+'</div>'+
+  if(open){ h+='<div class="reveal"><div class="gain">'+talentIco('spin')+'<span class="xp">'+esc(s.talentsGain(screen.talents))+'</span></div>'+(screen.bonus?'<div class="m c-gold" style="font-weight:700">'+esc(s.weekBonus(screen.bonus))+'</div>':'')+(screen.mult?'<div class="boostwon"><b>'+(screen.mult===1.5?'1,5':screen.mult)+'×</b>'+esc(s.boostWon(screen.perc))+'</div>':'')+'<div class="m">'+esc(s.talentsBalance(S.talents))+'</div>'+
     '<div class="acts"><button type="button" class="primary" data-home>'+esc(s.backHome)+'</button><button type="button" class="secondary" data-gotab="collection">'+esc(s.tabCollection)+'</button></div></div>'; }
   else { h+='<div class="tapme">'+ico('up')+'<span>'+esc(s.tapChest)+'</span></div><div class="tdots">'+d+'</div>'; }
   view.innerHTML=h+'</div>'; foot.innerHTML='';
