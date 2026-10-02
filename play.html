@@ -427,6 +427,8 @@ svg.fsvg{width:18px;height:18px;fill:var(--brand);vertical-align:-3px}
 .testnode.skip .tcirc{border-style:solid;border-color:var(--correct)}
 .testnode.skip .tcirc svg{fill:var(--correct)}
 .pskip{text-align:center;font-size:11px;font-weight:700;color:var(--muted);margin:10px 0;letter-spacing:.03em}
+button.pskip.pmore{display:block;width:100%;padding:10px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--brand)}
+button.pskip.pmore:active{transform:scale(.98)}
 .pref{font-size:12px;font-weight:700;color:var(--gold);margin:-8px 0 12px}
 .node.n-story .dot{background:linear-gradient(var(--surface),#EDE9FF);--edge:#C9C0EC}
 .node.n-story .dot svg{width:22px;height:22px;fill:var(--brand)}
@@ -833,8 +835,9 @@ var STAGES=[0,1,3,7,14,30,60,120,240,365];
 var STR = {
   hu:{brand:'BibleTravel',subtitle:'Utazás a Bibliában · Fedezd fel a Bibliát, éld át a kalandot!',greeting:function(n){return 'Szia, '+n+'!'},level:'Szint',
     unitProgress:function(d,t){return d+'/'+t+' állomás'},partProgress:function(d,t){return d+'/'+t+' rész'},section:'MODUL',station:'ÁLLOMÁS',part:'RÉSZ',stStory:'Történet',stChest:'Kincsesláda',stTask:function(n){return (n+1)+'. feladat'},
-    partsBefore:function(n){return '↑ '+n+' kész rész'},partsAfter:function(n){return '↓ még '+n+' rész ebben a modulban'},
+    partsBefore:function(n){return '↑ '+n+' kész rész'},partsAfter:function(n){return '↓ még '+n+' rész – mutasd mind'},
     modulSoon:'Ez a szakasz hamarosan elkészül. Addig is gyakorolhatsz a korábbi részeken!',
+    loadingMore:'Betöltés…',
     kindName:function(k){return ({mc:'Kérdések',tf:'Igaz vagy hamis',who:'Ki vagyok én?',fill:'Hiányzó szó',pic:'Képfelismerés',lesson:'Mit tanít?',order:'Sorrend',match:'Párosítás',timeline:'Idővonal',map:'Térkép'})[k]||'Feladat'},backHome:'‹ Vissza az ösvényhez',
     stationTag:function(n,t){return n+'/'+t+'. állomás'},next:'Következő',jumpHere:'Ugrás oda, ahol tartasz',yes:'Igaz',no:'Hamis',seeResult:'Eredmény',endLesson:'Lecke vége',
     successTitle:'Állomás teljesítve!',failTitle:'Elfogytak az életeid',failBody:'Semmi baj, a megszerzett pontjaid megmaradnak.',
@@ -868,8 +871,9 @@ var STR = {
     reset:'Haladás törlése',resetConfirm:'Biztosan törlöd az összes haladást?',locale:'hu-HU',firstDay:1,webNote:'Webes próbaverzió – a haladás ebben a böngészőben mentődik.'},
   en:{brand:'Bible Path',subtitle:'Learn the story of the Bible step by step',greeting:function(n){return 'Hi, '+n+'!'},level:'Level',
     unitProgress:function(d,t){return d+'/'+t+' stations'},partProgress:function(d,t){return d+'/'+t+' parts'},section:'MODULE',station:'STATION',part:'PART',stStory:'Story',stChest:'Treasure chest',stTask:function(n){return 'Task '+(n+1)},
-    partsBefore:function(n){return '↑ '+n+' parts done'},partsAfter:function(n){return '↓ '+n+' more parts in this module'},
+    partsBefore:function(n){return '↑ '+n+' parts done'},partsAfter:function(n){return '↓ '+n+' more parts – show all'},
     modulSoon:'This section is coming soon. Until then you can keep practising the earlier parts!',
+    loadingMore:'Loading…',
     kindName:function(k){return ({mc:'Questions',tf:'True or false',who:'Who am I?',fill:'Missing word',pic:'Picture quiz',lesson:'What does it teach?',order:'Order',match:'Matching',timeline:'Timeline',map:'Map'})[k]||'Task'},backHome:'‹ Back to the path',
     stationTag:function(n,t){return 'Station '+n+'/'+t},next:'Next',jumpHere:'Jump to where you are',yes:'True',no:'False',seeResult:'See result',endLesson:'End lesson',
     successTitle:'Station complete!',failTitle:'Out of hearts',failBody:'No worries, the points you earned are kept.',
@@ -1627,8 +1631,9 @@ function renderHome(){
 // The path: each part is a winding run of 8 stations (story, 3 tasks, chest, 3 tasks).
 // The whole module can be scrolled through so the road ahead is visible; only a very long
 // module is cut off (there can be 100 parts per module).
-var PART_WINDOW=40;
-function partWindow(mi,parts){ var nx=nextNode(), cur=(nx&&nx.mi===mi)?nx.pi:(moduleUnlocked(mi)?partsDoneIn(C.modules[mi]):0);
+var PART_WINDOW=40, mindResz={};
+function partWindow(mi,parts){ if(mindResz[mi]) return {from:0,to:parts.length-1};
+  var nx=nextNode(), cur=(nx&&nx.mi===mi)?nx.pi:(moduleUnlocked(mi)?partsDoneIn(C.modules[mi]):0);
   return {from:0,to:Math.min(parts.length-1,Math.max(cur+PART_WINDOW,PART_WINDOW))}; }
 function pathHtml(){
   var s=T(), html='<svg class="line"></svg>', hh=hearts(), nx=nextNode();
@@ -1691,7 +1696,7 @@ function pathHtml(){
           '<span class="tcirc">'+((bpass?img('test-levelup-done'):null)||img('test-levelup')||ico(bpass?'seal':'rosette'))+'</span><small>'+esc(s.testNode)+'</small></button></div>';
       }
     }
-    if(win.to<m.parts.length-1) html+='<div class="pskip">'+esc(s.partsAfter(m.parts.length-1-win.to))+'</div>';
+    if(win.to<m.parts.length-1) html+='<button type="button" class="pskip pmore" data-more="'+mi+'">'+esc(s.partsAfter(m.parts.length-1-win.to))+'</button>';
     if(hasBg) html+='</div>';
   });
   return html;
@@ -2072,6 +2077,10 @@ document.getElementById('app').addEventListener('click',function(e){
   if(d.pick!=null){ pickOrder(+d.pick); return; }
   if(el.hasAttribute('data-orderreset')){ resetOrder(); return; }
   if(el.hasAttribute('data-jump')){ jumpToCurrent(); return; }
+  // A hatralevo reszek kirajzolasa masodpercekig tarthat, ezert csak keresre nyilik ki,
+  // es elotte kiirjuk, hogy dolgozik - kulonben ugy tunik, mintha nem tortent volna semmi.
+  if(d.more!=null){ var mi=+d.more; el.textContent=T().loadingMore; el.disabled=true;
+    keepScroll=view.scrollTop; setTimeout(function(){ mindResz[mi]=1; render(); },20); return; }
   if(el.hasAttribute('data-storydone')){ if(viaWeek(finishStory)) return; finishStory(); return; }
   if(el.hasAttribute('data-buyshield')){ buyShield(); return; }
   if(d.coltab){ colTab=d.coltab; render(); return; }
