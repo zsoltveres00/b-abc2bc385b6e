@@ -1700,7 +1700,7 @@ function partWindow(mi,parts){ if(mindResz[mi]) return {from:0,to:parts.length-1
 // A modul sava: a jelveny gomb megnyitja a resz-valasztot, utana elvalaszto vonal es a nev.
 function mbarHtml(m,mi,un){
   var s=T(), kep=img(m.icon||('unit-'+m.id));
-  return '<div class="mbar'+(un?'':' lock')+'" style="--mc:'+m.color+(un?';background:'+m.color:'')+'">'+
+  return '<div class="mbar'+(un?'':' lock')+'" data-mi="'+mi+'" style="--mc:'+m.color+(un?';background:'+m.color:'')+'">'+
     '<button type="button" class="mbadge" data-mpick="'+mi+'" aria-label="'+esc(s.partsPick)+'">'+
       (kep||'<b>'+(mi+1)+'</b>')+'</button>'+
     '<i class="mdiv"></i>'+
@@ -1814,12 +1814,16 @@ function jumpToCurrent(soft){ var n=view.querySelector('.node.next')||view.query
   if(soft&&Math.abs(at-mid)<vb.height*0.28) return;
   var bar=view.querySelector('.mbar'), top=bar?bar.getBoundingClientRect().height+40:70;
   view.scrollTop+=at-Math.max(mid,top); syncStickyPart(); }
+// Minden megnyitott modul sava a sajat reszet mutassa, ne csak az elso.
 function syncStickyPart(){
-  var bar=view.querySelector('.mbar .pnow'); if(!bar) return;
-  var heads=view.querySelectorAll('.phead'); if(!heads.length) return;
-  var barBottom=view.querySelector('.mbar').getBoundingClientRect().bottom, cur=heads[0];
-  heads.forEach(function(hd){ if(hd.getBoundingClientRect().top<=barBottom+90) cur=hd; });
-  var txt=cur.dataset.part||''; if(bar.textContent!==txt) bar.textContent=txt;
+  view.querySelectorAll('.mbar .pnow').forEach(function(bar){
+    var sav=bar.parentNode; while(sav&&!sav.classList.contains('mbar')) sav=sav.parentNode;
+    if(!sav) return;
+    var heads=view.querySelectorAll('.phead[data-pi^="'+sav.dataset.mi+',"]'); if(!heads.length) return;
+    var alja=sav.getBoundingClientRect().bottom, cur=heads[0];
+    heads.forEach(function(hd){ if(hd.getBoundingClientRect().top<=alja+90) cur=hd; });
+    var txt=cur.dataset.part||''; if(bar.textContent!==txt) bar.textContent=txt;
+  });
 }
 function layoutPath(){
   var path=document.getElementById('path'); if(!path) return;
