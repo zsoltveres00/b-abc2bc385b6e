@@ -1551,7 +1551,6 @@ function renderIntro(){ var s=T();
 function renderPlace(){ var s=T(), e=placement.qs[placement.pos], q=e.q, pct=Math.round(100*placement.pos/placement.qs.length);
   var h='<div class="top"><span class="ltag">'+(img('dove-teach','hmini')||'')+'<b>'+esc(s.placeTag)+'</b></span><span class="hearts"><b>'+(placement.pos+1)+'/'+placement.qs.length+'</b></span></div>';
   h+='<div class="prow"><button type="button" class="xback" data-placeskip aria-label="'+esc(s.introSkip)+'">'+ico('x')+'</button><div class="pbar"><i style="width:'+pct+'%"></i></div></div>';
-  h+=langRow(1);
   h+='<div class="q">'+esc(S.lang==='hu'?q.hu.q:q.en.q)+'</div><div class="opts">';
   (S.lang==='hu'?q.hu.o:q.en.o).forEach(function(o,i){ h+='<button type="button" class="opt" data-place="'+i+'">'+esc(o)+'</button>'; });
   h+='</div><p class="rhint" style="margin-top:16px;text-align:center">'+esc(s.placeHint)+'</p>';
