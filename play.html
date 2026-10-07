@@ -2299,7 +2299,8 @@ document.getElementById('app').addEventListener('click',function(e){
     if(d.tab==='menu'){ openSheet(menuHtml()); if(!tourSeen('menu')) startTour('menu'); return; }
     tab=d.tab; render(); maybeTour(d.tab); return; }
   if(d.slot!=null){ var p=d.slot.split(','); var go=function(){ startSlot(+p[0],+p[1],+p[2]); }; if(viaWeek(go)) return; go(); return; }
-  if(el.hasAttribute('data-collect')){ clearTimeout(window.__weekT); weekNext=null; goHome(); return; }
+  // A pontok beszedese utan jon a napi szeria kepernyoje, ha ez volt a nap elso feladata.
+  if(el.hasAttribute('data-collect')){ clearTimeout(window.__weekT); if(viaWeek(goHome)) return; weekNext=null; goHome(); return; }
   if(el.hasAttribute('data-weeknext')){ clearTimeout(window.__weekT); var f=weekNext; weekNext=null; screen={name:'result',r:screen.r}; if(f) f(); else goHome(); return; }
   if(el.hasAttribute('data-placestart')){ startPlacement(); return; }
   if(el.hasAttribute('data-placeskip')){ skipPlacement(); return; }
