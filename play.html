@@ -479,6 +479,23 @@ button.pskip.pmore:active{transform:scale(.98)}
   border:1px solid color-mix(in srgb,var(--mc) 38%,transparent);box-shadow:none;margin:8px 0 0}
 .mbar.lock .mbadge{background:var(--mc);color:#fff}
 .mbar.lock .mdiv{background:color-mix(in srgb,var(--mc) 42%,transparent)}
+/* A lap aljan mindig latszik a kovetkezo modul sava, hogy konnyu legyen atlepni ra. */
+.mnext{position:absolute;left:14px;right:14px;bottom:70px;z-index:6;display:flex;align-items:center;color:#fff;
+  padding:7px 54px 7px 7px;border-radius:16px;box-shadow:0 8px 20px -6px var(--shadow);
+  opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+.mnext.on{opacity:1;transform:none;pointer-events:auto}
+.mnext.on:active{transform:scale(.985)}
+.mnext .mbadge{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.2);overflow:hidden}
+.mnext .mbadge img{width:38px;height:38px;object-fit:contain;display:block}
+.mnext .mbadge b{font-family:Spectral,Georgia,serif;font-size:18px;font-weight:700}
+.mnext .mdiv{flex:none;width:1px;height:30px;margin:0 11px;background:rgba(255,255,255,.4)}
+.mnext .mtx{flex:1;min-width:0}
+.mnext .mtx small{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mnext .mtx b{display:block;font-family:Spectral,Georgia,serif;font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mnext.lock{background:color-mix(in srgb,var(--mc) 16%,var(--surface));color:var(--text);border:1px solid color-mix(in srgb,var(--mc) 38%,transparent);box-shadow:0 6px 16px -8px var(--shadow)}
+.mnext.lock .mbadge{background:var(--mc);color:#fff}
+.mnext.lock .mdiv{background:color-mix(in srgb,var(--mc) 42%,transparent)}
+.mnext.lock .mtx small{color:color-mix(in srgb,var(--mc) 60%,var(--muted))}
 .mbar.lock .mtx small{color:color-mix(in srgb,var(--mc) 60%,var(--muted))}
 .mbar.lock>svg{fill:color-mix(in srgb,var(--mc) 55%,var(--muted));opacity:1}
 /* Reszvalaszto lap: inset listastilus, mint az iOS beallitasaiban. */
@@ -1758,9 +1775,12 @@ function renderHome(){
   view.innerHTML=html; foot.innerHTML=barHtml(); view.scrollTop=0;
   var old=document.querySelector('.jump'); if(old) old.remove();
   if(tab==='home'&&screen.name==='home'){ var jb=document.createElement('button'); jb.type='button'; jb.className='jump'; jb.setAttribute('data-jump',''); jb.setAttribute('aria-label',T().jumpHere); jb.innerHTML=ico('down'); document.getElementById('app').appendChild(jb); }
+  // A kovetkezo modul sava a lap aljan: egy koppintas, es ott vagyunk.
+  var oldn=document.querySelector('.mnext'); if(oldn) oldn.remove();
+  if(tab==='home'&&screen.name==='home'){ var nb=document.createElement('button'); nb.type='button'; nb.className='mnext'; nb.setAttribute('data-gomod',''); document.getElementById('app').appendChild(nb); }
   // The whole module is on screen now, so start the path at the station you are on;
   // a card opened from a node keeps the current scroll position instead.
-  if(tab==='home'){ layoutPath(); if(keepScroll!=null){ view.scrollTop=keepScroll; keepScroll=null; } else jumpToCurrent(true); syncStickyPart(); }
+  if(tab==='home'){ layoutPath(); if(keepScroll!=null){ view.scrollTop=keepScroll; keepScroll=null; } else jumpToCurrent(true); syncStickyPart(); syncNextBar(); }
 }
 // The path: each part is a winding run of 8 stations (story, 3 tasks, chest, 3 tasks).
 // The whole module can be scrolled through so the road ahead is visible; only a very long
@@ -1885,7 +1905,7 @@ function jumpToCurrent(soft){ var n=view.querySelector('.node.next')||view.query
   var mid=vb.height/2, at=nb.top+nb.height/2-vb.top;
   if(soft&&Math.abs(at-mid)<vb.height*0.28) return;
   var bar=view.querySelector('.mbar'), top=bar?bar.getBoundingClientRect().height+40:70;
-  view.scrollTop+=at-Math.max(mid,top); syncStickyPart(); }
+  view.scrollTop+=at-Math.max(mid,top); syncStickyPart(); syncNextBar(); }
 // Minden megnyitott modul sava a sajat reszet mutassa, ne csak az elso.
 function syncStickyPart(){
   view.querySelectorAll('.mbar .pnow').forEach(function(bar){
@@ -1896,6 +1916,27 @@ function syncStickyPart(){
     heads.forEach(function(hd){ if(hd.getBoundingClientRect().top<=alja+90) cur=hd; });
     var txt=cur.dataset.part||''; if(bar.textContent!==txt) bar.textContent=txt;
   });
+}
+// A lap aljan mindig a kovetkezo modul sava ul: amig az egyik modulban gorgetunk,
+// alul mar latszik, mi jon utana, es egy koppintassal at lehet ugrani ra.
+function syncNextBar(){
+  var nb=document.querySelector('.mnext'); if(!nb) return;
+  var bars=view.querySelectorAll('#path .mbar');
+  var vb=view.getBoundingClientRect(), hatar=vb.bottom-92, cel=null;
+  for(var i=0;i<bars.length;i++){ if(bars[i].getBoundingClientRect().top>hatar){ cel=bars[i]; break; } }
+  if(!cel){ nb.classList.remove('on'); return; }
+  var mi=+cel.dataset.mi, m=C.modules[mi], un=moduleUnlocked(mi), s=T();
+  var pn=cel.querySelector('.pnow'), nagy=(un&&pn&&pn.textContent)?pn.textContent:NM(m);
+  var kulcs=mi+'|'+nagy+'|'+(un?1:0);
+  if(nb.dataset.k!==kulcs){
+    nb.dataset.k=kulcs; nb.dataset.mi=mi;
+    nb.className='mnext'+(un?'':' lock');
+    nb.style.cssText='--mc:'+m.color+(un?';background:'+m.color:'');
+    var kep=img(m.icon||('unit-'+m.id));
+    nb.innerHTML='<span class="mbadge">'+(kep||'<b>'+(mi+1)+'</b>')+'</span><i class="mdiv"></i>'+
+      '<span class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+(un?' · '+esc(NM(m)):'')+'</small><b>'+esc(nagy)+'</b></span>';
+  }
+  nb.classList.add('on');
 }
 function layoutPath(){
   var path=document.getElementById('path'); if(!path) return;
@@ -2272,6 +2313,10 @@ document.getElementById('app').addEventListener('click',function(e){
   if(d.pick!=null){ pickOrder(+d.pick); return; }
   if(el.hasAttribute('data-orderreset')){ resetOrder(); return; }
   if(el.hasAttribute('data-jump')){ jumpToCurrent(); return; }
+  // A lap aljan ulo sav a kovetkezo modul elejere visz.
+  if(el.hasAttribute('data-gomod')){ var mb=view.querySelector('#path .mbar[data-mi="'+el.dataset.mi+'"]');
+    if(mb) view.scrollTop+=mb.getBoundingClientRect().top-view.getBoundingClientRect().top-36;
+    syncStickyPart(); syncNextBar(); return; }
   // A hatralevo reszek kirajzolasa masodpercekig tarthat, ezert csak keresre nyilik ki,
   // es elotte kiirjuk, hogy dolgozik - kulonben ugy tunik, mintha nem tortent volna semmi.
   if(d.more!=null){ var mi=+d.more; el.textContent=T().loadingMore; el.disabled=true;
@@ -2322,7 +2367,7 @@ scrim.addEventListener('click',closeSheet);
 sheet.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nameField'){ S.name=e.target.value.trim(); persist(); render(); } });
 addEventListener('resize',layoutPath);
 addEventListener('resize',function(){ if(tour) drawTourStep(); });
-view.addEventListener('scroll',function(){ if(screen.name==='home'&&tab==='home') syncStickyPart(); },{passive:true});
+view.addEventListener('scroll',function(){ if(screen.name==='home'&&tab==='home'){ syncStickyPart(); syncNextBar(); } },{passive:true});
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layoutPath);
 
 // heart countdown tick
