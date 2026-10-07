@@ -562,6 +562,16 @@ button.pskip.pmore:active{transform:scale(.98)}
 .xclose svg{width:14px;height:14px;fill:var(--muted)}
 .sheet h4{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 8px}
 .mrow{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;font-size:16px;font-weight:600}
+/* Hibabejelento: a sorok kivalaszthatok, alattuk sajat szoveges mezo. */
+.mrow.rkind{position:relative;padding-right:40px}
+.mrow.rkind .tick{position:absolute;right:12px;width:18px;height:18px;fill:var(--brand);opacity:0}
+.mrow.rkind.sel{background:color-mix(in srgb,var(--brand) 12%,var(--bg));box-shadow:inset 0 0 0 1.5px var(--brand)}
+.mrow.rkind.sel .tick{opacity:1}
+.rnote{display:block;margin:12px 0 10px}
+.rnote span{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.rnote textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;resize:vertical;min-height:72px}
+.rnote textarea:focus{outline:2px solid var(--brand);outline-offset:1px}
+.rep em{display:block;font-style:normal;font-size:13px;color:var(--text);margin:2px 0}
 .mrow svg{width:18px;height:18px;fill:var(--brand);flex:none}
 .mrow .chev{margin-left:auto;fill:var(--muted);width:13px;height:13px}
 .mrow .mtx{flex:1;min-width:0}
@@ -982,7 +992,7 @@ var STR = {
     hintBtn:'Segíts, Olívia!',colorHint:function(n){return 'Koppints a rajzon oda, ahol a színes részlet van! Még '+n+' db.'},colorOk:'Megtaláltad mindet – nézd, kiszíneződött!',colorBad:'Megvan, de sokat tévesztettél – nézd meg jobban legközelebb!',fillHint:'Melyik szó hiányzik? Koppints rá!',fillTitle:'Pótold a hiányzó szót az igeversben!',fillAnswer:'A helyes szó:',rightAnswer:'A helyes válasz',qVerseTitle:'Ige ehhez a kérdéshez',qVerseSimple:'egyszerű fordítás',hintUsed:'Ebben az állomásban már segítettem',hintBubble:'Kizártam egy rossz választ!',
     chestBanner:'Kincsesláda',chestBannerSub:'KOPPINTS, ÉS NYISD KI',tapChest:'Koppints a ládára!',collectionSub:'Minden modulnak megvannak a saját kincsei – a drágábbak ritkábbak.',moduleSoon:'Ez a modul készül – hamarosan játszható.',moreSoon:'Hamarosan újabb kincsek ebben a modulban',lockedModule:'Még zárva',
     mascotResult:function(stars){ return stars===3?'Tökéletes! Nagyon büszke vagyok rád!':stars===2?'Szép munka, már majdnem hibátlan!':stars===1?'Megcsináltad! Legközelebb még jobb lesz.':'Semmi baj, pihenj egy kicsit, aztán próbáld újra!'; },
-    weekTitle:'Ezen a héten',weekChest:'Vasárnapi láda!',weekBonus:function(n){return 'Dupla jutalom: a hét minden napján tanultál!'},weekScreen:'A heti sorozatod',weekMsg:function(n){return n>=7?'Teljes hét! Vasárnap dupla láda vár.':n+' nap megvan ezen a héten – így tovább!'},continueBtn:'Tovább',subscription:'Előfizetés',fixTitle:'Hibák javítása',fixNone:'Most nincs mit javítani – minden kérdésre elsőre jól válaszoltál. Ha legközelebb elrontasz valamit, ide gyűlik.',fixBody:function(n){return 'Ide gyűlnek azok a kérdések, amelyeket elsőre elrontottál. Gyakorold be őket, és amelyikre itt elsőre jól felelsz, kikerül a listáról.';},fixCount:function(n){return n+' kérdés vár javításra';},fixStart:'Kezdjük a gyakorlást',fixClear:'Lista ürítése',fixClearAsk:'Biztosan törlöd a gyűjtött hibákat?',fixTag:'Hibajavító',fixResult:function(n){return n?'Még '+n+' kérdés vár javításra.':'Minden hibádat kijavítottad!';},reportLink:'Hibás ez a kérdés?',reportTitle:'Mi a baj ezzel a kérdéssel?',reportKinds:{wrong:'A megjelölt válasz szerintem rossz',typo:'Elírás vagy nyelvi hiba',unclear:'Nem érthető a kérdés',image:'A képpel van baj',other:'Valami más'},reportThanks:'Köszönjük! Feljegyeztük.',reportsTitle:'Bejelentett hibák',reportsNone:'Még nem jelentettél be hibát.',reportsHint:'Ezek a bejelentések ebben a böngészőben tárolódnak. Másold ki őket, és küldd el, hogy javítani tudjuk.',notTranslated:'Ez a rész még nincs lefordítva – a szöveg magyarul látszik.',reportSent:'elküldve',reportPending:'küldésre vár',reportsCopy:'Lista másolása',reportsCopied:'Kimásolva!',reportsClear:'Bejelentések törlése',
+    weekTitle:'Ezen a héten',weekChest:'Vasárnapi láda!',weekBonus:function(n){return 'Dupla jutalom: a hét minden napján tanultál!'},weekScreen:'A heti sorozatod',weekMsg:function(n){return n>=7?'Teljes hét! Vasárnap dupla láda vár.':n+' nap megvan ezen a héten – így tovább!'},continueBtn:'Tovább',subscription:'Előfizetés',fixTitle:'Hibák javítása',fixNone:'Most nincs mit javítani – minden kérdésre elsőre jól válaszoltál. Ha legközelebb elrontasz valamit, ide gyűlik.',fixBody:function(n){return 'Ide gyűlnek azok a kérdések, amelyeket elsőre elrontottál. Gyakorold be őket, és amelyikre itt elsőre jól felelsz, kikerül a listáról.';},fixCount:function(n){return n+' kérdés vár javításra';},fixStart:'Kezdjük a gyakorlást',fixClear:'Lista ürítése',fixClearAsk:'Biztosan törlöd a gyűjtött hibákat?',fixTag:'Hibajavító',fixResult:function(n){return n?'Még '+n+' kérdés vár javításra.':'Minden hibádat kijavítottad!';},reportLink:'Hibás ez a kérdés?',reportTitle:'Mi a baj ezzel a kérdéssel?',reportKinds:{wrong:'A megjelölt válasz szerintem rossz',typo:'Elírás vagy nyelvi hiba',unclear:'Nem érthető a kérdés',verse:'Az igevers nem illik a kérdéshez',image:'A képpel van baj',other:'Valami más'},reportNote:'Írd le, mi a baj (nem kötelező)',reportNotePh:'Például: a helyes válasz szerintem a másik, mert…',reportSend:'Elküldöm',reportPickFirst:'Válassz egy sort, vagy írd le, mi a baj.',reportThanks:'Köszönjük! Feljegyeztük.',reportsTitle:'Bejelentett hibák',reportsNone:'Még nem jelentettél be hibát.',reportsHint:'Ezek a bejelentések ebben a böngészőben tárolódnak. Másold ki őket, és küldd el, hogy javítani tudjuk.',notTranslated:'Ez a rész még nincs lefordítva – a szöveg magyarul látszik.',reportSent:'elküldve',reportPending:'küldésre vár',reportsCopy:'Lista másolása',reportsCopied:'Kimásolva!',reportsClear:'Bejelentések törlése',
     chestFound:'Kincsesládát találtál!',talentsGain:function(n){return '+'+n+' talentum'},talentsBalance:function(n){return 'Egyenleged: '+n+' talentum'},
     chestHint:'Minden teljesített állomás talentumot ad, és minden rész közepén egy kincsesláda vár.',tabHome:'Ösvény',tabCollection:'Gyűjtemény',tabStats:'Statisztika',
     menu:'Menü',profile:'Profil',noName:'Hogy szólítsunk?',joined:function(y){return 'Csatlakozott: '+y},account:'Fiók',accountHint:'Később e-mail-címmel lehet majd menteni a haladást több eszközre.',charTitle:'Karakterem',shieldsUsedTitle:'Felhasznált pajzsok',shieldsLeft:function(n){return n+' pajzs van nálad'},bestDays:function(n){return n+' tanult nap'},partsWord:'rész',partsTitle:'Részek',language:'Nyelv',comingSoon:'Hamarosan',settings:'Beállítások',theme:'Megjelenés',themeHint:'Világos vagy sötét háttér.',themeLight:'Világos',themeDark:'Sötét',themeAuto:'Auto',mapBg:'Térkép-háttér',mapBgOn:'Be',mapBgOff:'Ki',mapBgHint:'Szép tájkép az ösvény mögött. Gyengébb telefonon vagy lassú neten kapcsold ki.',yourName:'A neved',namePlaceholder:'Hogy szólíthatunk?',save:'Mentés',close:'Bezárás',
@@ -1020,7 +1030,7 @@ var STR = {
     hintBtn:'Help me, Olivia!',colorHint:function(n){return 'Tap the drawing where the coloured detail belongs! '+n+' to go.'},colorOk:'You found them all – look, it is coloured in!',colorBad:'Done, but with many misses – look closer next time!',fillHint:'Which word is missing? Tap it!',fillTitle:'Fill in the missing word of the verse!',fillAnswer:'The right word:',rightAnswer:'The right answer',qVerseTitle:'Verse for this question',qVerseSimple:'simplified wording',hintUsed:'I already helped on this station',hintBubble:'I removed one wrong answer!',
     chestBanner:'Treasure chest',chestBannerSub:'TAP TO OPEN',tapChest:'Tap the chest!',collectionSub:'Each module has its own treasures – the pricier ones are rarer.',moduleSoon:'This module is being written – coming soon.',moreSoon:'More treasures coming to this module soon',lockedModule:'Locked',
     mascotResult:function(stars){ return stars===3?'Perfect! I\'m so proud of you!':stars===2?'Nice work, almost flawless!':stars===1?'You did it! Next time will be even better.':'No worries, take a break and try again!'; },
-    weekTitle:'This week',weekChest:'Sunday chest!',weekBonus:function(n){return 'Double reward: you studied every day this week!'},weekScreen:'Your week',weekMsg:function(n){return n>=7?'Full week! A double chest awaits on Sunday.':n+' days done this week – keep going!'},continueBtn:'Continue',subscription:'Subscription',fixTitle:'Fix your mistakes',fixNone:'Nothing to fix right now – you got every question right first time. Whatever you miss next will show up here.',fixBody:function(n){return 'Questions you got wrong on the first try collect here. Practise them, and any you answer correctly first time drops off the list.';},fixCount:function(n){return n+' question'+(n===1?'':'s')+' to fix';},fixStart:'Start practising',fixClear:'Clear the list',fixClearAsk:'Really clear the collected mistakes?',fixTag:'Fixing mistakes',fixResult:function(n){return n?n+' question'+(n===1?'':'s')+' still to fix.':'You have fixed every mistake!';},reportLink:'Something wrong with this question?',reportTitle:'What is wrong with this question?',reportKinds:{wrong:'I think the marked answer is wrong',typo:'Typo or language mistake',unclear:'The question is unclear',image:'Something is wrong with the picture',other:'Something else'},reportThanks:'Thank you! We have noted it.',reportsTitle:'Reported problems',reportsNone:'You have not reported anything yet.',reportsHint:'These reports are stored in this browser. Copy them and send them over so we can fix them.',notTranslated:'This part is not translated yet – the text is shown in Hungarian.',reportSent:'sent',reportPending:'waiting to send',reportsCopy:'Copy the list',reportsCopied:'Copied!',reportsClear:'Clear the reports',
+    weekTitle:'This week',weekChest:'Sunday chest!',weekBonus:function(n){return 'Double reward: you studied every day this week!'},weekScreen:'Your week',weekMsg:function(n){return n>=7?'Full week! A double chest awaits on Sunday.':n+' days done this week – keep going!'},continueBtn:'Continue',subscription:'Subscription',fixTitle:'Fix your mistakes',fixNone:'Nothing to fix right now – you got every question right first time. Whatever you miss next will show up here.',fixBody:function(n){return 'Questions you got wrong on the first try collect here. Practise them, and any you answer correctly first time drops off the list.';},fixCount:function(n){return n+' question'+(n===1?'':'s')+' to fix';},fixStart:'Start practising',fixClear:'Clear the list',fixClearAsk:'Really clear the collected mistakes?',fixTag:'Fixing mistakes',fixResult:function(n){return n?n+' question'+(n===1?'':'s')+' still to fix.':'You have fixed every mistake!';},reportLink:'Something wrong with this question?',reportTitle:'What is wrong with this question?',reportKinds:{wrong:'I think the marked answer is wrong',typo:'Typo or language mistake',unclear:'The question is unclear',verse:'The verse does not match the question',image:'Something is wrong with the picture',other:'Something else'},reportNote:'Tell us what is wrong (optional)',reportNotePh:'For example: I think the other answer is right, because…',reportSend:'Send it',reportPickFirst:'Pick a line, or write what is wrong.',reportThanks:'Thank you! We have noted it.',reportsTitle:'Reported problems',reportsNone:'You have not reported anything yet.',reportsHint:'These reports are stored in this browser. Copy them and send them over so we can fix them.',notTranslated:'This part is not translated yet – the text is shown in Hungarian.',reportSent:'sent',reportPending:'waiting to send',reportsCopy:'Copy the list',reportsCopied:'Copied!',reportsClear:'Clear the reports',
     chestFound:'You found a treasure chest!',talentsGain:function(n){return '+'+n+' talents'},talentsBalance:function(n){return 'Your balance: '+n+' talents'},
     chestHint:'Every finished station earns talents, and a treasure chest waits in the middle of every part.',tabHome:'Path',tabCollection:'Collection',tabStats:'Stats',
     menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
@@ -1509,7 +1519,7 @@ var REPORT_FORM={ formId:'1FAIpQLSdCWzkf0e-wtXNmgkCMAEmek2qHX4BAyzz9xSLJs2fuvQMT
 function reportUrl(){ return REPORT_FORM.formId?('https://docs.google.com/forms/d/e/'+REPORT_FORM.formId+'/formResponse'):''; }
 function sendReport(r){ var url=reportUrl(); if(!url||r.kuldve) return Promise.resolve(false);
   var fd=new FormData(), mz=REPORT_FORM.mezo;
-  if(mz.ok) fd.append(mz.ok, (T().reportKinds[r.k]||r.k));
+  if(mz.ok) fd.append(mz.ok, (T().reportKinds[r.k]||r.k)+(r.m?(' — '+r.m):''));
   if(mz.kerdes) fd.append(mz.kerdes, r.q||'');
   if(mz.hol) fd.append(mz.hol, r.hely||'');
   if(mz.tipus) fd.append(mz.tipus, r.t||'');
@@ -1542,13 +1552,18 @@ function fixSheet(){ var s=T(), n=mistakeCount();
   openSheet(h); }
 // Hiba bejelentese egy kerdesnel: a bejelentes ebben a bongeszoben tarolodik,
 // a Beallitasokbol kimasolhato es elkuldheto.
-function reportSheet(){ var s=T(), q=curQ(); if(!q) return;
+var reportPick=null;
+function reportSheet(){ var s=T(), q=curQ(); if(!q) return; reportPick=null;
   var h='<h4>'+esc(s.reportTitle)+'</h4><p class="rhint" style="text-align:left">'+esc(qText(q))+'</p>';
-  Object.keys(s.reportKinds).forEach(function(k){ h+='<button type="button" class="mrow" data-reportkind="'+k+'">'+esc(s.reportKinds[k])+'</button>'; });
+  Object.keys(s.reportKinds).forEach(function(k){ h+='<button type="button" class="mrow rkind" data-reportkind="'+k+'">'+esc(s.reportKinds[k])+'<svg class="tick"><use href="#i-check"/></svg></button>'; });
+  // Sajat szoveg: ide barmit beirhat a bejelento, ha a sorok kozul egyik sem pontos.
+  h+='<label class="rnote"><span>'+esc(s.reportNote)+'</span>'+
+     '<textarea id="rnote" rows="3" maxlength="500" placeholder="'+esc(s.reportNotePh)+'"></textarea></label>'+
+     '<button type="button" class="primary" data-reportsend>'+esc(s.reportSend)+'</button>';
   openSheet(h); }
 function qText(q){ return q&&q.hu?(S.lang==='hu'?q.hu.q:(q.en?q.en.q:q.hu.q)):''; }
-function saveReport(kind){ var s=T(), q=curQ();
-  S.reports=(S.reports||[]); S.reports.unshift({k:kind,q:qText(q),t:reportKind(q),hely:lessonWhere(),mikor:new Date().toISOString().slice(0,16).replace('T',' ')});
+function saveReport(kind,megj){ var s=T(), q=curQ();
+  S.reports=(S.reports||[]); S.reports.unshift({k:kind,m:(megj||''),q:qText(q),t:reportKind(q),hely:lessonWhere(),mikor:new Date().toISOString().slice(0,16).replace('T',' ')});
   if(S.reports.length>200) S.reports.length=200; persist(); sendReport(S.reports[0]);
   openSheet('<h4>'+esc(s.reportsTitle)+'</h4><p class="rhint" style="text-align:left">'+esc(s.reportThanks)+'</p>'); }
 function lessonWhere(){ var s=T(); if(!lesson) return '';
@@ -1569,7 +1584,7 @@ function reportsSheet(){ var s=T(), r=S.reports||[];
   var h='<h4>'+esc(s.reportsTitle)+'</h4>';
   if(!r.length){ h+='<p class="rhint" style="text-align:left">'+esc(s.reportsNone)+'</p>'; openSheet(h); return; }
   h+='<p class="rhint" style="text-align:left">'+esc(s.reportsHint)+'</p><div class="repl">';
-  r.slice(0,30).forEach(function(x){ h+='<div class="rep"><b>'+esc(s.reportKinds[x.k]||x.k)+'</b><span>'+esc(x.q)+'</span><i>'+esc(x.hely+' · '+x.mikor)+(reportUrl()?' · '+esc(x.kuldve?s.reportSent:s.reportPending):'')+'</i></div>'; });
+  r.slice(0,30).forEach(function(x){ h+='<div class="rep"><b>'+esc(s.reportKinds[x.k]||x.k)+'</b>'+(x.m?'<em>'+esc(x.m)+'</em>':'')+'<span>'+esc(x.q)+'</span><i>'+esc(x.hely+' · '+x.mikor)+(reportUrl()?' · '+esc(x.kuldve?s.reportSent:s.reportPending):'')+'</i></div>'; });
   h+='</div><button type="button" class="primary" data-repcopy>'+esc(s.reportsCopy)+'</button>'+
      '<button type="button" class="secondary" data-repclear style="margin-top:10px">'+esc(s.reportsClear)+'</button>';
   openSheet(h); }
@@ -2344,11 +2359,18 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-fixstart')){ startPractice(); return; }
   if(el.hasAttribute('data-fixclear')){ if(confirm(T().fixClearAsk)){ S.mistakes=[]; persist(); closeSheet(); render(); } return; }
   if(el.hasAttribute('data-report')){ reportSheet(); return; }
-  if(d.reportkind!=null){ saveReport(d.reportkind); return; }
+  // A sorra koppintas csak kivalaszt; a bejelentes a Kuldom gombbal megy el,
+  // hogy kozben sajat szoveget is be lehessen irni.
+  if(d.reportkind!=null){ reportPick=(reportPick===d.reportkind?null:d.reportkind);
+    document.querySelectorAll('#sheet .rkind').forEach(function(b){ b.classList.toggle('sel', b.dataset.reportkind===reportPick); });
+    return; }
+  if(el.hasAttribute('data-reportsend')){ var ta=document.getElementById('rnote'), megj=ta?ta.value.trim():'';
+    if(!reportPick&&!megj){ alert(T().reportPickFirst); return; }
+    saveReport(reportPick||'other', megj); return; }
   if(el.hasAttribute('data-reports')){ reportsSheet(); return; }
   if(el.hasAttribute('data-repclear')){ if(confirm(T().fixClearAsk)){ S.reports=[]; persist(); closeSheet(); render(); } return; }
   if(el.hasAttribute('data-repcopy')){
-    var txt=(S.reports||[]).map(function(x){ return '- ['+(T().reportKinds[x.k]||x.k)+'] '+x.q+'  ('+x.hely+', '+x.mikor+')'; }).join(String.fromCharCode(10));
+    var txt=(S.reports||[]).map(function(x){ return '- ['+(T().reportKinds[x.k]||x.k)+'] '+x.q+(x.m?'  — '+x.m:'')+'  ('+x.hely+', '+x.mikor+')'; }).join(String.fromCharCode(10));
     try{ navigator.clipboard.writeText(txt); el.textContent=T().reportsCopied; }catch(x){ prompt(T().reportsCopy,txt); } return; }
   if(d.mapbg!=null){ S.mapBg=d.mapbg==='1'; persist(); render(); return; }
   if(d.lang){ S.lang=d.lang; persist(); render(); return; }
