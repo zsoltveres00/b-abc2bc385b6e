@@ -484,6 +484,8 @@ button.pskip.pmore:active{transform:scale(.98)}
   padding:7px 54px 7px 7px;border-radius:16px;box-shadow:0 8px 20px -6px var(--shadow);
   opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
 .mnext.on{opacity:1;transform:none;pointer-events:auto}
+/* Amikor lap vagy kartya nyilik meg (a sotetito hatter latszik), a sav tunjon el. */
+#scrim.show ~ .mnext{opacity:0;transform:translateY(10px);pointer-events:none}
 .mnext.on:active{transform:scale(.985)}
 .mnext .mbadge{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.2);overflow:hidden}
 .mnext .mbadge img{width:38px;height:38px;object-fit:contain;display:block}
@@ -1584,7 +1586,9 @@ var view=document.getElementById('view'), foot=document.getElementById('foot'), 
 function applyTheme(){ var t=S.theme||'auto'; if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t); }
 function render(){
   closeSheet(); applyShields();
-  if(screen.name!=='home'){ var jx=document.querySelector('.jump'); if(jx) jx.remove(); }
+  if(screen.name!=='home'){ var jx=document.querySelector('.jump'); if(jx) jx.remove();
+    // A kovetkezo modul sava csak az osvenyen kell, a tortenet- es feladatlapokon nem.
+    var nx2=document.querySelector('.mnext'); if(nx2) nx2.remove(); }
   if(screen.name==='home'){ renderHome(); }
   else if(screen.name==='story'){ renderStory(); }
   else if(screen.name==='lesson'){ renderLesson(); }
