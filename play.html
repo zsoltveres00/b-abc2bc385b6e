@@ -253,13 +253,13 @@ img.mascot{object-fit:contain}
 .ltag img.hmini{width:48px;height:48px;object-fit:contain}
 .hres{display:flex;flex-direction:column;align-items:center;margin-bottom:6px}.hres img{width:96px;height:96px;object-fit:contain}
 .hres small{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.hres b{font-family:Spectral,Georgia,serif;font-size:20px}
-.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-.hc{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.hc .em img{width:56px;height:56px;object-fit:contain;filter:grayscale(1);opacity:.45}.hc .em i{width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px dashed var(--brand);display:grid;place-items:center;font-style:normal;font-weight:800;color:var(--brand)}
+.hgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.hc{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.hc .em{padding-top:4px;line-height:1}.hc .em img{width:72px;height:72px;object-fit:contain;display:block;filter:grayscale(1);opacity:.45}.hc .em i{width:60px;height:60px;font-size:24px;border-radius:50%;background:var(--bg);border:2px dashed var(--brand);display:grid;place-items:center;font-style:normal;font-weight:800;color:var(--brand)}
 .hc.gold .em img{filter:none;opacity:1}.hc.gold{border-color:var(--star);background:color-mix(in srgb,var(--star) 12%,var(--surface))}
 .hc.silver .em img{filter:grayscale(.6);opacity:.8}
 .hc.locked{opacity:.55}
-.hc b{font-size:11px;font-weight:700;text-align:center;line-height:1.1}.hc .hs svg,.hc .hs img{width:16px;height:16px;fill:var(--star);color:var(--star)}.hc.locked .hs svg{fill:var(--muted)}.hc:not(.gold):not(.silver) .hs svg{fill:none;color:var(--muted)}
+.hc b{font-size:11px;font-weight:600;text-align:center;line-height:1.2;min-height:30px;display:flex;align-items:center}.hc .hs svg,.hc .hs img{width:16px;height:16px;fill:var(--star);color:var(--star)}.hc.locked .hs svg{fill:var(--muted)}.hc:not(.gold):not(.silver) .hs svg{fill:none;color:var(--muted)}
 /* picture choice */
 .opt.pimg{padding:8px}.opt.pimg img{width:100%;aspect-ratio:1;object-fit:contain;display:block}
 /* colouring task */
