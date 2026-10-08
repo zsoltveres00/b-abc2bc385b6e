@@ -155,10 +155,10 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 .prow .pdel{flex:none;width:40px;height:40px;border-radius:12px;background:var(--bg);display:grid;place-items:center}
 .prow .pdel svg{width:16px;height:16px;fill:var(--wrong)}
 /* Parositas: ket oszlop, bal oldalon valasztunk, jobb oldalon keressuk a parjat. */
-.mgrid{display:flex;gap:10px;align-items:flex-start}
-.mcol{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+.mcol{display:contents}
 .mitem{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
-  padding:12px 10px;font-size:15px;font-weight:600;text-align:center;line-height:1.25;min-height:56px;
+  padding:12px 10px;font-size:15px;font-weight:600;text-align:center;line-height:1.25;min-height:56px;height:100%;
   display:flex;align-items:center;justify-content:center;transition:transform .08s}
 .mitem:not(:disabled):active{transform:scale(.97)}
 .mitem.sel{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
@@ -1592,7 +1592,10 @@ function reportsSheet(){ var s=T(), r=S.reports||[];
 var weekNext=null;
 // A napi sorozat kepernyoje nem ugrik fel tobbe a feladatok utan (a heti csik a fooldalon tovabbra is latszik).
 // A szeria kepernyoje a nap elso teljesitett feladata utan jon be, naponta egyszer.
-function viaWeek(fn){ if(screen.name==='result'&&screen.r.firstToday&&!screen.r.weekShown){ screen.r.weekShown=true; weekNext=fn; screen={name:'week',r:screen.r}; render(); return true; } return false; }
+function viaWeek(fn){ if(screen.name!=='result'||screen.r.weekShown) return false;
+  var ma=dayKey(new Date()); if(S.weekDay===ma) return false;
+  S.weekDay=ma; persist();
+  screen.r.weekShown=true; weekNext=fn; screen={name:'week',r:screen.r}; render(); return true; }
 function openWeekChest(){ if(!weekChestEarned()) { goHome(); return; } var hny=ladaNyeremeny(true); screen={name:'chest',talents:hny.talents,mult:hny.mult,perc:hny.perc,bonus:weekComplete()?TALENTS_PER_CHEST:0,taps:0,key:weekKey(new Date()),kind:'week'}; render(); }
 function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges()) maybeTour(tab==='home'?'home':tab); }
 
@@ -2077,13 +2080,14 @@ function renderLesson(){
     var pr=matchPairs(q), kesz=lesson.answered!=null;
     h+='<div class="hintrow">'+mascotHtml(null,null,"teach")+'<div class="bubble">'+
       esc(kesz?(lesson.wrongTaps<3?s.matchOk:s.matchBad):s.matchHint(pr.length-lesson.matched.length))+'</div></div>';
-    h+='<div class="mgrid"><div class="mcol">';
-    lesson.mLeft.forEach(function(i){ var kk=lesson.matched.indexOf(i)>=0;
-      h+='<button type="button" class="mitem'+(kk?' ok':'')+(lesson.selLeft===i?' sel':'')+(lesson.badL===i?' bad':'')+'" data-mleft="'+i+'"'+((kk||kesz)?' disabled':'')+'>'+esc(pr[i][0])+'</button>'; });
-    h+='</div><div class="mcol">';
-    lesson.mRight.forEach(function(i){ var kk=lesson.matched.indexOf(i)>=0;
-      h+='<button type="button" class="mitem'+(kk?' ok':'')+(lesson.badR===i?' bad':'')+'" data-mright="'+i+'"'+((kk||kesz)?' disabled':'')+'>'+esc(pr[i][1])+'</button>'; });
-    h+='</div></div>';
+    h+='<div class="mgrid">';
+    for(var mi=0;mi<lesson.mLeft.length;mi++){
+      var li=lesson.mLeft[mi], okL=lesson.matched.indexOf(li)>=0;
+      h+='<button type="button" class="mitem'+(okL?' ok':'')+(lesson.selLeft===li?' sel':'')+(lesson.badL===li?' bad':'')+'" data-mleft="'+li+'"'+((okL||kesz)?' disabled':'')+'>'+esc(pr[li][0])+'</button>';
+      var ri=lesson.mRight[mi], okR=lesson.matched.indexOf(ri)>=0;
+      h+='<button type="button" class="mitem'+(okR?' ok':'')+(lesson.badR===ri?' bad':'')+'" data-mright="'+ri+'"'+((okR||kesz)?' disabled':'')+'>'+esc(pr[ri][1])+'</button>';
+    }
+    h+='</div>';
   } else if(q.type==='fill'){
     var txt=esc(S.lang==='hu'?q.hu.q:q.en.q), chosen=lesson.answered, word=chosen!=null?esc(optLabel(q,chosen)):'';
     h+='<div class="hintrow">'+mascotHtml(null,null,"teach")+'<div class="bubble">'+esc(s.fillHint)+'</div></div>';
