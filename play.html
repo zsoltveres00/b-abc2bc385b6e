@@ -2153,7 +2153,7 @@ function renderLesson(){
   } else if(q.type==='fill'){
     var txt=esc(S.lang==='hu'?q.hu.q:q.en.q), chosen=lesson.answered, word=chosen!=null?esc(optLabel(q,chosen)):'';
     h+='<div class="hintrow">'+mascotHtml(null,null,"teach")+'<div class="bubble">'+esc(s.fillHint)+'</div></div>';
-    h+='<div class="fill">'+txt.replace('_____','<span class="blank '+(chosen==null?'':(chosen===q.c?'ok':'bad'))+'">'+(word||'&nbsp;')+'</span>')+'</div>';
+    h+='<div class="fill">'+txt.replace(/_{3,}/,'<span class="blank '+(chosen==null?'':(chosen===q.c?'ok':'bad'))+'">'+(word||'&nbsp;')+'</span>')+'</div>';
     if(chosen!=null&&chosen!==q.c) h+='<div class="fillans">'+esc(s.fillAnswer)+' <b>'+esc(optLabel(q,q.c))+'</b></div>';
     h+='<div class="chips">';
     lesson.order.forEach(function(o){ var cls='chip'; if(chosen!=null){ if(o===q.c) cls+=' ok'; else if(o===chosen) cls+=' bad'; } h+='<button type="button" class="'+cls+'" data-answer="'+o+'" '+(chosen!=null?'disabled':'')+'>'+esc(optLabel(q,o))+'</button>'; });
