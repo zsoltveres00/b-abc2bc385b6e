@@ -887,7 +887,7 @@ button.pskip.pmore:active{transform:scale(.98)}
   <p id="bootTx">Betöltés…</p>
 </div>
 
-<!-- Kezdo animacio: csak az elso inditaskor (vagy ?intro a cimben). A logo
+<!-- Kezdo animacio: minden inditaskor lefut (Zsolt kerese, 2026-10-12). A logo
      rajzolodik ki: potty - csik - potty ... - kereszt, kis harangszoval.
      Kozben a hatterben betolt a jatek; koppintasra azonnal eltunik. -->
 <style>
@@ -926,10 +926,7 @@ button.pskip.pmore:active{transform:scale(.98)}
 </div>
 <script>
 (function(){
-  var KULCS='bt-intro-latta', el=document.getElementById('intro');
-  var kell=/[?&]intro\b/.test(location.search);
-  try{ if(!localStorage.getItem(KULCS)) kell=true; localStorage.setItem(KULCS,'1'); }catch(e){}
-  if(!kell){ el.remove(); return; }
+  var el=document.getElementById('intro');
   el.hidden=false;
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
   // Zenedoboz: tiszta, puha hang, lassabb felfutassal es egy kis lagy szurovel, hogy ne csengjen eles.
