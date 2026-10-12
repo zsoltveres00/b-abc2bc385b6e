@@ -606,6 +606,10 @@ button.pskip.pmore:active{transform:scale(.98)}
 .lang button{padding:8px 14px;border-radius:8px;border:1.5px solid var(--border);font-size:14px;font-weight:700}
 .lang button.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
 /* Nyelvvalaszto a legelso inditasnal es a szintfelmeron: kozepre kerul, nem a sor vegere. */
+.lang button.zaszlo{padding:4px;border-radius:10px;line-height:0;border-width:2px;opacity:.6;transition:opacity .15s}
+.lang button.zaszlo svg{width:36px;height:24px;display:block;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.14)}
+.lang button.zaszlo.on{opacity:1;background:transparent;border-color:var(--brand);box-shadow:0 0 0 2px color-mix(in srgb,var(--brand) 30%,transparent)}
+.lang.langpick.small button.zaszlo{padding:3px}.lang.langpick.small button.zaszlo svg{width:30px;height:20px}
 .lang.langpick{margin:0 auto 14px;justify-content:center}
 .lang.langpick.small button{padding:5px 12px;font-size:12px;border-radius:7px}
 /* Ki jatszik most: a sav alatt lenyilo kis menu, hogy egy koppintassal lehessen nevet valtani. */
@@ -1201,6 +1205,14 @@ function talentIco(cls){ return img('talent-big','tcoin'+(cls?' '+cls:''))||img(
 // Treasure artwork. The modules are m1…m8 but the pictures were drawn as card-u1…u6, so try both.
 function cardImg(g){ return img(g.art||('card-'+g.unit+'-'+g.id))||img('card-'+String(g.unit).replace(/^m/,'u')+'-'+g.id)||g.emoji; }
 function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+// Nyelvvalaszto zaszlok (felirat helyett). Az angolhoz a brit zaszlo.
+var zaszloDb=0;
+function zaszlo(l){ zaszloDb++;
+  if(l==='hu') return '<svg viewBox="0 0 30 20" preserveAspectRatio="none" aria-hidden="true"><rect width="30" height="20" fill="#477050"/><rect width="30" height="13.34" fill="#fff"/><rect width="30" height="6.67" fill="#CD2A3E"/></svg>';
+  var c='ukc'+zaszloDb, t='ukt'+zaszloDb;
+  return '<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="'+c+'"><path d="M0,0v30h60v-30z"/></clipPath><clipPath id="'+t+'"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath>'+
+    '<g clip-path="url(#'+c+')"><path d="M0,0v30h60v-30z" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#'+t+')" stroke="#C8102E" stroke-width="4"/>'+
+    '<path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></g></svg>'; }
 function ico(n){ return '<svg><use href="#i-'+n+'"/></svg>'; }
 function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function addDays(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
@@ -1827,8 +1839,8 @@ function render(){
 // Nyelvvalaszto a legelso inditashoz: itt meg nincs Menu, ahol at lehetne allitani.
 function langRow(kicsi){
   return '<span class="lang langpick'+(kicsi?' small':'')+'">'+
-    '<button type="button" data-lang="hu" class="'+(S.lang==='hu'?'on':'')+'">HU</button>'+
-    '<button type="button" data-lang="en" class="'+(S.lang==='en'?'on':'')+'">EN</button></span>'; }
+    '<button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button>'+
+    '<button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button></span>'; }
 // Olivia bemutatkozasa a legelso inditaskor.
 function renderIntro(){ var s=T(), lap=screen.lap||0;
   if(lap<s.ob.length){ var o=s.ob[lap], h='<div class="center">'+(lap===0?langRow():'');
@@ -2483,7 +2495,7 @@ function profilePage(){
 function settingsPage(){
   var s=T();
   return '<div class="hrow"><h1 class="brand">'+esc(s.settings)+'</h1></div><div class="setlist">'+
-    '<div class="mrow">'+ico('globe')+'<div class="mtx"><b>'+esc(s.language)+'</b></div><span class="lang"><button type="button" data-lang="hu" class="'+(S.lang==='hu'?'on':'')+'">HU</button><button type="button" data-lang="en" class="'+(S.lang==='en'?'on':'')+'">EN</button></span></div>'+
+    '<div class="mrow">'+ico('globe')+'<div class="mtx"><b>'+esc(s.language)+'</b></div><span class="lang"><button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button><button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button></span></div>'+
     // A terkep-hatter kapcsolo egyelore rejtve: a hatterkepek meg keszulnek. A logika megvan, csak ezt a sort kell visszatenni.
     '<button type="button" class="mrow" data-reports><svg><use href="#i-flag"/></svg><div class="mtx"><b>'+esc(s.reportsTitle)+'</b></div>'+((S.reports||[]).length?'<span class="det">'+(S.reports||[]).length+'</span>':'')+'<svg class="chev"><use href="#i-chev"/></svg></button>'+
     '<div class="mrow"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.theme)+'</b><span>'+esc(s.themeHint)+'</span></div><span class="lang"><button type="button" data-theme="light" class="'+(S.theme==='light'?'on':'')+'">'+esc(s.themeLight)+'</button><button type="button" data-theme="dark" class="'+(S.theme==='dark'?'on':'')+'">'+esc(s.themeDark)+'</button><button type="button" data-theme="auto" class="'+(S.theme==='auto'||!S.theme?'on':'')+'">'+esc(s.themeAuto)+'</button></span></div>'+
