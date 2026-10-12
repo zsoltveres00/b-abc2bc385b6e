@@ -941,15 +941,15 @@ button.pskip.pmore:active{transform:scale(.98)}
     o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+hossz+.05); }
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
-  var T=[350,800,1250,1700,2150], hangok=[392,523.25,587.33,659.25], kezd=Date.now();
+  var T=[350,800,1250,1700,2150], hangok=[523.25,659.25,783.99,1046.5], kezd=Date.now();
   // A hang csak akkor szol, ha a keszulek engedi (az appban igen; bongeszoben koppintas kell hozza).
   if(ctx&&ctx.state==='suspended'){ try{ ctx.resume(); }catch(e){} }
   setTimeout(function(){
     for(var i=0;i<4;i++)(function(i){
-      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(hangok[i],0,1.3,.13);
+      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(hangok[i]*0.75,0,.25,.07); harang(hangok[i],0.07,.9,.14);
         [utak[i],arnyek[i]].forEach(function(q){ setTimeout(function(){ q.style.transition='stroke-dashoffset 330ms ease-in-out'; q.style.strokeDashoffset=0; },120); }); },T[i]);
     })(i);
-    setTimeout(function(){ pottyok[4].classList.add('ragyog'); harang(783.99,0,1.2,.11); harang(1046.5,.16,1.8,.12); parna(261.63,0,2.2,.05); parna(329.63,0,2.2,.04); parna(392,0,2.2,.04); },T[4]);
+    setTimeout(function(){ pottyok[4].classList.add('ragyog'); [1046.5,1174.66,1318.5,1567.98].forEach(function(f,k){ harang(f,k*.07,.6,.09); }); harang(2093,.3,1.4,.08); harang(1318.5,.3,1.6,.1); harang(1567.98,.3,1.6,.08); parna(523.25,.25,1.8,.05); parna(659.25,.25,1.8,.04); },T[4]);
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
