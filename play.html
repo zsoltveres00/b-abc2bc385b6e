@@ -932,24 +932,26 @@ button.pskip.pmore:active{transform:scale(.98)}
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
   // Zenedoboz: tiszta, puha hang, lassabb felfutassal es egy kis lagy szurovel, hogy ne csengjen eles.
   function harang(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, fo=ctx.createGain(), lp=ctx.createBiquadFilter();
-    lp.type='lowpass'; lp.frequency.value=2400; fo.connect(lp); lp.connect(ctx.destination);
-    fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.03); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
-    [[1,1],[4,.06]].forEach(function(f){ var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1]; o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+.05); }); }
+    lp.type='lowpass'; lp.frequency.value=1400; fo.connect(lp); lp.connect(ctx.destination);
+    fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.05); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
+    [[1,1],[2,.12]].forEach(function(f){ var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1]; o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+.05); }); }
   // Meleg alaphang a vegere: lassan beuszo, halk akkord.
   function parna(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, g=ctx.createGain(), o=ctx.createOscillator();
     o.type='sine'; o.frequency.value=frek; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(ero,t+0.35); g.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
     o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+hossz+.05); }
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
-  var T=[350,800,1250,1700,2150], hangok=[523.25,659.25,783.99,1046.5], kezd=Date.now();
+  var T=[350,800,1250,1700,2150], kezd=Date.now();
+  // G4-C5 | E5-D5 | C5-E5 | G5-E5 | D5-E5-C5 (zaras), C-dur, kozepes magassagban
+  var dal=[[392,523.25],[659.25,587.33],[523.25,659.25],[783.99,659.25]];
   // A hang csak akkor szol, ha a keszulek engedi (az appban igen; bongeszoben koppintas kell hozza).
   if(ctx&&ctx.state==='suspended'){ try{ ctx.resume(); }catch(e){} }
   setTimeout(function(){
     for(var i=0;i<4;i++)(function(i){
-      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(hangok[i]*0.75,0,.25,.07); harang(hangok[i],0.07,.9,.14);
+      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(dal[i][0],0,.7,.07); harang(dal[i][1],.22,.8,.065);
         [utak[i],arnyek[i]].forEach(function(q){ setTimeout(function(){ q.style.transition='stroke-dashoffset 330ms ease-in-out'; q.style.strokeDashoffset=0; },120); }); },T[i]);
     })(i);
-    setTimeout(function(){ pottyok[4].classList.add('ragyog'); [1046.5,1174.66,1318.5,1567.98].forEach(function(f,k){ harang(f,k*.07,.6,.09); }); harang(2093,.3,1.4,.08); harang(1318.5,.3,1.6,.1); harang(1567.98,.3,1.6,.08); parna(523.25,.25,1.8,.05); parna(659.25,.25,1.8,.04); },T[4]);
+    setTimeout(function(){ pottyok[4].classList.add('ragyog'); harang(587.33,0,.6,.065); harang(659.25,.2,.6,.065); harang(523.25,.42,1.9,.075); parna(261.63,.42,2,.035); parna(329.63,.42,2,.03); parna(392,.42,2,.03); },T[4]);
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
