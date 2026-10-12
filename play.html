@@ -648,6 +648,7 @@ button.pskip.pmore:active{transform:scale(.98)}
 .gc:not(.own) .em{filter:grayscale(1);opacity:.45}
 .gc.lock .em{opacity:.25}
 .gc .nm{font-size:11px;font-weight:600;height:30px;display:flex;align-items:center;text-align:center;line-height:1.2}
+.gc .gcinfo{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center}
 .gc .own-l{display:flex;gap:4px;align-items:center;color:var(--gold);font-weight:700;font-size:12px;padding:7px 0}
 .gc .own-l svg{width:13px;height:13px;fill:currentColor}
 .gc .buy{width:100%;display:flex;justify-content:center;align-items:center;gap:4px;padding:7px 0;border-radius:8px;font-size:12px;font-weight:700;background:var(--brand);color:var(--brand-ink)}
@@ -1951,6 +1952,12 @@ function badgesHtml(){ var s=T(), list=badgeList(), h='<h3 class="sh">'+esc(s.ba
   return h; }
 function heroSheet(ui,id){ var s=T(), u=C.modules[ui], hr=heroById(u,id); if(!hr) return; var hs=heroStars(id), un=heroUnlocked(u,hr);
   openSheet('<div class="bsheet '+(hs===3?'on':'')+'"><div class="bimg">'+(img(hr.img)||'<span>👤</span>')+'</div><h3>'+esc(L(hr))+'</h3><p>'+esc(L(hr.bio))+'</p><div class="bst">'+(hs?starIco(hs):'')+' '+esc(hs===3?s.heroDone:un?s.heroNeed3:s.heroLockedAt(hr.at+1))+'</div>'+(un&&hearts()>0?'<button type="button" class="primary" style="margin-top:14px" data-hero="'+ui+','+id+'">'+esc(hs?s.heroAgain:s.heroStart)+'</button>':'')+'</div>'); }
+// Kincs lapja: kep, nev, leiras, es ha meg nincs meg, a vasarlas gombja (mint a hosoknel).
+function giftSheet(i){ var s=T(), g=C.gifts[i]; if(!g) return; var o=owns(g), mi=C.modules.findIndex(function(m){return m.id===g.unit;}), un=mi<0||moduleUnlocked(mi);
+  var kep=cardImg(g); if(kep.charAt(0)!=='<') kep='<span>'+kep+'</span>';
+  openSheet('<div class="bsheet '+(o?'on':'')+'"><div class="bimg">'+kep+'</div><h3>'+esc(L(g))+'</h3>'+(g.bio?'<p>'+esc(L(g.bio))+'</p>':'')+
+    (o||!un?'<div class="bst">'+(o?ico('seal')+esc(s.owned):ico('lock')+esc(s.lockedModule))+'</div>':'')+
+    (!o&&un?'<button type="button" class="primary" style="margin-top:14px" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+talentIco()+g.price+'</button>':'')+'</div>'); }
 // Review card of a finished station: what it was about, plus the option to play it again.
 function reviewSheet(mi,pi,slot){
   var s=T(), m=C.modules[mi], p=m.parts[pi], stars=slotStars(m,p,slot), key=slotKey(m,p,slot);
@@ -2217,7 +2224,7 @@ function collectionHtml(){
     if(u.heroes&&u.heroes.length){ h+='<div class="hgrid">'; u.heroes.forEach(function(hr){ var hs=heroStars(hr.id), hu2=heroUnlocked(u,hr); h+='<button type="button" class="hc '+(hs===3?'gold':hs>0?'silver':'')+(hu2?'':' locked')+'" data-heroinfo="'+ui+','+hr.id+'"><div class="em">'+(img(hr.img)||'<i>'+esc(NM(hr).charAt(0))+'</i>')+'</div><b>'+esc(L(hr))+'</b><span class="hs">'+(hs?starIco(hs):(hu2?ico('staro'):ico('lock')))+'</span></button>'; }); h+='</div>'; }
     h+='<div class="cards">';
     C.gifts.forEach(function(g,i){ if(g.unit!==u.id) return; var o=owns(g);
-      h+='<div class="gc '+(o?'own':'')+(un?'':' lock')+'"><div class="em">'+cardImg(g)+'</div><div class="nm">'+esc(L(g))+'</div>'+
+      h+='<div class="gc '+(o?'own':'')+(un?'':' lock')+'"><button type="button" class="gcinfo" data-giftinfo="'+i+'"><div class="em">'+cardImg(g)+'</div><div class="nm">'+esc(L(g))+'</div></button>'+
         (o?'<div class="own-l">'+ico('seal')+esc(s.owned)+'</div>':'<button type="button" class="buy" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+(un?'':ico('lock'))+talentIco()+g.price+'</button>')+'</div>'; });
     h+='</div>';
     // Modules whose artwork is still being drawn say so, so the whole plan is visible.
@@ -2571,7 +2578,8 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-weekchest')){ if(viaWeek(openWeekChest)) return; openWeekChest(); return; }
   if(el.hasAttribute('data-home')){ if(viaWeek(goHome)) return; goHome(); return; }
   if(d.gotab){ tab=d.gotab; goHome(); return; }
-  if(d.buy!=null){ buyCard(C.gifts[+d.buy]); return; }
+  if(d.giftinfo!=null){ giftSheet(+d.giftinfo); return; }
+  if(d.buy!=null){ var vett=C.gifts[+d.buy]; buyCard(vett); if(el.closest('#sheet')&&owns(vett)){ closeSheet(); setTimeout(function(){ giftSheet(+d.buy); },260); } return; }
   if(d.cal){ calOffset+=+d.cal; if(calOffset>0) calOffset=0; render(); return; }
   if(d.theme){ S.theme=d.theme; applyTheme(); persist(); render(); return; }
   if(el.hasAttribute('data-fix')){ fixSheet(); return; }
