@@ -929,20 +929,26 @@ button.pskip.pmore:active{transform:scale(.98)}
   if(!kell){ el.remove(); return; }
   el.hidden=false;
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
-  function harang(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, fo=ctx.createGain(); fo.connect(ctx.destination);
-    fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.012); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
-    [[1,1],[2,.35],[3.01,.12],[4.2,.05]].forEach(function(f){ var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1]; o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+.05); }); }
+  // Zenedoboz: tiszta, puha hang, lassabb felfutassal es egy kis lagy szurovel, hogy ne csengjen eles.
+  function harang(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, fo=ctx.createGain(), lp=ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value=2400; fo.connect(lp); lp.connect(ctx.destination);
+    fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.03); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
+    [[1,1],[4,.06]].forEach(function(f){ var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1]; o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+.05); }); }
+  // Meleg alaphang a vegere: lassan beuszo, halk akkord.
+  function parna(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, g=ctx.createGain(), o=ctx.createOscillator();
+    o.type='sine'; o.frequency.value=frek; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(ero,t+0.35); g.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
+    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+hossz+.05); }
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
-  var T=[350,800,1250,1700,2150], hangok=[523.25,659.25,783.99,1046.5], kezd=Date.now();
+  var T=[350,800,1250,1700,2150], hangok=[392,523.25,587.33,659.25], kezd=Date.now();
   // A hang csak akkor szol, ha a keszulek engedi (az appban igen; bongeszoben koppintas kell hozza).
   if(ctx&&ctx.state==='suspended'){ try{ ctx.resume(); }catch(e){} }
   setTimeout(function(){
     for(var i=0;i<4;i++)(function(i){
-      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(hangok[i],0,1.1,.22);
+      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(hangok[i],0,1.3,.13);
         [utak[i],arnyek[i]].forEach(function(q){ setTimeout(function(){ q.style.transition='stroke-dashoffset 330ms ease-in-out'; q.style.strokeDashoffset=0; },120); }); },T[i]);
     })(i);
-    setTimeout(function(){ pottyok[4].classList.add('ragyog'); harang(1046.5,0,1.8,.16); harang(1318.5,.02,1.8,.12); harang(783.99,.04,1.8,.12); harang(523.25,.06,2,.1); },T[4]);
+    setTimeout(function(){ pottyok[4].classList.add('ragyog'); harang(783.99,0,1.2,.11); harang(1046.5,.16,1.8,.12); parna(261.63,0,2.2,.05); parna(329.63,0,2.2,.04); parna(392,0,2.2,.04); },T[4]);
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
@@ -1037,13 +1043,13 @@ var S = {
   progress: load('bq-progress',{}), heartLosses: load('bq-heart-losses',[]), streak: load('bq-streak',0),
   lastStudy: load('bq-laststudy',null), chests: load('bq-chests',{}), cards: load('bq-gift-log',[]),
   daily: load('bq-daily',{}), firstStudy: load('bq-first-study',null), stars: load('bq-stars',{}), weekChests: load('bq-week-chests',{}),
-  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), sound: load('bq-sound',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
+  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), sound: load('bq-sound',true), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
 };
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
   save('bq-laststudy',S.lastStudy); save('bq-chests',S.chests); save('bq-gift-log',S.cards);
-  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-sound',S.sound); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
+  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-sound',S.sound); save('bq-haptics',S.haptics); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
 }
 
 // ---------- rules ----------
@@ -1092,7 +1098,7 @@ var STR = {
     weekTitle:'Ezen a héten',weekChest:'Vasárnapi láda!',weekBonus:function(n){return 'Dupla jutalom: a hét minden napján tanultál!'},weekScreen:'A heti sorozatod',weekMsg:function(n){return n>=7?'Teljes hét! Vasárnap dupla láda vár.':n+' nap megvan ezen a héten – így tovább!'},continueBtn:'Tovább',subscription:'Előfizetés',fixTitle:'Hibák javítása',fixNone:'Most nincs mit javítani – minden kérdésre elsőre jól válaszoltál. Ha legközelebb elrontasz valamit, ide gyűlik.',fixBody:function(n){return 'Ide gyűlnek azok a kérdések, amelyeket elsőre elrontottál. Gyakorold be őket, és amelyikre itt elsőre jól felelsz, kikerül a listáról.';},fixCount:function(n){return n+' kérdés vár javításra';},fixStart:'Kezdjük a gyakorlást',fixClear:'Lista ürítése',fixClearAsk:'Biztosan törlöd a gyűjtött hibákat?',fixTag:'Hibajavító',fixResult:function(n){return n?'Még '+n+' kérdés vár javításra.':'Minden hibádat kijavítottad!';},reportLink:'Hibás ez a kérdés?',reportTitle:'Mi a baj ezzel a kérdéssel?',reportKinds:{wrong:'A megjelölt válasz szerintem rossz',typo:'Elírás vagy nyelvi hiba',unclear:'Nem érthető a kérdés',verse:'Az igevers nem illik a kérdéshez',image:'A képpel van baj',other:'Valami más'},reportNote:'Írd le, mi a baj (nem kötelező)',reportNotePh:'Például: a helyes válasz szerintem a másik, mert…',reportSend:'Elküldöm',reportPickFirst:'Válassz egy sort, vagy írd le, mi a baj.',reportThanks:'Köszönjük! Feljegyeztük.',reportsTitle:'Bejelentett hibák',reportsNone:'Még nem jelentettél be hibát.',reportsHint:'Ezek a bejelentések ebben a böngészőben tárolódnak. Másold ki őket, és küldd el, hogy javítani tudjuk.',notTranslated:'Ez a rész még nincs lefordítva – a szöveg magyarul látszik.',reportSent:'elküldve',reportPending:'küldésre vár',reportsCopy:'Lista másolása',reportsCopied:'Kimásolva!',reportsClear:'Bejelentések törlése',
     chestFound:'Kincsesládát találtál!',talentsGain:function(n){return '+'+n+' talentum'},talentsBalance:function(n){return 'Egyenleged: '+n+' talentum'},
     chestHint:'Minden teljesített állomás talentumot ad, és minden rész közepén egy kincsesláda vár.',tabHome:'Ösvény',tabCollection:'Gyűjtemény',tabStats:'Statisztika',
-    menu:'Menü',profile:'Profil',noName:'Hogy szólítsunk?',joined:function(y){return 'Csatlakozott: '+y},account:'Fiók',accountHint:'Később e-mail-címmel lehet majd menteni a haladást több eszközre.',charTitle:'Karakterem',shieldsUsedTitle:'Felhasznált pajzsok',shieldsLeft:function(n){return n+' pajzs van nálad'},bestDays:function(n){return n+' tanult nap'},partsWord:'rész',partsTitle:'Részek',language:'Nyelv',comingSoon:'Hamarosan',settings:'Beállítások',theme:'Megjelenés',themeHint:'Világos vagy sötét háttér.',themeLight:'Világos',themeDark:'Sötét',themeAuto:'Auto',soundTitle:'Hangok',soundHint:'Rövid hangok a válaszoknál, a ládánál és a kitüntetéseknél.',mapBg:'Térkép-háttér',mapBgOn:'Be',mapBgOff:'Ki',mapBgHint:'Szép tájkép az ösvény mögött. Gyengébb telefonon vagy lassú neten kapcsold ki.',yourName:'A neved',namePlaceholder:'Hogy szólíthatunk?',save:'Mentés',close:'Bezárás',
+    menu:'Menü',profile:'Profil',noName:'Hogy szólítsunk?',joined:function(y){return 'Csatlakozott: '+y},account:'Fiók',accountHint:'Később e-mail-címmel lehet majd menteni a haladást több eszközre.',charTitle:'Karakterem',shieldsUsedTitle:'Felhasznált pajzsok',shieldsLeft:function(n){return n+' pajzs van nálad'},bestDays:function(n){return n+' tanult nap'},partsWord:'rész',partsTitle:'Részek',language:'Nyelv',comingSoon:'Hamarosan',settings:'Beállítások',theme:'Megjelenés',themeHint:'Világos vagy sötét háttér.',themeLight:'Világos',themeDark:'Sötét',themeAuto:'Auto',hapticTitle:'Rezgés',hapticHint:'Rezeg a ládánál, a feladat végén és amikor megvan a napi széria.',soundTitle:'Hangok',soundHint:'Rövid hangok a válaszoknál, a ládánál és a kitüntetéseknél.',mapBg:'Térkép-háttér',mapBgOn:'Be',mapBgOff:'Ki',mapBgHint:'Szép tájkép az ösvény mögött. Gyengébb telefonon vagy lassú neten kapcsold ki.',yourName:'A neved',namePlaceholder:'Hogy szólíthatunk?',save:'Mentés',close:'Bezárás',
     collectionIntro:'Gyűjtsd össze mind a 8 kártyát! Egy kártya ára:',owned:'Megvan',buy:'Megveszem',cardsOwned:function(n,t){return n+'/'+t+' kártya'},
     statLevel:'Szint',statStreak:'Sorozat',statWeek:'Ezen a héten',statShields:'Pajzsok',shieldsUsed:function(n){return n+' pajzsot használtál fel'},lessons:function(n){return n+' lecke'},days:function(n){return n+' nap'},
     studiedDay:'tanult nap',missedDay:'kihagyott nap',shieldedDay:'pajzs védte nap',calendarTitle:'Naptár',monthSummary:function(s,m){return s+' tanult · '+m+' kihagyott nap'},
@@ -1130,7 +1136,7 @@ var STR = {
     weekTitle:'This week',weekChest:'Sunday chest!',weekBonus:function(n){return 'Double reward: you studied every day this week!'},weekScreen:'Your week',weekMsg:function(n){return n>=7?'Full week! A double chest awaits on Sunday.':n+' days done this week – keep going!'},continueBtn:'Continue',subscription:'Subscription',fixTitle:'Fix your mistakes',fixNone:'Nothing to fix right now – you got every question right first time. Whatever you miss next will show up here.',fixBody:function(n){return 'Questions you got wrong on the first try collect here. Practise them, and any you answer correctly first time drops off the list.';},fixCount:function(n){return n+' question'+(n===1?'':'s')+' to fix';},fixStart:'Start practising',fixClear:'Clear the list',fixClearAsk:'Really clear the collected mistakes?',fixTag:'Fixing mistakes',fixResult:function(n){return n?n+' question'+(n===1?'':'s')+' still to fix.':'You have fixed every mistake!';},reportLink:'Something wrong with this question?',reportTitle:'What is wrong with this question?',reportKinds:{wrong:'I think the marked answer is wrong',typo:'Typo or language mistake',unclear:'The question is unclear',verse:'The verse does not match the question',image:'Something is wrong with the picture',other:'Something else'},reportNote:'Tell us what is wrong (optional)',reportNotePh:'For example: I think the other answer is right, because…',reportSend:'Send it',reportPickFirst:'Pick a line, or write what is wrong.',reportThanks:'Thank you! We have noted it.',reportsTitle:'Reported problems',reportsNone:'You have not reported anything yet.',reportsHint:'These reports are stored in this browser. Copy them and send them over so we can fix them.',notTranslated:'This part is not translated yet – the text is shown in Hungarian.',reportSent:'sent',reportPending:'waiting to send',reportsCopy:'Copy the list',reportsCopied:'Copied!',reportsClear:'Clear the reports',
     chestFound:'You found a treasure chest!',talentsGain:function(n){return '+'+n+' talents'},talentsBalance:function(n){return 'Your balance: '+n+' talents'},
     chestHint:'Every finished station earns talents, and a treasure chest waits in the middle of every part.',tabHome:'Path',tabCollection:'Collection',tabStats:'Stats',
-    menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',soundTitle:'Sounds',soundHint:'Short sounds for answers, chests and badges.',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
+    menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',hapticTitle:'Vibration',hapticHint:'Vibrates on chests, at the end of a task and when you keep your streak.',soundTitle:'Sounds',soundHint:'Short sounds for answers, chests and badges.',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
     collectionIntro:'Collect all 8 cards! One card costs:',owned:'Owned',buy:'Buy',cardsOwned:function(n,t){return n+'/'+t+' cards'},
     statLevel:'Level',statStreak:'Streak',statWeek:'This week',statShields:'Shields',shieldsUsed:function(n){return n+(n===1?' shield used':' shields used')},lessons:function(n){return n+(n===1?' lesson':' lessons')},days:function(n){return n+(n===1?' day':' days')},
     studiedDay:'studied',missedDay:'missed',shieldedDay:'shielded day',calendarTitle:'Calendar',monthSummary:function(s,m){return s+' studied · '+m+' missed days'},
@@ -1198,7 +1204,14 @@ function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 function addDays(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
 function startOfDay(d){ var x=new Date(d); x.setHours(0,0,0,0); return x; }
 function mmss(ms){ var t=Math.ceil(ms/1000); return Math.floor(t/60)+':'+('0'+(t%60)).slice(-2); }
-function haptic(kind){ try{ if(navigator.vibrate) navigator.vibrate(kind==='error'?[40,40,40]:20); }catch(e){} }
+// Rezges. Az iPhone-on a bongeszo nem tud rezegni, ezert az appban a burok (app/App.js)
+// csinalja: neki kuldjuk el, milyen rezges kell. Fajtak: success, error, kopp (lada koppintas),
+// lada (lada kinyilik), kesz (feladat vege), szeria (megvan a napi szeria). Beallitasokban ki/be.
+function haptic(kind){ if(S.haptics===false) return;
+  try{ if(window.ReactNativeWebView){ window.ReactNativeWebView.postMessage(JSON.stringify({t:'rezges',k:kind})); return; }
+    if(navigator.vibrate) navigator.vibrate(kind==='error'?[40,40,40]:kind==='lada'||kind==='kesz'?[30,60,60]:kind==='szeria'?[20,50,30,50,50]:kind==='kopp'?35:20); }catch(e){} }
+// A nap elso leckeje meghosszabbitja a szeriat: ezt a jelzest az eredmenylap rezgeti meg.
+var szeriaUj=false;
 
 // ---------- hangok ----------
 // Minden hangot a bongeszo sajat hangkeltoje szol: nincs hangfajl, nincs letoltes,
@@ -1413,7 +1426,7 @@ function studiedToday(){ return played(new Date())>0; }
 function mascotSad(){ if(!S.lastStudy||stage()===0) return false; var t=dayKey(new Date()), y=dayKey(addDays(new Date(),-1)); return S.lastStudy!==t && S.lastStudy!==y; }
 function lessonsThisWeek(){ var t=startOfDay(new Date()), fd=T().firstDay, diff=(t.getDay()-fd+7)%7, start=addDays(t,-diff), n=0; for(var i=0;i<7;i++) n+=played(addDays(start,i)); return n; }
 function lessonsTotal(){ var n=0; for(var k in S.daily) n+=S.daily[k]; return n; }
-function registerToday(){ var t=dayKey(new Date()); S.daily[t]=(S.daily[t]||0)+1; if(S.firstStudy==null) S.firstStudy=Date.now(); if(S.lastStudy!==t){ S.streak=(S.lastStudy===dayKey(addDays(new Date(),-1)))?S.streak+1:1; S.lastStudy=t; } return S.streak; }
+function registerToday(){ var t=dayKey(new Date()); S.daily[t]=(S.daily[t]||0)+1; if(S.firstStudy==null) S.firstStudy=Date.now(); if(S.lastStudy!==t){ szeriaUj=true; S.streak=(S.lastStudy===dayKey(addDays(new Date(),-1)))?S.streak+1:1; S.lastStudy=t; } return S.streak; }
 
 // ---------- chests & cards ----------
 // Chest screen: three taps open it, the reward is paid out on the third.
@@ -1435,7 +1448,7 @@ function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
 function szorzoChip(){ var m=szorzoMost(); if(m<=1) return '';
   return '<span class="st boost"><b>'+(m===1.5?'1,5':m)+'×</b><i>'+T().boostLeft(szorzoPerc())+'</i></span>'; }
 function szorzoPerc(){ if(!S.boost||S.boost.until<=Date.now()) return 0; return Math.max(1,Math.ceil((S.boost.until-Date.now())/60000)); }
-function tapChest(){ if(screen.name!=='chest'||screen.taps>=3) return; screen.taps++; haptic('success'); hang(screen.taps>=3?'lada':'kopp');
+function tapChest(){ if(screen.name!=='chest'||screen.taps>=3) return; screen.taps++; haptic(screen.taps>=3?'lada':'kopp'); hang(screen.taps>=3?'lada':'kopp');
   if(screen.taps>=3){ S.talents+=screen.talents; S.cnt.chests=(S.cnt.chests||0)+1;
     szorzoIndit(screen.mult,screen.perc);
     if(screen.kind==='part'){ var m=C.modules[screen.mi]; markSlot(m,m.parts[screen.pi],screen.slot,true); registerToday(); }
@@ -1787,7 +1800,8 @@ function render(){
   if(screen.name==='home'){ renderHome(); }
   else if(screen.name==='story'){ renderStory(); }
   else if(screen.name==='lesson'){ renderLesson(); }
-  else if(screen.name==='result'){ if(!screen.hangolt){ screen.hangolt=1; hang(screen.r&&screen.r.success?'kesz':'bukas'); } renderResult(); }
+  else if(screen.name==='result'){ if(!screen.hangolt){ screen.hangolt=1; var jo=screen.r&&screen.r.success; hang(jo?'kesz':'bukas'); haptic(jo?'kesz':'error');
+    if(szeriaUj){ szeriaUj=false; setTimeout(function(){ haptic('szeria'); },700); } } renderResult(); }
   else if(screen.name==='chest'){ renderChest(); }
   else if(screen.name==='week'){ renderWeek(); }
   else if(screen.name==='intro'){ renderIntro(); }
@@ -2452,6 +2466,7 @@ function settingsPage(){
     '<button type="button" class="mrow" data-reports><svg><use href="#i-flag"/></svg><div class="mtx"><b>'+esc(s.reportsTitle)+'</b></div>'+((S.reports||[]).length?'<span class="det">'+(S.reports||[]).length+'</span>':'')+'<svg class="chev"><use href="#i-chev"/></svg></button>'+
     '<div class="mrow"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.theme)+'</b><span>'+esc(s.themeHint)+'</span></div><span class="lang"><button type="button" data-theme="light" class="'+(S.theme==='light'?'on':'')+'">'+esc(s.themeLight)+'</button><button type="button" data-theme="dark" class="'+(S.theme==='dark'?'on':'')+'">'+esc(s.themeDark)+'</button><button type="button" data-theme="auto" class="'+(S.theme==='auto'||!S.theme?'on':'')+'">'+esc(s.themeAuto)+'</button></span></div>'+
     '<div class="mrow"><svg><use href="#i-sound"/></svg><div class="mtx"><b>'+esc(s.soundTitle)+'</b><span>'+esc(s.soundHint)+'</span></div><span class="lang"><button type="button" data-sound="1" class="'+(S.sound!==false?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-sound="0" class="'+(S.sound===false?'on':'')+'">'+esc(s.mapBgOff)+'</button></span></div>'+
+    '<div class="mrow"><svg><use href="#i-spark"/></svg><div class="mtx"><b>'+esc(s.hapticTitle)+'</b><span>'+esc(s.hapticHint)+'</span></div><span class="lang"><button type="button" data-haptics="1" class="'+(S.haptics!==false?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-haptics="0" class="'+(S.haptics===false?'on':'')+'">'+esc(s.mapBgOff)+'</button></span></div>'+
     '<div class="mrow"><svg><use href="#i-chart"/></svg><div class="mtx"><b>'+esc(s.diffTitle)+'</b><span>'+esc(s.diffDesc[S.diff||'m'])+'</span></div></div>'+
     '<div class="difrow">'+DIFFS.map(function(d){ return '<button type="button" class="difbtn'+((S.diff||'m')===d?' on':'')+'" data-setdiff="'+d+'">'+esc(s.diffName[d])+'</button>'; }).join('')+'</div>'+
     '<p class="picknote" style="margin-top:2px">'+esc(s.diffLockNote)+'</p>'+
@@ -2573,6 +2588,7 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-repcopy')){
     var txt=(S.reports||[]).map(function(x){ return '- ['+(T().reportKinds[x.k]||x.k)+'] '+x.q+(x.m?'  — '+x.m:'')+'  ('+x.hely+', '+x.mikor+')'; }).join(String.fromCharCode(10));
     try{ navigator.clipboard.writeText(txt); el.textContent=T().reportsCopied; }catch(x){ prompt(T().reportsCopy,txt); } return; }
+  if(d.haptics!=null){ S.haptics=d.haptics==='1'; persist(); render(); haptic('kopp'); return; }
   if(d.sound!=null){ S.sound=d.sound==='1'; persist(); render(); hang('jo'); return; }
   if(d.mapbg!=null){ S.mapBg=d.mapbg==='1'; persist(); render(); return; }
   if(d.lang){ S.lang=d.lang; persist(); render(); return; }
