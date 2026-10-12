@@ -930,28 +930,27 @@ button.pskip.pmore:active{transform:scale(.98)}
   var el=document.getElementById('intro');
   el.hidden=false;
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
-  // Zenedoboz: tiszta, puha hang, lassabb felfutassal es egy kis lagy szurovel, hogy ne csengjen eles.
-  function harang(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, fo=ctx.createGain(), lp=ctx.createBiquadFilter();
-    lp.type='lowpass'; lp.frequency.value=1400; fo.connect(lp); lp.connect(ctx.destination);
-    fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.05); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
-    [[1,1],[2,.12]].forEach(function(f){ var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1]; o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+.05); }); }
-  // Meleg alaphang a vegere: lassan beuszo, halk akkord.
-  function parna(frek,ido,hossz,ero){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, g=ctx.createGain(), o=ctx.createOscillator();
-    o.type='sine'; o.frequency.value=frek; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(ero,t+0.35); g.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
-    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+hossz+.05); }
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
   var T=[350,800,1250,1700,2150], kezd=Date.now();
   // G4-C5 | E5-D5 | C5-E5 | G5-E5 | D5-E5-C5 (zaras), C-dur, kozepes magassagban
-  var dal=[[392,523.25],[659.25,587.33],[523.25,659.25],[783.99,659.25]];
+  // Marimba + basszus (a docs/dallam-proba.html 18-as valtozata, Zsolt valasztasa 2026-10-12).
+  function peng(f,ido,hossz,ero,harm,szuro,felfut){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, g=ctx.createGain(), lp=ctx.createBiquadFilter();
+    lp.type='lowpass'; lp.frequency.value=szuro; g.connect(lp); lp.connect(ctx.destination);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(ero,t+felfut); g.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
+    harm.forEach(function(h){ var o=ctx.createOscillator(), gg=ctx.createGain(); o.type=h[2]||'sine'; o.frequency.value=f*h[0]; gg.gain.value=h[1]; o.connect(gg); gg.connect(g); o.start(t); o.stop(t+hossz+.05); }); }
+  function marimba(f,i,h,e){ peng(f,i,Math.min(h,.8),e,[[1,1],[4,.18],[10,.03]],1800,.008); }
+  function basszus(f,i,h,e){ peng(f,i,h,e,[[1,1,'triangle'],[2,.35],[3,.12]],1200,.006); }
+  var dal=[[392,523.25,659.25],[587.33,659.25,698.46],[659.25,523.25,440],[493.88,587.33,783.99]],
+      mely=[[130.81,196],[146.83,220],[110,164.81],[98,146.83]];
   // A hang csak akkor szol, ha a keszulek engedi (az appban igen; bongeszoben koppintas kell hozza).
   if(ctx&&ctx.state==='suspended'){ try{ ctx.resume(); }catch(e){} }
   setTimeout(function(){
     for(var i=0;i<4;i++)(function(i){
-      setTimeout(function(){ pottyok[i].classList.add('pop'); harang(dal[i][0],0,.7,.07); harang(dal[i][1],.22,.8,.065);
+      setTimeout(function(){ pottyok[i].classList.add('pop'); dal[i].forEach(function(f,k){ marimba(f,k*.12,.6,.065); }); basszus(mely[i][0],0,.4,.06); basszus(mely[i][1],.22,.3,.05);
         [utak[i],arnyek[i]].forEach(function(q){ setTimeout(function(){ q.style.transition='stroke-dashoffset 330ms ease-in-out'; q.style.strokeDashoffset=0; },120); }); },T[i]);
     })(i);
-    setTimeout(function(){ pottyok[4].classList.add('ragyog'); harang(587.33,0,.6,.065); harang(659.25,.2,.6,.065); harang(523.25,.42,1.9,.075); parna(261.63,.42,2,.035); parna(329.63,.42,2,.03); parna(392,.42,2,.03); },T[4]);
+    setTimeout(function(){ pottyok[4].classList.add('ragyog'); marimba(659.25,0,.4,.065); marimba(587.33,.12,.4,.065); marimba(523.25,.24,1.5,.065); basszus(130.81,.24,1.6,.06); },T[4]);
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
@@ -1224,10 +1223,14 @@ var HANG=null;
 function hangCtx(){ if(S.sound===false) return null;
   try{ if(!HANG){ var A=window.AudioContext||window.webkitAudioContext; if(!A) return null; HANG=new A(); }
     if(HANG.state==='suspended') HANG.resume(); }catch(e){ return null; } return HANG; }
-function hangJegy(c,frek,ido,hossz,ero){ var t=c.currentTime+ido, fo=c.createGain(); fo.connect(c.destination);
-  fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+0.01); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
-  [[1,1],[2,0.3],[3.01,0.1]].forEach(function(f){ var o=c.createOscillator(), g=c.createGain(); o.type='sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1];
+function hangPeng(c,frek,ido,hossz,ero,harm,szuro,felfut){ var t=c.currentTime+ido, fo=c.createGain(), lp=c.createBiquadFilter();
+  lp.type='lowpass'; lp.frequency.value=szuro; fo.connect(lp); lp.connect(c.destination);
+  fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+felfut); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
+  harm.forEach(function(f){ var o=c.createOscillator(), g=c.createGain(); o.type=f[2]||'sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1];
     o.connect(g); g.connect(fo); o.start(t); o.stop(t+hossz+0.05); }); }
+// Marimba (dallam) es pengetett basszus: a kezdo dallam (18-as valtozat) hangszine.
+function hangJegy(c,frek,ido,hossz,ero){ hangPeng(c,frek,ido,Math.min(hossz,.8),ero,[[1,1],[4,.18],[10,.03]],1800,.008); }
+function hangBasszus(c,frek,ido,hossz,ero){ hangPeng(c,frek,ido,hossz,ero,[[1,1,'triangle'],[2,.35],[3,.12]],1200,.006); }
 // Fa kopogas a ladahoz: egy rovid, mely "tok" es egy kis zorej.
 function hangKopp(c,ido,ero){ var t=c.currentTime+ido, o=c.createOscillator(), g=c.createGain();
   o.type='sine'; o.frequency.setValueAtTime(190,t); o.frequency.exponentialRampToValueAtTime(90,t+0.09);
@@ -1237,14 +1240,24 @@ function hangKopp(c,ido,ero){ var t=c.currentTime+ido, o=c.createOscillator(), g
   var z=c.createBufferSource(), f=c.createBiquadFilter(), g2=c.createGain(); z.buffer=b; f.type='bandpass'; f.frequency.value=900; f.Q.value=1.2; g2.gain.value=ero*0.8;
   z.connect(f); f.connect(g2); g2.connect(c.destination); z.start(t); }
 var HANGOK={
-  jo:function(c){ hangJegy(c,659.25,0,.35,.18); hangJegy(c,880,.09,.5,.18); },
-  rossz:function(c){ hangJegy(c,311.13,0,.3,.12); hangJegy(c,261.63,.12,.45,.12); },
-  pici:function(c){ hangJegy(c,1046.5,0,.25,.1); },
-  kopp:function(c){ hangKopp(c,0,.5); },
-  lada:function(c){ hangKopp(c,0,.4); [523.25,659.25,783.99,1046.5,1318.5].forEach(function(f,i){ hangJegy(c,f,.12+i*.07,.9,.13); }); },
-  kesz:function(c){ [523.25,659.25,783.99].forEach(function(f,i){ hangJegy(c,f,i*.12,.6,.15); }); hangJegy(c,1046.5,.36,1.2,.16); hangJegy(c,659.25,.38,1.2,.08); },
-  bukas:function(c){ hangJegy(c,392,0,.4,.1); hangJegy(c,329.63,.18,.7,.1); },
-  kituntetes:function(c){ [783.99,987.77,1174.66,1567.98].forEach(function(f,i){ hangJegy(c,f,i*.06,1.4,.1); }); }
+  // jo valasz: ket felfele lepo marimba-hang, alatta egy halk basszus
+  jo:function(c){ hangJegy(c,659.25,0,.4,.11); hangJegy(c,783.99,.1,.5,.11); hangBasszus(c,130.81,0,.4,.05); },
+  // rossz valasz: ket lefele lepo, melyebb, halkabb hang (nem bunteto, csak jelez)
+  rossz:function(c){ hangJegy(c,329.63,0,.35,.08); hangJegy(c,261.63,.13,.5,.08); hangBasszus(c,98,0,.5,.05); },
+  // parositas / szinezes egy-egy talalata: egy rovid, fenyes marimba-pottyenes
+  pici:function(c){ hangJegy(c,783.99,0,.3,.07); },
+  // lada koppintasa: fa kopogas, alatta egy mely marimba-hang
+  kopp:function(c){ hangKopp(c,0,.45); hangJegy(c,196,0,.35,.06); },
+  // lada kinyilik: kopogas, felfuto marimba-felbontas es basszus
+  lada:function(c){ hangKopp(c,0,.35); [523.25,659.25,783.99,1046.5].forEach(function(f,i){ hangJegy(c,f,.1+i*.1,.7,.08); }); hangBasszus(c,130.81,.1,1.2,.06); hangBasszus(c,196,.3,.8,.04); },
+  // feladat vege, sikerrel: a kezdo dallam zarasa (E-D-C) basszussal
+  kesz:function(c){ hangJegy(c,659.25,0,.4,.09); hangJegy(c,587.33,.12,.4,.09); hangJegy(c,523.25,.24,1.2,.1); hangBasszus(c,98,0,.3,.05); hangBasszus(c,130.81,.24,1.4,.06); },
+  // feladat vege, nem sikerult: lassu, puha, lefele hajlo ket hang
+  bukas:function(c){ hangJegy(c,392,0,.5,.07); hangJegy(c,329.63,.2,.8,.07); hangBasszus(c,110,.2,1,.04); },
+  // uj kitunetes: vidam marimba-futam felfele, a vegen egy C-dur akkord
+  kituntetes:function(c){ [392,523.25,659.25,783.99].forEach(function(f,i){ hangJegy(c,f,i*.08,.5,.08); }); hangJegy(c,1046.5,.34,1,.08); hangBasszus(c,130.81,.34,1.2,.05); hangBasszus(c,196,.34,1,.04); },
+  // megvan a napi szeria: harom lepcsozetes, egyre magasabb hang, mint a rezges
+  szeria:function(c){ [523.25,659.25,783.99].forEach(function(f,i){ hangJegy(c,f,i*.11,.5,.08); hangBasszus(c,[130.81,164.81,196][i],i*.11,.4,.04); }); }
 };
 function hang(nev){ var c=hangCtx(); if(!c||!HANGOK[nev]) return; try{ HANGOK[nev](c); }catch(e){} }
 
@@ -1804,7 +1817,7 @@ function render(){
   else if(screen.name==='story'){ renderStory(); }
   else if(screen.name==='lesson'){ renderLesson(); }
   else if(screen.name==='result'){ if(!screen.hangolt){ screen.hangolt=1; var jo=screen.r&&screen.r.success; hang(jo?'kesz':'bukas'); haptic(jo?'kesz':'error');
-    if(szeriaUj){ szeriaUj=false; setTimeout(function(){ haptic('szeria'); },700); } } renderResult(); }
+    if(szeriaUj){ szeriaUj=false; setTimeout(function(){ haptic('szeria'); hang('szeria'); },700); } } renderResult(); }
   else if(screen.name==='chest'){ renderChest(); }
   else if(screen.name==='week'){ renderWeek(); }
   else if(screen.name==='intro'){ renderIntro(); }
