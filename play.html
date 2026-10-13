@@ -954,7 +954,7 @@ button.pskip.pmore:active{transform:scale(.98)}
   var T=[350,800,1250,1700,2150], kezd=Date.now();
   // G4-C5 | E5-D5 | C5-E5 | G5-E5 | D5-E5-C5 (zaras), C-dur, kozepes magassagban
   // Marimba + basszus (a docs/dallam-proba.html 18-as valtozata, Zsolt valasztasa 2026-10-12).
-  function peng(f,ido,hossz,ero,harm,szuro,felfut){ if(!ctx||ctx.state!=='running') return; var t=ctx.currentTime+ido, g=ctx.createGain(), lp=ctx.createBiquadFilter();
+  function peng(f,ido,hossz,ero,harm,szuro,felfut){ if(!ctx||ctx.state!=='running') return; ero=Math.min(.9,ero*2.5); var t=ctx.currentTime+ido, g=ctx.createGain(), lp=ctx.createBiquadFilter();
     lp.type='lowpass'; lp.frequency.value=szuro; g.connect(lp); lp.connect(ctx.destination);
     g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(ero,t+felfut); g.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
     harm.forEach(function(h){ var o=ctx.createOscillator(), gg=ctx.createGain(); o.type=h[2]||'sine'; o.frequency.value=f*h[0]; gg.gain.value=h[1]; o.connect(gg); gg.connect(g); o.start(t); o.stop(t+hossz+.05); }); }
@@ -1250,7 +1250,9 @@ var HANG=null;
 function hangCtx(){ if(S.sound===false) return null;
   try{ if(!HANG){ var A=window.AudioContext||window.webkitAudioContext; if(!A) return null; HANG=new A(); }
     if(HANG.state==='suspended') HANG.resume(); }catch(e){ return null; } return HANG; }
-function hangPeng(c,frek,ido,hossz,ero,harm,szuro,felfut){ var t=c.currentTime+ido, fo=c.createGain(), lp=c.createBiquadFilter();
+// HANGERO: kozos hangero-szorzo (a telefon hangszoroja halk, ezert 2,5x).
+var HANGERO=2.5;
+function hangPeng(c,frek,ido,hossz,ero,harm,szuro,felfut){ ero=Math.min(.9,ero*HANGERO); var t=c.currentTime+ido, fo=c.createGain(), lp=c.createBiquadFilter();
   lp.type='lowpass'; lp.frequency.value=szuro; fo.connect(lp); lp.connect(c.destination);
   fo.gain.setValueAtTime(0.0001,t); fo.gain.exponentialRampToValueAtTime(ero,t+felfut); fo.gain.exponentialRampToValueAtTime(0.0001,t+hossz);
   harm.forEach(function(f){ var o=c.createOscillator(), g=c.createGain(); o.type=f[2]||'sine'; o.frequency.value=frek*f[0]; g.gain.value=f[1];
@@ -1259,7 +1261,7 @@ function hangPeng(c,frek,ido,hossz,ero,harm,szuro,felfut){ var t=c.currentTime+i
 function hangJegy(c,frek,ido,hossz,ero){ hangPeng(c,frek,ido,Math.min(hossz,.8),ero,[[1,1],[4,.18],[10,.03]],1800,.008); }
 function hangBasszus(c,frek,ido,hossz,ero){ hangPeng(c,frek,ido,hossz,ero,[[1,1,'triangle'],[2,.35],[3,.12]],1200,.006); }
 // Fa kopogas a ladahoz: egy rovid, mely "tok" es egy kis zorej.
-function hangKopp(c,ido,ero){ var t=c.currentTime+ido, o=c.createOscillator(), g=c.createGain();
+function hangKopp(c,ido,ero){ ero=Math.min(.9,ero*HANGERO); var t=c.currentTime+ido, o=c.createOscillator(), g=c.createGain();
   o.type='sine'; o.frequency.setValueAtTime(190,t); o.frequency.exponentialRampToValueAtTime(90,t+0.09);
   g.gain.setValueAtTime(ero,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.12); o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+0.15);
   var n=(c.sampleRate*0.04)|0, b=c.createBuffer(1,n,c.sampleRate), d=b.getChannelData(0);
