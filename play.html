@@ -541,6 +541,8 @@ button.pskip.pmore:active{transform:scale(.98)}
 /* Ladabol nyert szorzo: az allapotsorban es a lada megnyitasakor. */
 .srow .st.boost{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;
   background:color-mix(in srgb,var(--gold) 20%,var(--surface));border:1px solid var(--gold);color:var(--gold)}
+/* Szorzo kepe (boost-15 / boost-2), ha mar elkeszult; addig a felirat latszik. */
+img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44px;height:44px;display:block;margin:0 auto 4px}
 .srow .st.boost b{font-size:15px;font-weight:800}
 .srow .st.boost i{font-style:normal;font-size:10px;font-weight:700;opacity:.85}
 .boostwon{margin:8px auto 0;max-width:280px;padding:9px 14px;border-radius:12px;font-size:14px;font-weight:700;
@@ -1496,7 +1498,7 @@ function szorzoIndit(mult,perc){ if(!mult||!perc) return; S.boost={m:mult,until:
 function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
 // Az allapotsorban latszik, ha eppen szorzo van ervenyben, es mennyi ideig.
 function szorzoChip(){ var m=szorzoMost(); if(m<=1) return '';
-  return '<span class="st boost"><b>'+(m===1.5?'1,5':m)+'×</b><i>'+T().boostLeft(szorzoPerc())+'</i></span>'; }
+  return '<span class="st boost">'+(img(m===1.5?'boost-15':'boost-2','bic')||'<b>'+(m===1.5?'1,5':m)+'×</b>')+'<i>'+T().boostLeft(szorzoPerc())+'</i></span>'; }
 function szorzoPerc(){ if(!S.boost||S.boost.until<=Date.now()) return 0; return Math.max(1,Math.ceil((S.boost.until-Date.now())/60000)); }
 function tapChest(){ if(screen.name!=='chest'||screen.taps>=3) return; screen.taps++; haptic(screen.taps>=3?'lada':'kopp'); hang(screen.taps>=3?'lada':'kopp');
   if(screen.taps>=3){ S.talents+=screen.talents; S.cnt.chests=(S.cnt.chests||0)+1;
@@ -2056,7 +2058,7 @@ function shopHtml(){ var s=T(), aj=napiAjanlat(), h='<h3 class="shopsec">'+esc(s
     h+='<div class="gc'+(k===0?' deal':'')+'">'+(k===0?'<span class="dealtag">−'+Math.round(DEAL_OFF*100)+'%</span>':'')+'<button type="button" class="gcinfo" data-giftinfo="'+i+'"><div class="em">'+cardImg(g)+'</div><div class="nm">'+esc(L(g))+'</div></button>'+
       '<button type="button" class="buy" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+talentIco()+(k===0?'<s>'+g.price+'</s> ':'')+ar+'</button></div>'; }); h+='</div>'; }
   h+='<h3 class="shopsec">'+esc(s.shopOther)+'</h3>';
-  h+='<div class="shop"><div class="item"><div class="ic sh"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg></div><div class="tx"><b>'+esc(s.heartsRefill)+'</b><span>'+esc(s.heartsRefillDesc)+'</span><small>'+esc(hearts()<HEARTS?s.heartsNow(hearts(),HEARTS):s.heartsFull)+'</small></div>'+
+  h+='<div class="shop"><div class="item"><div class="ic sh">'+(img('shop-hearts')||'<svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>')+'</div><div class="tx"><b>'+esc(s.heartsRefill)+'</b><span>'+esc(s.heartsRefillDesc)+'</span><small>'+esc(hearts()<HEARTS?s.heartsNow(hearts(),HEARTS):s.heartsFull)+'</small></div>'+
     '<button type="button" class="buy" data-refill '+(canRefillHearts()?'':'disabled')+'>'+talentIco()+HEART_REFILL_PRICE+'</button></div></div>';
   return h+'<div class="shop"><div class="item"><div class="ic sh">'+(img('shop-shield')||'<svg viewBox="0 0 24 24"><use href="#i-shield"/></svg>')+'</div><div class="tx"><b>'+esc(s.shield)+'</b><span>'+esc(s.shieldDesc)+'</span><small>'+esc(s.shieldOwned(S.shields))+(S.shields>=SHIELD_MAX?' · '+esc(s.shieldMax):'')+'</small></div>'+
     '<button type="button" class="buy" data-buyshield '+(canBuyShield()?'':'disabled')+'>'+talentIco()+SHIELD_PRICE+'</button></div></div>'; }
@@ -2482,7 +2484,7 @@ function renderChest(){
   var cls=open?'opened':(screen.taps===0?'idle':'w'+(screen.taps%2+1)+' t'+screen.taps), parts='';
   if(screen.taps>0){ var n=open?14:5, coin=talentIco('fly'), star=starIco(3), glyphs=open?[coin,star,'✨',coin,star]:['✨',star,'✨']; for(var k=0;k<n;k++){ var a=(Math.PI*(open?2:1.2))*(k/n)+(open?0:Math.PI*-0.1)+(open?0:0), dist=open?90+Math.random()*70:50+Math.random()*30; var dx=(open?Math.cos(a):Math.cos(Math.PI+a))*dist, dy=(open?Math.sin(a):-Math.abs(Math.sin(a)))*dist-(open?0:30); parts+='<span class="p" style="--dx:'+dx.toFixed(0)+'px;--dy:'+dy.toFixed(0)+'px;--r:'+((Math.random()*160-80)|0)+'deg;animation-delay:'+(Math.random()*.15).toFixed(2)+'s">'+glyphs[k%glyphs.length]+'</span>'; } }
   h+='<button type="button" class="tapchest '+cls+'" data-tap '+(open?'disabled':'')+'><span class="glow"></span>'+chestHtml(open,150)+parts+'</button>';
-  if(open){ h+='<div class="reveal"><div class="gain">'+talentIco('spin')+'<span class="xp">'+esc(s.talentsGain(screen.talents))+'</span></div>'+(screen.bonus?'<div class="m c-gold" style="font-weight:700">'+esc(s.weekBonus(screen.bonus))+'</div>':'')+(screen.mult?'<div class="boostwon"><b>'+(screen.mult===1.5?'1,5':screen.mult)+'×</b>'+esc(s.boostWon(screen.perc))+'</div>':'')+'<div class="m">'+esc(s.talentsBalance(S.talents))+'</div>'+
+  if(open){ h+='<div class="reveal"><div class="gain">'+talentIco('spin')+'<span class="xp">'+esc(s.talentsGain(screen.talents))+'</span></div>'+(screen.bonus?'<div class="m c-gold" style="font-weight:700">'+esc(s.weekBonus(screen.bonus))+'</div>':'')+(screen.mult?'<div class="boostwon">'+(img(screen.mult===1.5?'boost-15':'boost-2','bic big')||'<b>'+(screen.mult===1.5?'1,5':screen.mult)+'×</b>')+esc(s.boostWon(screen.perc))+'</div>':'')+'<div class="m">'+esc(s.talentsBalance(S.talents))+'</div>'+
     '<div class="acts"><button type="button" class="primary" data-home>'+esc(s.backHome)+'</button><button type="button" class="secondary" data-gotab="collection">'+esc(s.tabCollection)+'</button></div></div>'; }
   else { h+='<div class="tapme">'+ico('up')+'<span>'+esc(s.tapChest)+'</span></div><div class="tdots">'+d+'</div>'; }
   view.innerHTML=h+'</div>'; foot.innerHTML='';
