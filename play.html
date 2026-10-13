@@ -491,6 +491,7 @@ button.pskip.pmore:active{transform:scale(.98)}
 .mbar .mbadge img{width:46px;height:46px;object-fit:contain;display:block}
 .mbar .mbadge b{font-family:Spectral,Georgia,serif;font-size:21px;font-weight:700}
 .mbar .mbadge:active{transform:scale(.93)}
+.mbar.coll{position:static;margin:20px 0 10px}.mbar.coll .mbadge:active{transform:none}
 .mbar .mdiv{flex:none;width:1px;height:36px;margin:0 13px;background:rgba(255,255,255,.4)}
 .mbar .mtx{flex:1;min-width:0}
 .mbar .mtx small{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;opacity:.9}
@@ -2298,7 +2299,9 @@ function collectionHtml(){
   h+='<div class="intro">'+esc(s.collectionSub)+'</div>';
   C.modules.forEach(function(u,ui){
     var un=moduleUnlocked(ui);
-    h+='<div class="mh"><span class="me" style="background:'+u.color+'">'+(img(u.icon||("unit-"+u.id))||'📖')+'</span>'+esc((ui+1)+'. '+NM(u))+(un?'':'<span class="lk">'+ico('lock')+esc(s.lockedModule)+'</span>')+'</div>';
+    // Ugyanaz a hosszu, szines modulsav, mint az osvenyen (csak itt nem ragad fel es nem gomb).
+    h+='<div class="mbar coll'+(un?'':' lock')+'" style="--mc:'+u.color+(un?';background:'+u.color:'')+'"><span class="mbadge">'+(img(u.icon||('unit-'+u.id))||'<b>'+(ui+1)+'</b>')+'</span><i class="mdiv"></i>'+
+      '<div class="mtx"><small>'+(ui+1)+'. '+esc(s.section)+(un?'':' · '+esc(s.lockedModule))+'</small><b>'+esc(NM(u))+'</b></div>'+(un?'':ico('lock'))+'</div>';
     if(u.blurb) h+='<p class="mblurb">'+esc(L(u.blurb))+'</p>';
     var tr=(C.trophies||[]).filter(function(t){return t.unit===u.id;})[0];
     if(tr){ var to=unitComplete(u); h+='<div class="hcard '+(to?'on':'')+'"><div class="em">'+(img(tr.img)||'🏆')+'</div><div class="tx"><small>'+esc(s.trophyTag)+'</small><b>'+esc(L(tr))+'</b><span>'+esc(to?L(tr.bio):((u.parts||[]).length?s.trophyLocked(partsDoneIn(u),u.parts.length):s.moduleSoon))+'</span></div><i class="seal">'+(to?ico('seal'):ico('lock'))+'</i></div>'; }
