@@ -188,6 +188,11 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 .lvlrow span{font-size:12px;color:var(--muted);line-height:1.35}
 .difrow{display:flex;gap:6px;margin:-4px 0 8px}
 .difrow+.difrow{margin-top:0}
+.nlist{display:flex;flex-direction:column;gap:6px;margin:0 0 8px}
+.nopt{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 12px;border-radius:12px;background:var(--surface);border:1.5px solid var(--border);text-align:left}
+.nopt i{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--border);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px;color:var(--brand-ink)}
+.nopt.on{border-color:var(--brand)}.nopt.on i{background:var(--brand);border-color:var(--brand)}
+.nopt span{display:flex;flex-direction:column;min-width:0}.nopt b{font-size:14px}.nopt small{font-size:12px;color:var(--muted);line-height:1.35}
 /* Automatikus modban ez jelzi, hol tart most a jatekos (de nincs rogzitve). */
 .difbtn.most{border-color:var(--brand);color:var(--brand);border-style:dashed}
 .difbtn{flex:1;padding:10px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;text-align:center}
@@ -1070,13 +1075,13 @@ var S = {
   progress: load('bq-progress',{}), heartLosses: load('bq-heart-losses',[]), streak: load('bq-streak',0),
   lastStudy: load('bq-laststudy',null), chests: load('bq-chests',{}), cards: load('bq-gift-log',[]),
   daily: load('bq-daily',{}), firstStudy: load('bq-first-study',null), stars: load('bq-stars',{}), weekChests: load('bq-week-chests',{}),
-  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), wish: load('bq-wish',null), setBonus: load('bq-set-bonus',{}), sound: load('bq-sound',true), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
+  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), wish: load('bq-wish',null), setBonus: load('bq-set-bonus',{}), sound: load('bq-sound',true), notif: load('bq-notif',null), felbe: load('bq-felbe',null), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{})
 };
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
   save('bq-laststudy',S.lastStudy); save('bq-chests',S.chests); save('bq-gift-log',S.cards);
-  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-wish',S.wish); save('bq-set-bonus',S.setBonus); save('bq-sound',S.sound); save('bq-haptics',S.haptics); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
+  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-wish',S.wish); save('bq-set-bonus',S.setBonus); save('bq-sound',S.sound); save('bq-notif',S.notif); save('bq-felbe',S.felbe); save('bq-haptics',S.haptics); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour);
 }
 
 // ---------- rules ----------
@@ -1125,7 +1130,7 @@ var STR = {
     weekTitle:'Ezen a héten',weekChest:'Vasárnapi láda!',weekBonus:function(n){return 'Dupla jutalom: a hét minden napján tanultál!'},weekScreen:'A heti sorozatod',weekMsg:function(n){return n>=7?'Teljes hét! Vasárnap dupla láda vár.':n+' nap megvan ezen a héten – így tovább!'},continueBtn:'Tovább',subscription:'Előfizetés',fixTitle:'Hibák javítása',tourAgain:'Bemutató újra',fixNone:'Most nincs mit javítani – minden kérdésre elsőre jól válaszoltál. Ha legközelebb elrontasz valamit, ide gyűlik.',fixBody:function(n){return 'Ide gyűlnek azok a kérdések, amelyeket elsőre elrontottál. Gyakorold be őket, és amelyikre itt elsőre jól felelsz, kikerül a listáról.';},fixCount:function(n){return n+' kérdés vár javításra';},fixStart:'Kezdjük a gyakorlást',fixClear:'Lista ürítése',fixClearAsk:'Biztosan törlöd a gyűjtött hibákat?',fixTag:'Hibajavító',fixResult:function(n){return n?'Még '+n+' kérdés vár javításra.':'Minden hibádat kijavítottad!';},reportLink:'Hibás ez a kérdés?',reportTitle:'Mi a baj ezzel a kérdéssel?',reportKinds:{wrong:'A megjelölt válasz szerintem rossz',typo:'Elírás vagy nyelvi hiba',unclear:'Nem érthető a kérdés',verse:'Az igevers nem illik a kérdéshez',image:'A képpel van baj',other:'Valami más'},reportNote:'Írd le, mi a baj (nem kötelező)',reportNotePh:'Például: a helyes válasz szerintem a másik, mert…',reportSend:'Elküldöm',reportPickFirst:'Válassz egy sort, vagy írd le, mi a baj.',reportThanks:'Köszönjük! Feljegyeztük.',reportsTitle:'Bejelentett hibák',reportsNone:'Még nem jelentettél be hibát.',reportsHint:'Ezek a bejelentések ebben a böngészőben tárolódnak. Másold ki őket, és küldd el, hogy javítani tudjuk.',notTranslated:'Ez a rész még nincs lefordítva – a szöveg magyarul látszik.',reportSent:'elküldve',reportPending:'küldésre vár',reportsCopy:'Lista másolása',reportsCopied:'Kimásolva!',reportsClear:'Bejelentések törlése',
     chestFound:'Kincsesládát találtál!',talentsGain:function(n){return '+'+n+' talentum'},talentsBalance:function(n){return 'Egyenleged: '+n+' talentum'},
     chestHint:'Minden teljesített állomás talentumot ad, és minden rész közepén egy kincsesláda vár.',tabHome:'Ösvény',tabCollection:'Gyűjtemény',tabStats:'Statisztika',
-    menu:'Menü',profile:'Profil',noName:'Hogy szólítsunk?',joined:function(y){return 'Csatlakozott: '+y},account:'Fiók',accountHint:'Később e-mail-címmel lehet majd menteni a haladást több eszközre.',charTitle:'Karakterem',shieldsUsedTitle:'Felhasznált pajzsok',shieldsLeft:function(n){return n+' pajzs van nálad'},bestDays:function(n){return n+' tanult nap'},partsWord:'rész',partsTitle:'Részek',language:'Nyelv',comingSoon:'Hamarosan',settings:'Beállítások',theme:'Megjelenés',themeHint:'Világos vagy sötét háttér.',themeLight:'Világos',themeDark:'Sötét',themeAuto:'Auto',hapticTitle:'Rezgés',hapticHint:'Rezeg a ládánál, a feladat végén és amikor megvan a napi széria.',soundTitle:'Hangok',soundHint:'Rövid hangok a válaszoknál, a ládánál és a kitüntetéseknél.',mapBg:'Térkép-háttér',mapBgOn:'Be',mapBgOff:'Ki',mapBgHint:'Szép tájkép az ösvény mögött. Gyengébb telefonon vagy lassú neten kapcsold ki.',yourName:'A neved',namePlaceholder:'Hogy szólíthatunk?',save:'Mentés',close:'Bezárás',
+    menu:'Menü',profile:'Profil',noName:'Hogy szólítsunk?',joined:function(y){return 'Csatlakozott: '+y},account:'Fiók',accountHint:'Később e-mail-címmel lehet majd menteni a haladást több eszközre.',charTitle:'Karakterem',shieldsUsedTitle:'Felhasznált pajzsok',shieldsLeft:function(n){return n+' pajzs van nálad'},bestDays:function(n){return n+' tanult nap'},partsWord:'rész',partsTitle:'Részek',language:'Nyelv',comingSoon:'Hamarosan',settings:'Beállítások',theme:'Megjelenés',themeHint:'Világos vagy sötét háttér.',themeLight:'Világos',themeDark:'Sötét',themeAuto:'Auto',ntTitle:'Értesítések',ntHint:'Naponta legfeljebb egy rövid emlékeztető. Este 8 után és iskolaidőben soha.',ntTip:{napi:['Napi emlékeztető','A választott időpontban, ha aznap még nem tanultál. Ide tartozik a széria-védő és a félbehagyott rész is.'],lada:['Vasárnapi láda','Vasárnap délelőtt, ha még nem nyitottad ki.'],sziv:['Szívek','Amikor mind az öt szíved visszatöltődött.'],unnep:['Ünnepek','Húsvétkor, pünkösdkor és karácsonykor egy ünnepi történet.'],szulo:['Szülői heti összefoglaló','Vasárnap este: hány napot tanult a héten. Szülőknek.']},ntProbaGomb:'Próba-értesítés küldése (1 perc múlva)',ntProbaKesz:'Elküldve – 1 perc múlva megjön ✓',ntProbaCim:'BibleTravel',ntProba:'Így fognak kinézni az értesítések. 🕊️',ntKerdCim:'Szólhatok holnap?',ntKerd:'Ha szeretnéd, holnap szólok, amikor jön a következő történet. Naponta legfeljebb egyszer, este 8 után soha. A Beállításokban bármikor kikapcsolhatod.',ntIgen:'Igen, szólj nekem',ntNem:'Most nem',ntNapiCim:'Olívia vár 🕊️',ntNapi:function(r){ return r?'Ma ezzel folytatjuk: '+r+'. Egy rövid lecke elég!':'Egy rövid lecke ma is elég. Folytatjuk?'; },ntSzeriaCim:'Megtartod a lángot? 🔥',ntSzeria:function(n){ return 'Már '+n+' napja tanulsz egymás után. Egy rövid lecke ma is elég hozzá.'; },ntKivansCim:'Ma akciós a kívánságod!',ntKivans:function(n){ return n+' ma 30% kedvezménnyel kapható a boltban.'; },ntFolytCim:'Hol is tartottunk?',ntFolyt:function(n){ return 'Félbemaradt: '+n+'. Megnézzük, hogyan folytatódik?'; },ntLadaCim:'Vasárnapi láda 🎁',ntLada:'Ma kinyithatod a vasárnapi ládát. Ha egész héten tanultál, dupla jutalom jár!',ntSzivCim:'Visszajöttek a szíveid ❤️',ntSziv:'Mind az öt szíved visszatöltődött. Folytathatod!',ntSzuloCim:'Heti összefoglaló',ntSzulo:function(n,sz){ return 'Ezen a héten '+n+' napot tanult a BibleTravelben. A jelenlegi széria: '+sz+' nap.'; },ntUnnepCim:{husvet:'Áldott húsvétot!',punkosd:'Áldott pünkösdöt!',karacsony:'Áldott karácsonyt!'},ntUnnep:{husvet:'Ma van húsvét. Olvasd el, mi történt a harmadik napon reggel!',punkosd:'Ma van pünkösd. Nézd meg, mi történt, amikor eljött a Szentlélek!',karacsony:'Ma van karácsony. Olvasd el Jézus születésének történetét!'},felbeCim:'Ez a feladat megszakadt',felbe:function(p){ return 'A feladat '+p+' percnél tovább állt, ezért nem számít elvégzettnek. Kezdd újra, amikor ráérsz!'; },hapticTitle:'Rezgés',hapticHint:'Rezeg a ládánál, a feladat végén és amikor megvan a napi széria.',soundTitle:'Hangok',soundHint:'Rövid hangok a válaszoknál, a ládánál és a kitüntetéseknél.',mapBg:'Térkép-háttér',mapBgOn:'Be',mapBgOff:'Ki',mapBgHint:'Szép tájkép az ösvény mögött. Gyengébb telefonon vagy lassú neten kapcsold ki.',yourName:'A neved',namePlaceholder:'Hogy szólíthatunk?',save:'Mentés',close:'Bezárás',
     collectionIntro:'Gyűjtsd össze mind a 8 kártyát! Egy kártya ára:',owned:'Megvan',buy:'Megveszem',cardsOwned:function(n,t){return n+'/'+t+' kártya'},
     statLevel:'Szint',statStreak:'Sorozat',statWeek:'Ezen a héten',statShields:'Pajzsok',shieldsUsed:function(n){return n+' pajzsot használtál fel'},lessons:function(n){return n+' lecke'},days:function(n){return n+' nap'},
     studiedDay:'tanult nap',missedDay:'kihagyott nap',shieldedDay:'pajzs védte nap',calendarTitle:'Naptár',monthSummary:function(s,m){return s+' tanult · '+m+' kihagyott nap'},
@@ -1163,7 +1168,7 @@ var STR = {
     weekTitle:'This week',weekChest:'Sunday chest!',weekBonus:function(n){return 'Double reward: you studied every day this week!'},weekScreen:'Your week',weekMsg:function(n){return n>=7?'Full week! A double chest awaits on Sunday.':n+' days done this week – keep going!'},continueBtn:'Continue',subscription:'Subscription',fixTitle:'Fix your mistakes',tourAgain:'Show the tour again',fixNone:'Nothing to fix right now – you got every question right first time. Whatever you miss next will show up here.',fixBody:function(n){return 'Questions you got wrong on the first try collect here. Practise them, and any you answer correctly first time drops off the list.';},fixCount:function(n){return n+' question'+(n===1?'':'s')+' to fix';},fixStart:'Start practising',fixClear:'Clear the list',fixClearAsk:'Really clear the collected mistakes?',fixTag:'Fixing mistakes',fixResult:function(n){return n?n+' question'+(n===1?'':'s')+' still to fix.':'You have fixed every mistake!';},reportLink:'Something wrong with this question?',reportTitle:'What is wrong with this question?',reportKinds:{wrong:'I think the marked answer is wrong',typo:'Typo or language mistake',unclear:'The question is unclear',verse:'The verse does not match the question',image:'Something is wrong with the picture',other:'Something else'},reportNote:'Tell us what is wrong (optional)',reportNotePh:'For example: I think the other answer is right, because…',reportSend:'Send it',reportPickFirst:'Pick a line, or write what is wrong.',reportThanks:'Thank you! We have noted it.',reportsTitle:'Reported problems',reportsNone:'You have not reported anything yet.',reportsHint:'These reports are stored in this browser. Copy them and send them over so we can fix them.',notTranslated:'This part is not translated yet – the text is shown in Hungarian.',reportSent:'sent',reportPending:'waiting to send',reportsCopy:'Copy the list',reportsCopied:'Copied!',reportsClear:'Clear the reports',
     chestFound:'You found a treasure chest!',talentsGain:function(n){return '+'+n+' talents'},talentsBalance:function(n){return 'Your balance: '+n+' talents'},
     chestHint:'Every finished station earns talents, and a treasure chest waits in the middle of every part.',tabHome:'Path',tabCollection:'Collection',tabStats:'Stats',
-    menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',hapticTitle:'Vibration',hapticHint:'Vibrates on chests, at the end of a task and when you keep your streak.',soundTitle:'Sounds',soundHint:'Short sounds for answers, chests and badges.',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
+    menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',ntTitle:'Notifications',ntHint:'At most one short reminder a day. Never after 8 pm or during school hours.',ntTip:{napi:['Daily reminder','At your chosen time, if you have not studied yet that day. Includes the streak saver and unfinished parts.'],lada:['Sunday chest','On Sunday morning, if you have not opened it yet.'],sziv:['Hearts','When all five hearts are back.'],unnep:['Holidays','A holiday story at Easter, Pentecost and Christmas.'],szulo:['Weekly summary for parents','Sunday evening: how many days were studied this week. For parents.']},ntProbaGomb:'Send a test notification (in 1 minute)',ntProbaKesz:'Sent – it arrives in 1 minute ✓',ntProbaCim:'BibleTravel',ntProba:'This is how the notifications will look. 🕊️',ntKerdCim:'May I remind you tomorrow?',ntKerd:'If you like, I will let you know tomorrow when the next story is ready. At most once a day, never after 8 pm. You can turn it off any time in Settings.',ntIgen:'Yes, remind me',ntNem:'Not now',ntNapiCim:'Olivia is waiting 🕊️',ntNapi:function(r){ return r?'Today we continue with: '+r+'. One short lesson is enough!':'One short lesson is enough today. Shall we go on?'; },ntSzeriaCim:'Keep your flame? 🔥',ntSzeria:function(n){ return 'You have studied '+n+' days in a row. One short lesson today keeps it going.'; },ntKivansCim:'Your wish is on sale today!',ntKivans:function(n){ return n+' is 30% off in the shop today.'; },ntFolytCim:'Where were we?',ntFolyt:function(n){ return 'Unfinished: '+n+'. Shall we see how it goes on?'; },ntLadaCim:'Sunday chest 🎁',ntLada:'You can open the Sunday chest today. If you studied every day this week, the reward is doubled!',ntSzivCim:'Your hearts are back ❤️',ntSziv:'All five hearts are full again. Carry on!',ntSzuloCim:'Weekly summary',ntSzulo:function(n,sz){ return 'This week your child studied '+n+' days in BibleTravel. Current streak: '+sz+' days.'; },ntUnnepCim:{husvet:'Happy Easter!',punkosd:'Happy Pentecost!',karacsony:'Merry Christmas!'},ntUnnep:{husvet:'It is Easter today. Read what happened on the morning of the third day!',punkosd:'It is Pentecost today. See what happened when the Holy Spirit came!',karacsony:'It is Christmas today. Read the story of Jesus’ birth!'},felbeCim:'This task was interrupted',felbe:function(p){ return 'The task was left for more than '+p+' minutes, so it does not count as done. Start again when you are ready!'; },hapticTitle:'Vibration',hapticHint:'Vibrates on chests, at the end of a task and when you keep your streak.',soundTitle:'Sounds',soundHint:'Short sounds for answers, chests and badges.',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
     collectionIntro:'Collect all 8 cards! One card costs:',owned:'Owned',buy:'Buy',cardsOwned:function(n,t){return n+'/'+t+' cards'},
     statLevel:'Level',statStreak:'Streak',statWeek:'This week',statShields:'Shields',shieldsUsed:function(n){return n+(n===1?' shield used':' shields used')},lessons:function(n){return n+(n===1?' lesson':' lessons')},days:function(n){return n+(n===1?' day':' days')},
     studiedDay:'studied',missedDay:'missed',shieldedDay:'shielded day',calendarTitle:'Calendar',monthSummary:function(s,m){return s+' studied · '+m+' missed days'},
@@ -1294,6 +1299,58 @@ var HANGOK={
   // megvan a napi szeria: harom lepcsozetes, egyre magasabb hang, mint a rezges
   szeria:function(c){ [523.25,659.25,783.99].forEach(function(f,i){ hangJegy(c,f,i*.11,.5,.08); hangBasszus(c,[130.81,164.81,196][i],i*.11,.4,.04); }); }
 };
+// ---------- ertesitesek ----------
+// Csak helyi ertesitesek: a jatek kiszamolja a kovetkezo napokra, mit es mikor kell kuldeni,
+// es atadja az app buroknak (App.js), az pedig a telefonra utemezi. Nincs szerver, nem megy ki adat.
+// Szabalyok: naponta legfeljebb 1 (vasarnap 2), este 8 utan es reggel 8 elott soha,
+// hetkoznap 8-14 kozott soha; ha nem jon vissza, a 3. nap utan ritkul, a 7. nap utan leall.
+var NOTIF_ALAP={on:false,ido:17,napi:true,lada:true,sziv:true,unnep:true,szulo:false};
+function vanBurok(){ return !!window.ReactNativeWebView; }
+function burokUzen(o){ try{ if(vanBurok()) window.ReactNativeWebView.postMessage(JSON.stringify(o)); }catch(e){} }
+function notifBe(){ return !!(S.notif&&S.notif.on&&vanBurok()); }
+function nApi(){ return Object.assign({},NOTIF_ALAP,S.notif||{}); }
+function idopont(nap,ora,perc){ var d=new Date(nap); d.setHours(ora,perc||0,0,0); return d; }
+function szabadIdo(d){ var h=d.getHours(), hn=d.getDay(); if(h<8||h>=20) return false; if(hn>=1&&hn<=5&&h>=8&&h<14) return false; return true; }
+function husvet(ev){ var a=ev%19,b=Math.floor(ev/100),c=ev%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),ho=Math.floor((h+l-7*m+114)/31),nap=((h+l-7*m+114)%31)+1; return new Date(ev,ho-1,nap); }
+function unnepNap(nap){ var ev=nap.getFullYear(), k=dayKey(nap), hu=husvet(ev);
+  if(k===dayKey(hu)) return 'husvet'; if(k===dayKey(addDays(hu,49))) return 'punkosd'; if(nap.getMonth()===11&&nap.getDate()===25) return 'karacsony'; return null; }
+function kovetkezoReszNev(){ var nx=nextNode(); if(!nx) return ''; var p=C.modules[nx.mi].parts[nx.pi]; return p?NM(p):''; }
+function ajanlatNap(nap){ var lehet=C.gifts.filter(function(g){ return !owns(g)&&moduleUnlocked(unitIndex(g.unit)); });
+  var k=dayKey(nap), h=0; for(var i=0;i<k.length;i++) h=(h*31+k.charCodeAt(i))>>>0; h=(h*1103515245+12345)>>>0; return lehet.length?lehet[h%lehet.length]:null; }
+function ertesitesLista(){ var s=T(), n=nApi(), most=Date.now(), ma=startOfDay(new Date()), ki=[], napiMa=studiedToday();
+  var ritkit=[0,1,2,3,5,7], resz=kovetkezoReszNev();
+  function tesz(d,cim,szoveg){ if(d.getTime()>most+60000&&szabadIdo(d)) ki.push({ido:d.getTime(),cim:cim,szoveg:szoveg}); }
+  for(var o=0;o<=7;o++){ var nap=addDays(ma,o), vas=dayKey(nap)===dayKey(addDays(weekStart(nap),6));
+    // a fo uzenet (naponta egy)
+    if(ritkit.indexOf(o)>=0&&!(o===0&&napiMa)){
+      var un=n.unnep&&unnepNap(nap), gyerekIdo=(nap.getDay()===0||nap.getDay()===6)?10:15;
+      var szeria=(S.streak||0)>=3&&((o===0&&!napiMa)||(o===1&&napiMa)), ajan=S.wish&&ajanlatNap(nap);
+      if(un){ tesz(idopont(nap,gyerekIdo),s.ntUnnepCim[un],s.ntUnnep[un]); }
+      else if(n.napi&&o===2&&S.felbe){ tesz(idopont(nap,n.ido),s.ntFolytCim,s.ntFolyt(S.felbe.nev)); }
+      else if(n.napi&&szeria){ tesz(idopont(nap,19),s.ntSzeriaCim,s.ntSzeria(S.streak)); }
+      else if(n.napi&&ajan&&ajan.id===S.wish){ tesz(idopont(nap,n.ido),s.ntKivansCim,s.ntKivans(L(ajan))); }
+      else if(n.napi){ tesz(idopont(nap,n.ido),s.ntNapiCim,s.ntNapi(resz)); } }
+    // vasarnap: lada (es a szuloi osszefoglalo), ezek a masodik helyet kapjak
+    if(vas&&o<=7){ if(n.lada&&!S.weekChests[weekKey(nap)]) tesz(idopont(nap,10),s.ntLadaCim,s.ntLada);
+      if(n.szulo){ var napok=weekDays().filter(function(d){ return played(d)>0; }).length; tesz(idopont(nap,18),s.ntSzuloCim,s.ntSzulo(napok,S.streak||0)); } } }
+  // szivek: amikor mind visszatoltodott
+  if(n.sziv&&hearts()<HEARTS&&S.heartLosses.length){ var tele=Math.max.apply(null,S.heartLosses)+REGEN; tesz(new Date(tele),s.ntSzivCim,s.ntSziv); }
+  ki.sort(function(a,b){ return a.ido-b.ido; }); return ki.slice(0,40); }
+function utemez(){ if(!vanBurok()) return; burokUzen({t:'ertesitesek',lista:notifBe()?ertesitesLista():[]}); }
+// Az engedely kerdese: elobb Olivia kerdez, csak "igen" utan jon a telefon sajat ablaka.
+function ertesitesKerdes(){ var s=T(); if(!vanBurok()||S.notif) return;
+  openSheet('<div class="bsheet on"><div class="bimg">'+(mascotHtml('big',null,'cheer')||'')+'</div><h3>'+esc(s.ntKerdCim)+'</h3><p>'+esc(s.ntKerd)+'</p>'+
+    '<button type="button" class="primary" style="margin-top:16px" data-notifigen>'+esc(s.ntIgen)+'</button><button type="button" class="secondary" style="margin-top:8px" data-notifnem>'+esc(s.ntNem)+'</button></div>'); }
+window.__ertesites=function(engedve){ S.notif=Object.assign({},NOTIF_ALAP,S.notif||{},{on:!!engedve}); persist(); utemez(); if(tab==='settings') render(); };
+// 15 perces szabaly: ha egy feladat 15 percig all (nem valaszol, vagy kilep az appbol), nem szamit elvegzettnek.
+var FELBE_PERC=15;
+function feladatAll(){ if(!lesson||screen.name!=='lesson') return; if(!lesson.utolso){ lesson.utolso=Date.now(); return; }
+  if(Date.now()-lesson.utolso<FELBE_PERC*60000) return;
+  var m=C.modules[lesson.ui], p=m&&m.parts[lesson.pi];
+  if(p&&!lesson.hero&&lesson.test==null&&!lesson.practice) { S.felbe={mi:lesson.ui,pi:lesson.pi,nev:NM(p),ido:Date.now()}; persist(); }
+  goHome(); var s=T(); openSheet('<div class="bsheet"><h3>'+esc(s.felbeCim)+'</h3><p>'+esc(s.felbe(FELBE_PERC))+'</p><button type="button" class="primary" style="margin-top:16px" data-closesheet>'+esc(s.continueBtn)+'</button></div>'); }
+document.addEventListener('visibilitychange',function(){ if(document.hidden){ utemez(); } else { feladatAll(); } });
+setInterval(feladatAll,30000);
 function hang(nev){ var c=hangCtx(); if(!c||!HANGOK[nev]) return; try{ HANGOK[nev](c); }catch(e){} }
 
 // ---------- hearts ----------
@@ -1874,7 +1931,9 @@ function render(){
   if(screen.name==='home'){ renderHome(); }
   else if(screen.name==='story'){ renderStory(); }
   else if(screen.name==='lesson'){ renderLesson(); }
-  else if(screen.name==='result'){ if(!screen.hangolt){ screen.hangolt=1; var jo=screen.r&&screen.r.success; hang(jo?'kesz':'bukas'); haptic(jo?'kesz':'error');
+  else if(screen.name==='result'){ if(!screen.hangolt){ screen.hangolt=1; var jo=screen.r&&screen.r.success;
+    if(jo&&S.felbe&&lesson&&S.felbe.mi===lesson.ui&&S.felbe.pi===lesson.pi){ S.felbe=null; persist(); }
+    setTimeout(utemez,500); if(jo&&!S.notif&&vanBurok()) setTimeout(ertesitesKerdes,1800); hang(jo?'kesz':'bukas'); haptic(jo?'kesz':'error');
     if(szeriaUj){ szeriaUj=false; setTimeout(function(){ haptic('szeria'); hang('szeria'); },700); } } renderResult(); }
   else if(screen.name==='chest'){ renderChest(); }
   else if(screen.name==='week'){ renderWeek(); }
@@ -2550,6 +2609,13 @@ function profilePage(){
      tile('shield','c-brand',s.shieldsUsedTitle,shieldsUsed(),s.shieldsLeft(S.shields))+tile('cal','c-ice',s.statWeek,s.lessons(lessonsThisWeek()),'');
   return h+'</div></div>';
 }
+function ertesitesBeallitas(s){ var n=nApi(), be=notifBe();
+  var h='<div class="mrow"><svg><use href="#i-cal"/></svg><div class="mtx"><b>'+esc(s.ntTitle)+'</b><span>'+esc(s.ntHint)+'</span></div><span class="lang"><button type="button" data-notifon="1" class="'+(be?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-notifon="0" class="'+(be?'':'on')+'">'+esc(s.mapBgOff)+'</button></span></div>';
+  if(!be) return h;
+  h+='<div class="difrow">'+[15,16,17,18,19].map(function(o){ return '<button type="button" class="difbtn'+(n.ido===o?' on':'')+'" data-notifido="'+o+'">'+o+':00</button>'; }).join('')+'</div>';
+  h+='<div class="nlist">'+['napi','lada','sziv','unnep','szulo'].map(function(k){ return '<button type="button" class="nopt'+(n[k]?' on':'')+'" data-notiftip="'+k+'"><i>'+(n[k]?'✓':'')+'</i><span><b>'+esc(s.ntTip[k][0])+'</b><small>'+esc(s.ntTip[k][1])+'</small></span></button>'; }).join('')+'</div>';
+  h+='<button type="button" class="secondary" style="margin:4px 0 10px;width:100%" data-notifproba>'+esc(s.ntProbaGomb)+'</button>';
+  return h; }
 // Settings page – its own screen, grows over time.
 function settingsPage(){
   var s=T();
@@ -2560,6 +2626,7 @@ function settingsPage(){
     '<div class="mrow"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.theme)+'</b><span>'+esc(s.themeHint)+'</span></div><span class="lang"><button type="button" data-theme="light" class="'+(S.theme==='light'?'on':'')+'">'+esc(s.themeLight)+'</button><button type="button" data-theme="dark" class="'+(S.theme==='dark'?'on':'')+'">'+esc(s.themeDark)+'</button><button type="button" data-theme="auto" class="'+(S.theme==='auto'||!S.theme?'on':'')+'">'+esc(s.themeAuto)+'</button></span></div>'+
     '<div class="mrow"><svg><use href="#i-sound"/></svg><div class="mtx"><b>'+esc(s.soundTitle)+'</b><span>'+esc(s.soundHint)+'</span></div><span class="lang"><button type="button" data-sound="1" class="'+(S.sound!==false?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-sound="0" class="'+(S.sound===false?'on':'')+'">'+esc(s.mapBgOff)+'</button></span></div>'+
     '<div class="mrow"><svg><use href="#i-spark"/></svg><div class="mtx"><b>'+esc(s.hapticTitle)+'</b><span>'+esc(s.hapticHint)+'</span></div><span class="lang"><button type="button" data-haptics="1" class="'+(S.haptics!==false?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-haptics="0" class="'+(S.haptics===false?'on':'')+'">'+esc(s.mapBgOff)+'</button></span></div>'+
+    (vanBurok()?ertesitesBeallitas(s):'')+
     '<div class="mrow"><svg><use href="#i-chart"/></svg><div class="mtx"><b>'+esc(s.diffTitle)+'</b><span>'+esc(s.diffDesc[S.diff||'m'])+'</span></div></div>'+
     // Automatikus: a jatek igazitja a szintet. Ha a jatekos egy szintre koppint, az rogzul (S.diffLock).
     '<div class="difrow"><button type="button" class="difbtn'+(S.diffLock?'':' on')+'" data-setdiff="auto">'+esc(s.diffAuto)+'</button></div>'+
@@ -2602,6 +2669,7 @@ document.getElementById('app').addEventListener('click',function(e){
   if(whoOpen&&!e.target.closest('.whowrap')){ whoOpen=false;
     setTimeout(function(){ var m=document.querySelector('.whomenu'); if(m) m.remove();
       var b=document.querySelector('.whobar.open'); if(b) b.classList.remove('open'); },0); }
+  if(lesson&&screen.name==='lesson') lesson.utolso=Date.now();
   var el=e.target.closest('button,[data-tab],[data-color]'); if(!el) return;
   var d=el.dataset;
   if(d.tab){
@@ -2688,6 +2756,12 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-repcopy')){
     var txt=(S.reports||[]).map(function(x){ return '- ['+(T().reportKinds[x.k]||x.k)+'] '+x.q+(x.m?'  — '+x.m:'')+'  ('+x.hely+', '+x.mikor+')'; }).join(String.fromCharCode(10));
     try{ navigator.clipboard.writeText(txt); el.textContent=T().reportsCopied; }catch(x){ prompt(T().reportsCopy,txt); } return; }
+  if(el.hasAttribute('data-notifigen')){ closeSheet(); burokUzen({t:'ertesites-engedely'}); return; }
+  if(el.hasAttribute('data-notifnem')){ S.notif=Object.assign({},NOTIF_ALAP,{on:false}); persist(); closeSheet(); return; }
+  if(d.notifon!=null){ if(d.notifon==='1'){ burokUzen({t:'ertesites-engedely'}); } else { S.notif=Object.assign({},nApi(),{on:false}); persist(); utemez(); render(); } return; }
+  if(d.notifido){ S.notif=Object.assign({},nApi(),{ido:+d.notifido}); persist(); utemez(); render(); return; }
+  if(d.notiftip){ var nn=nApi(); nn[d.notiftip]=!nn[d.notiftip]; S.notif=nn; persist(); utemez(); render(); return; }
+  if(el.hasAttribute('data-notifproba')){ var s9=T(); burokUzen({t:'ertesites-proba',cim:s9.ntProbaCim,szoveg:s9.ntProba}); el.textContent=s9.ntProbaKesz; return; }
   if(d.haptics!=null){ S.haptics=d.haptics==='1'; persist(); render(); haptic('kopp'); return; }
   if(d.sound!=null){ S.sound=d.sound==='1'; persist(); render(); hang('jo'); return; }
   if(d.mapbg!=null){ S.mapBg=d.mapbg==='1'; persist(); render(); return; }
@@ -2736,6 +2810,7 @@ seedBadges();
 if(S.placed==null&&!partsDoneAll()&&!S.xp) screen={name:'intro'};
 render();
 if(screen.name==='home'&&!popBadges()) maybeTour('home');
+setTimeout(utemez,1500);
 }
 </script>
 </body>
