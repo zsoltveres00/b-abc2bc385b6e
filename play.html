@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="hu">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <!-- Enelkul a telefon 980 pixel szelesnek hiszi az oldalt es minden apro lesz. -->
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="BibleTravel - Utazas a Bibliaban. Fedezd fel a Bibliat, eld at a kalandot!">
+<meta name="description" content="BibleTravel – a journey through the Bible. Stories, quizzes and treasure chests for children and adults.">
 <!-- Csak az kapja meg, akinek odaadjuk a linket: keresokbol kizarva. -->
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#5B3FD1" media="(prefers-color-scheme: light)">
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="img/app-icon.png">
 <link rel="icon" href="img/app-icon.png">
-<title>BibleTravel – Utazás a Bibliában</title>
+<title>BibleTravel – A journey through the Bible</title>
 <!-- A Spectral betu helyben van (docs/fonts), igy net nelkul is ez latszik, es nem megy keres a Google-hoz. -->
 <link rel="stylesheet" href="fonts/spectral.css">
 </head>
@@ -912,7 +912,7 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
 
 <div id="boot">
   <div class="bspin"></div>
-  <p id="bootTx">Betöltés…</p>
+  <p id="bootTx">Loading…</p>
 </div>
 
 <!-- Kezdo animacio: minden inditaskor lefut (Zsolt kerese, 2026-10-12). A logo
@@ -1071,7 +1071,7 @@ function profilTörlés(id){
   PROFILOK=PROFILOK.filter(function(p){return p.id!==id;}); nyersIr('bq-profiles',PROFILOK);
   if(PROFIL===id){ nyersIr('bq-prof',PROFILOK[0].id); } location.reload(); }
 var S = {
-  lang: load('bq-lang','hu'), name: load('bq-name',''), xp: load('bq-xp',0), talents: load('bq-talents',0),
+  lang: load('bq-lang','en'), /* alapnyelv: angol (elsodleges piac) */ name: load('bq-name',''), xp: load('bq-xp',0), talents: load('bq-talents',0),
   progress: load('bq-progress',{}), heartLosses: load('bq-heart-losses',[]), streak: load('bq-streak',0),
   lastStudy: load('bq-laststudy',null), chests: load('bq-chests',{}), cards: load('bq-gift-log',[]),
   daily: load('bq-daily',{}), firstStudy: load('bq-first-study',null), stars: load('bq-stars',{}), weekChests: load('bq-week-chests',{}),
@@ -1944,8 +1944,8 @@ function render(){
 // Nyelvvalaszto a legelso inditashoz: itt meg nincs Menu, ahol at lehetne allitani.
 function langRow(kicsi){
   return '<span class="lang langpick'+(kicsi?' small':'')+'">'+
-    '<button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button>'+
-    '<button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button></span>'; }
+    '<button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button>'+
+    '<button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button></span>'; }
 // Olivia bemutatkozasa a legelso inditaskor.
 function renderIntro(){ var s=T(), lap=screen.lap||0;
   if(lap<s.ob.length){ var o=s.ob[lap], h='<div class="center">'+(lap===0?langRow():'');
@@ -2620,7 +2620,7 @@ function ertesitesBeallitas(s){ var n=nApi(), be=notifBe();
 function settingsPage(){
   var s=T();
   return '<div class="hrow"><h1 class="brand">'+esc(s.settings)+'</h1></div><div class="setlist">'+
-    '<div class="mrow">'+ico('globe')+'<div class="mtx"><b>'+esc(s.language)+'</b></div><span class="lang"><button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button><button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button></span></div>'+
+    '<div class="mrow">'+ico('globe')+'<div class="mtx"><b>'+esc(s.language)+'</b></div><span class="lang"><button type="button" data-lang="en" class="zaszlo'+(S.lang==='en'?' on':'')+'" aria-label="English" title="English">'+zaszlo('en')+'</button><button type="button" data-lang="hu" class="zaszlo'+(S.lang==='hu'?' on':'')+'" aria-label="Magyar" title="Magyar">'+zaszlo('hu')+'</button></span></div>'+
     // A terkep-hatter kapcsolo egyelore rejtve: a hatterkepek meg keszulnek. A logika megvan, csak ezt a sort kell visszatenni.
     '<button type="button" class="mrow" data-reports><svg><use href="#i-flag"/></svg><div class="mtx"><b>'+esc(s.reportsTitle)+'</b></div>'+((S.reports||[]).length?'<span class="det">'+(S.reports||[]).length+'</span>':'')+'<svg class="chev"><use href="#i-chev"/></svg></button>'+
     '<div class="mrow"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.theme)+'</b><span>'+esc(s.themeHint)+'</span></div><span class="lang"><button type="button" data-theme="light" class="'+(S.theme==='light'?'on':'')+'">'+esc(s.themeLight)+'</button><button type="button" data-theme="dark" class="'+(S.theme==='dark'?'on':'')+'">'+esc(s.themeDark)+'</button><button type="button" data-theme="auto" class="'+(S.theme==='auto'||!S.theme?'on':'')+'">'+esc(s.themeAuto)+'</button></span></div>'+
