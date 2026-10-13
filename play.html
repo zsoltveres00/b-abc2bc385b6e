@@ -948,6 +948,9 @@ button.pskip.pmore:active{transform:scale(.98)}
 (function(){
   var el=document.getElementById('intro');
   el.hidden=false;
+  // Az appban a burok (App.js) a telefon felso es also savjat is zoldre szinezi, amig ez latszik.
+  function burok(be){ try{ window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify({t:'intro',be:be})); }catch(e){} }
+  burok(true);
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
@@ -973,7 +976,7 @@ button.pskip.pmore:active{transform:scale(.98)}
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
-  function bezar(){ if(vege) return; vege=true; el.classList.add('ki'); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },550); }
+  function bezar(){ if(vege) return; vege=true; el.classList.add('ki'); setTimeout(function(){ burok(false); },300); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },550); }
   setTimeout(bezar,T[4]+2000);
   el.addEventListener('click',function(){ if(Date.now()-kezd>400) bezar(); });
 })();
@@ -2076,7 +2079,8 @@ function renderHome(){
   else if(tab==='settings'){ html+=settingsPage(); }
   else if(tab==='profile'){ html+=profilePage(); }
   else { html+=statsHtml(); }
-  html+='<p class="tiny">'+esc(s.webNote)+'</p>';
+  // Ez a megjegyzes csak a bongeszos valtozatban latszik, az appban (file://) nem.
+  if(location.protocol!=='file:') html+='<p class="tiny">'+esc(s.webNote)+'</p>';
   view.innerHTML=html; foot.innerHTML=barHtml(); view.scrollTop=0;
   var old=document.querySelector('.jump'); if(old) old.remove();
   if(tab==='home'&&screen.name==='home'){ var jb=document.createElement('button'); jb.type='button'; jb.className='jump'; jb.setAttribute('data-jump',''); jb.setAttribute('aria-label',T().jumpHere); jb.innerHTML=ico('down'); document.getElementById('app').appendChild(jb); }
@@ -2511,7 +2515,7 @@ function menuHtml(){
     '<button type="button" class="mrow" data-fix>'+ico('redo')+esc(s.fixTitle)+(mistakeCount()?'<span class="det c-wrong">'+mistakeCount()+'</span>':'')+'<svg class="chev"><use href="#i-chev"/></svg></button>'+
     // A bemutato (Olivia vegigvezetese) ujrainditasa: minden ful ujra megmutatja a magaet.
     '<button type="button" class="mrow" data-tourreset>'+ico('spark')+esc(s.tourAgain)+'<svg class="chev"><use href="#i-chev"/></svg></button>'+
-    '<div class="mrow off">'+ico('spark')+esc(s.subscription)+'<svg class="chev"><use href="#i-chev"/></svg></div>'+
+    // Az "Elofizetes" sor az elso (ingyenes) kiadasbol kimarad; a 2. fazisban jon vissza.
     '<button type="button" class="mrow" data-reset style="color:var(--wrong)"><svg style="fill:var(--wrong)"><use href="#i-trash"/></svg>'+esc(s.reset)+'</button>';
 }
 // Settings sheet – grows over time; language and the map background live here.
@@ -2531,10 +2535,10 @@ function profilePage(){
   var h='<div class="prof"><div class="phead2">'+avatarHtml('pav')+'<div><h1>'+esc(S.name||s.noName)+'</h1><span>'+esc(s.joined(joined))+'</span></div><button type="button" class="edit" data-editname>'+ico('person')+'</button></div>';
   // The name field opens right here under the name, not as a sheet from the bottom.
   if(editingName) h+='<div class="namebox"><label class="lbl" for="nameField">'+esc(s.yourName)+'</label><input id="nameField" class="field" type="text" autocomplete="nickname" placeholder="'+esc(s.namePlaceholder)+'" value="'+esc(S.name)+'"><button type="button" class="primary" data-savename>'+esc(s.save)+'</button></div>';
-  h+='<div class="mrow">'+ico('person')+'<div class="mtx"><b>'+esc(s.account)+'</b><span>'+esc(s.accountHint)+'</span></div></div>';
+  // A "Fiok (kesobb e-mail)" sor az elso kiadasbol kimarad: nincs fiok, minden a keszuleken marad.
   h+='<h3 class="sh">'+esc(s.charTitle)+'</h3><div class="chars">';
   avatarList().forEach(function(a){ h+='<button type="button" class="ch '+(S.avatar===a.id?'on':'')+'" data-avatar="'+esc(a.id)+'">'+a.html+'<small>'+esc(a.name)+'</small></button>'; });
-  h+='<div class="ch soon">'+ico('spark')+'<small>'+esc(s.comingSoon)+'</small></div></div>';
+  h+='</div>';
   h+='<h3 class="sh">'+esc(s.overview)+'</h3><div class="tiles">';
   function tile(i,c,t,v,d){ return '<div class="tile"><div class="t '+c+'">'+ico(i)+esc(t)+'</div><div class="v">'+esc(v)+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>'; }
   h+=tile('book','c-brand',s.statLevel,levelName(),S.xp+' XP')+tile('flame','c-gold',s.statStreak,s.days(displayStreak()),s.bestDays(studyDays()))+
