@@ -1480,10 +1480,12 @@ var LADA_SZORZO=[[0,0,70],[1.5,30,22],[2,10,8]];
 function sorsol(tabla){ var o=0,i; for(i=0;i<tabla.length;i++) o+=tabla[i][tabla[i].length-1];
   var r=Math.random()*o; for(i=0;i<tabla.length;i++){ r-=tabla[i][tabla[i].length-1]; if(r<0) return tabla[i]; } return tabla[0]; }
 function ladaNyeremeny(het){
-  // A vasarnapi lada ugyanugy sorsol, mint a reszek ladaja; ha a jatekos a het minden
-  // napjan tanult, a talentum es a szorzo ideje is dupla. (Zsolt kerese, 2026-10-13.)
-  var b=sorsol(LADA_SZORZO), t=sorsol(LADA_TALENTUM)[0], dupla=het&&weekComplete();
-  return { talents:dupla?t*2:t, mult:b[0], perc:dupla?b[1]*2:b[1] };
+  // A vasarnapi lada talentuma ugyanugy sorsolt, mint a reszek ladajae, es dupla, ha a jatekos
+  // a het minden napjan tanult. A szorzoja fix: mindig 2x, 15 percre. (Zsolt kerese, 2026-10-13.)
+  var t=sorsol(LADA_TALENTUM)[0];
+  if(het) return { talents:weekComplete()?t*2:t, mult:2, perc:15 };
+  var b=sorsol(LADA_SZORZO);
+  return { talents:t, mult:b[0], perc:b[1] };
 }
 function szorzoIndit(mult,perc){ if(!mult||!perc) return; S.boost={m:mult,until:Date.now()+perc*60000}; }
 function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
