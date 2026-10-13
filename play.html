@@ -1480,10 +1480,10 @@ var LADA_SZORZO=[[0,0,70],[1.5,30,22],[2,10,8]];
 function sorsol(tabla){ var o=0,i; for(i=0;i<tabla.length;i++) o+=tabla[i][tabla[i].length-1];
   var r=Math.random()*o; for(i=0;i<tabla.length;i++){ r-=tabla[i][tabla[i].length-1]; if(r<0) return tabla[i]; } return tabla[0]; }
 function ladaNyeremeny(het){
-  // A heti lada mindig ad extrat: aki egesz heten tanult, az megerdemli.
-  if(het) return { talents:weekChestReward(), mult:2, perc:15 };
-  var b=sorsol(LADA_SZORZO);
-  return { talents:sorsol(LADA_TALENTUM)[0], mult:b[0], perc:b[1] };
+  // A vasarnapi lada ugyanugy sorsol, mint a reszek ladaja; ha a jatekos a het minden
+  // napjan tanult, a talentum es a szorzo ideje is dupla. (Zsolt kerese, 2026-10-13.)
+  var b=sorsol(LADA_SZORZO), t=sorsol(LADA_TALENTUM)[0], dupla=het&&weekComplete();
+  return { talents:dupla?t*2:t, mult:b[0], perc:dupla?b[1]*2:b[1] };
 }
 function szorzoIndit(mult,perc){ if(!mult||!perc) return; S.boost={m:mult,until:Date.now()+perc*60000}; }
 function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
@@ -1505,7 +1505,6 @@ function weekComplete(){ return weekDays().every(function(d){ return played(d)>0
 // The Sunday chest opens when the player studies on the last day of the week; a full week adds a bonus.
 function isLastWeekday(d){ return dayKey(d)===dayKey(addDays(weekStart(d),6)); }
 function weekChestEarned(){ var now=new Date(); return isLastWeekday(now) && played(now)>0 && !S.weekChests[weekKey(now)]; }
-function weekChestReward(){ return weekComplete()?TALENTS_PER_CHEST*2:TALENTS_PER_CHEST; }
 function owns(g){ return S.cards.indexOf(g.id)>=0; }
 function canBuyShield(){ return S.shields<SHIELD_MAX&&S.talents>=SHIELD_PRICE; }
 function buyShield(){ if(!canBuyShield()) return; S.talents-=SHIELD_PRICE; S.shields++; persist(); haptic('success'); render(); }
