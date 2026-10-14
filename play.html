@@ -376,9 +376,10 @@ h1.brand.mid{text-align:center}
 /* Halk link a kerdes alatt: itt lehet hibat jelenteni. */
 .tnote{margin:-6px 0 12px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--gold) 14%,var(--surface));border:1px solid var(--gold);font-size:12px;font-weight:600;color:var(--gold)}
 /* Hibabejelento: a lap aljan egy halvany, de jol lathato gomb (nem apro link). */
-.qreport{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:32px 0 10px;padding:12px 14px;border-radius:12px;
-  background:color-mix(in srgb,var(--brand) 7%,var(--surface));border:1px solid var(--border);color:var(--muted);font-size:14px;font-weight:600;text-align:center}
-.qreport svg{width:15px;height:15px;fill:currentColor;flex:none}
+.qreport{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:8px 0 0;padding:9px 14px;border-radius:12px;
+  background:var(--pop);border:1px solid var(--pop-edge);color:var(--ice-ink);font-size:13px;font-weight:700;text-align:center}
+.qreport:active{transform:scale(.99)}
+.qreport svg{width:16px;height:16px;fill:#E5484D;flex:none}
 .repl{max-height:46vh;overflow:auto;margin:4px 0 12px}
 .rep{background:var(--bg);border-radius:10px;padding:8px 10px;margin-bottom:6px}
 .rep b{display:block;font-size:12px;color:var(--wrong)}
@@ -2024,6 +2025,8 @@ function xbackBtn(){ return '<button type="button" class="xback" data-home aria-
 function heartsHtml(n){ var t=(n<HEARTS)?('<span class="tm">'+mmss(msToNextHeart())+'</span>'):'';
   return '<span class="hearts" id="lessonHearts">'+heartIco(n>0)+'<b>'+n+'</b>'+t+'</span>'; }
 function goalHtml(){ var s=T(), ok=studiedToday(); return '<div class="goal '+(ok?'ok':'')+'">'+(img(ok?'icon-goal-done':'icon-goal','gic')||ico(ok?'check':'flag'))+'<span>'+esc(ok?s.goalDone:s.goalTodo)+'</span><b>'+esc(s.studyDays(studyDays()))+(daysToNextStage()?' · '+esc(s.stageProgress(daysToNextStage())):' · '+esc(s.stageMax))+'</b></div>'; }
+// Hibabejelento: mindig a kepernyo legaljan, a fo gomb alatt, halvanykek savban, zaszloval.
+function jelezGomb(szoveg){ return '<button type="button" class="qreport" data-report><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h1.6v18H5z"/><path d="M7.5 4.2c2.7-1.5 5 .9 7.7 0 1.4-.5 2.6-.9 3.8-.7v9c-1.2-.2-2.4.2-3.8.7-2.7.9-5-1.5-7.7 0z"/></svg>'+esc(szoveg)+'</button>'; }
 function renderStory(){
   var s=T(), m=C.modules[lesson.ui], p=m.parts[lesson.pi], d=assessing()?'m':(S.diff||'m');
   var txt=STORY(p,d), h='';
@@ -2034,9 +2037,8 @@ function renderStory(){
   h+='<div class="rmascot" style="justify-content:flex-start;margin:0 0 12px">'+mascotHtml(null,null,"teach")+'<div class="bubble">'+esc(s.introBubble)+'</div></div>';
   h+='<div class="story"><h4>'+esc(s.storyTitle)+'</h4>'+storyHtml(txt)+'</div>';
   var vs=VERSE(p); if(vs) h+='<div class="verse"><h4>'+esc(s.verseTitle)+'</h4><p>„'+esc(vs.text)+'”</p><span>'+esc(vs.ref)+'</span></div>';
-  h+='<button type="button" class="qreport" data-report>'+ico('flag')+esc(s.reportStoryLink)+'</button>';
   view.innerHTML=h; view.scrollTop=0;
-  foot.innerHTML='<div class="footpad"><button type="button" class="primary" data-storydone>'+esc(s.storyRead)+'</button></div>';
+  foot.innerHTML='<div class="footpad"><button type="button" class="primary" data-storydone>'+esc(s.storyRead)+'</button>'+jelezGomb(s.reportStoryLink)+'</div>';
 }
 // Badges. The one-off "first steps" have their own names; every other group is a ladder of
 // thresholds that shares the group's picture, so the collection grows with the player.
@@ -2482,10 +2484,9 @@ function renderLesson(){
     h+='</div>';
   }
   h+=answerHtml(q)+questionVerseHtml(q);
-  h+='<button type="button" class="qreport" data-report>'+ico('flag')+esc(s.reportLink)+'</button>';
   view.innerHTML=h; drawLineArt();
   var label=lesson.hearts<=0?s.endLesson:!lastInPass()?s.next:(lesson.toReview.length?s.startReview:s.seeResult);
-  foot.innerHTML=lesson.answered!=null?'<div class="footpad"><button type="button" class="primary" data-advance>'+esc(label)+'</button></div>':'';
+  foot.innerHTML='<div class="footpad">'+(lesson.answered!=null?'<button type="button" class="primary" data-advance>'+esc(label)+'</button>':'')+jelezGomb(s.reportLink)+'</div>';
 }
 // Colouring page: the coloured card is turned into white-with-black-outlines on a canvas (Sobel edges).
 var LINE_CACHE={};
