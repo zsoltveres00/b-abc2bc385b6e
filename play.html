@@ -1634,8 +1634,11 @@ function priceOf(g){ return g.id===akciosId()?Math.round(g.price*(1-DEAL_OFF)/10
 function canBuy(g){ return !owns(g)&&moduleUnlocked(unitIndex(g.unit))&&S.talents>=priceOf(g); }
 function buyCard(g){ if(!canBuy(g)) return; S.talents-=priceOf(g); S.cards.push(g.id); if(S.wish===g.id) S.wish=null;
   var bonus=gyujtemenyJutalom(g.unit); persist(); haptic('success'); render();
-  if(bonus) setTimeout(function(){ var s=T(), m=C.modules[unitIndex(g.unit)]; hang('kituntetes');
-    openSheet('<div class="bsheet on"><small class="bnew">'+esc(s.setBonusTitle)+'</small><div class="bimg">'+(img(m.icon||('unit-'+m.id))||'<span>💎</span>')+'</div><p>'+esc(s.setBonusText(NM(m),bonus))+'</p><button type="button" class="primary" style="margin-top:16px" data-closesheet>'+esc(s.continueBtn)+'</button></div>'); },350); }
+  // A vasarlas is hozhat kituntetest (elso kincs, 5 kincs...): azonnal feljon, nem csak hazatereskor.
+  if(!bonus){ setTimeout(popBadges,350); return; }
+  badgeQueue=newBadges();
+  setTimeout(function(){ var s=T(), m=C.modules[unitIndex(g.unit)]; hang('kituntetes');
+    openSheet('<div class="bsheet on"><small class="bnew">'+esc(s.setBonusTitle)+'</small><div class="bimg">'+(img(m.icon||('unit-'+m.id))||'<span>💎</span>')+'</div><p>'+esc(s.setBonusText(NM(m),bonus))+'</p><button type="button" class="primary" style="margin-top:16px" data-badgenext>'+esc(s.continueBtn)+'</button></div>'); },350); }
 // Ha egy modul minden kincse megvan: egyszer a kincsek araanak 10%-a visszajar talentumban.
 function gyujtemenyJutalom(unit){ var gs=C.gifts.filter(function(x){ return x.unit===unit; });
   if(!gs.length||!gs.every(owns)||(S.setBonus||{})[unit]) return 0;
