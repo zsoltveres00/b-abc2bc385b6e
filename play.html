@@ -670,7 +670,7 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
 .gc .nm{font-size:11px;font-weight:600;height:30px;display:flex;align-items:center;text-align:center;line-height:1.2}
 .shopsec{font-family:Spectral,Georgia,serif;font-size:18px;margin:18px 0 2px}
 .shophint{margin:0 0 10px;font-size:13px;color:var(--muted)}
-.cards.deals .gc{position:relative}
+.cards.deals .gc,.gc.deal{position:relative}
 .gc.deal{border:1.5px solid var(--gold);background:color-mix(in srgb,var(--gold) 9%,var(--surface))}
 .dealtag{position:absolute;top:6px;right:6px;z-index:1;padding:2px 7px;border-radius:999px;background:var(--wrong);color:#fff;font-size:11px;font-weight:800}
 .gc .buy s{opacity:.6;font-weight:500;margin-right:2px}
@@ -2144,7 +2144,7 @@ function giftSheet(i){ var s=T(), g=C.gifts[i]; if(!g) return; var o=owns(g), mi
   var kep=cardImg(g); if(kep.charAt(0)!=='<') kep='<span>'+kep+'</span>';
   openSheet('<div class="bsheet '+(o?'on':'')+'"><div class="bimg">'+kep+'</div><h3>'+esc(L(g))+'</h3>'+(g.bio?'<p>'+esc(L(g.bio))+'</p>':'')+
     (o||!un?'<div class="bst">'+(o?ico('seal')+esc(s.owned):ico('lock')+esc(s.lockedModule))+'</div>':'')+
-    (!o&&un?'<button type="button" class="primary" style="margin-top:14px" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+talentIco()+priceOf(g)+'</button>'+
+    (!o&&un?'<button type="button" class="primary" style="margin-top:14px" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+talentIco()+(g.id===akciosId()?'<s>'+g.price+'</s> ':'')+priceOf(g)+(g.id===akciosId()?' (−'+Math.round(DEAL_OFF*100)+'%)':'')+'</button>'+
       '<button type="button" class="secondary" style="margin-top:8px" data-wish="'+g.id+'">'+esc(S.wish===g.id?s.wishRemove:s.wishAdd)+'</button>':'')+'</div>'); }
 // Review card of a finished station: what it was about, plus the option to play it again.
 function reviewSheet(mi,pi,slot){
@@ -2421,9 +2421,10 @@ function collectionHtml(){
     if(tr){ var to=unitComplete(u); h+='<div class="hcard '+(to?'on':'')+'"><div class="em">'+(img(tr.img)||'🏆')+'</div><div class="tx"><small>'+esc(s.trophyTag)+'</small><b>'+esc(L(tr))+'</b><span>'+esc(to?L(tr.bio):((u.parts||[]).length?s.trophyLocked(partsDoneIn(u),u.parts.length):s.moduleSoon))+'</span></div><i class="seal">'+(to?ico('seal'):ico('lock'))+'</i></div>'; }
     if(u.heroes&&u.heroes.length){ h+='<div class="hgrid">'; u.heroes.forEach(function(hr){ var hs=heroStars(hr.id), hu2=heroUnlocked(u,hr); h+='<button type="button" class="hc '+(hs===3?'gold':hs>0?'silver':'')+(hu2?'':' locked')+'" data-heroinfo="'+ui+','+hr.id+'"><div class="em">'+(img(hr.img)||'<i>'+esc(NM(hr).charAt(0))+'</i>')+'</div><b>'+esc(L(hr))+'</b><span class="hs">'+(hs?starIco(hs):(hu2?ico('staro'):ico('lock')))+'</span></button>'; }); h+='</div>'; }
     h+='<div class="cards">';
-    C.gifts.forEach(function(g,i){ if(g.unit!==u.id) return; var o=owns(g);
-      h+='<div class="gc '+(o?'own':'')+(un?'':' lock')+'"><button type="button" class="gcinfo" data-giftinfo="'+i+'"><div class="em">'+cardImg(g)+'</div><div class="nm">'+esc(L(g))+'</div></button>'+
-        (o?'<div class="own-l">'+ico('seal')+esc(s.owned)+'</div>':'<button type="button" class="buy" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+(S.wish===g.id?'★ ':'')+(un?'':ico('lock'))+talentIco()+priceOf(g)+'</button>')+'</div>'; });
+    C.gifts.forEach(function(g,i){ if(g.unit!==u.id) return; var o=owns(g), ak=!o&&g.id===akciosId();
+      // A bolt napi akcioja itt is akciosnak latszik: ugyanaz a cimke es athuzott ar.
+      h+='<div class="gc '+(o?'own':'')+(un?'':' lock')+(ak?' deal':'')+'">'+(ak?'<span class="dealtag">−'+Math.round(DEAL_OFF*100)+'%</span>':'')+'<button type="button" class="gcinfo" data-giftinfo="'+i+'"><div class="em">'+cardImg(g)+'</div><div class="nm">'+esc(L(g))+'</div></button>'+
+        (o?'<div class="own-l">'+ico('seal')+esc(s.owned)+'</div>':'<button type="button" class="buy" data-buy="'+i+'" '+(canBuy(g)?'':'disabled')+'>'+(S.wish===g.id?'★ ':'')+(un?'':ico('lock'))+talentIco()+(ak?'<s>'+g.price+'</s> ':'')+priceOf(g)+'</button>')+'</div>'; });
     h+='</div>';
     // Modules whose artwork is still being drawn say so, so the whole plan is visible.
     var have=C.gifts.filter(function(g){return g.unit===u.id;}).length;
