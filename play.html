@@ -1378,12 +1378,16 @@ function unitComplete(m){ return (m.parts||[]).length>0&&partsDoneIn(m)>=m.parts
 function moduleById(id){ for(var i=0;i<C.modules.length;i++) if(C.modules[i].id===id) return C.modules[i]; return null; }
 // Egy modul akkor nyitott, ha az elozo kesz - vagy ha mar van benne tartalom.
 // Igy nem kell 62 reszt vegigjatszani ahhoz, hogy a kovetkezo konyv latszodjon.
-function moduleUnlocked(mi){ return mi===0||unitComplete(C.modules[mi-1])||(C.modules[mi].parts||[]).length>0; }
-function partUnlocked(mi,pi){ if(!moduleUnlocked(mi)) return false; var m=C.modules[mi];
+// Ellenorzo mod: a cim vegen #mind -> minden modul, resz, allomas es hos nyitva (Zsolt atnezesehez).
+// A haladast nem bantja, csak a zarakat oldja fel, amig a #mind ott van a cimben.
+function mindNyitva(){ return location.hash==='#mind'; }
+window.addEventListener('hashchange',function(){ try{ render(); }catch(e){} });
+function moduleUnlocked(mi){ return mindNyitva()||mi===0||unitComplete(C.modules[mi-1])||(C.modules[mi].parts||[]).length>0; }
+function partUnlocked(mi,pi){ if(mindNyitva()) return true; if(!moduleUnlocked(mi)) return false; var m=C.modules[mi];
   if(pi===0||partDone(m,m.parts[pi-1])) return true;
   // A teljesített ugró-teszt megnyitja a következő szakasz elejét, a kihagyott részek zárva maradnak.
   return blockOf(pi)>blockOf(pi-1)&&testPassed(mi,blockOf(pi-1)); }
-function slotUnlocked(mi,pi,slot){ var m=C.modules[mi]; return partUnlocked(mi,pi)&&(slot===0||slotDone(m,m.parts[pi],slot-1)); }
+function slotUnlocked(mi,pi,slot){ var m=C.modules[mi]; if(mindNyitva()) return true; return partUnlocked(mi,pi)&&(slot===0||slotDone(m,m.parts[pi],slot-1)); }
 // The next thing to do anywhere on the path.
 function nextNode(){ for(var mi=0;mi<C.modules.length;mi++){ if(!moduleUnlocked(mi)) return null; var m=C.modules[mi], pi, s;
     // Ugró-teszt után a legutoljára megnyitott szakaszban folytatjuk.
@@ -1730,7 +1734,7 @@ function finishStory(){
 var SPECIAL={order:1,pick:1,color:1,fill:1};
 // Hero side-quest: all of the hero's questions (max 10), no story screen, does not tick the station itself.
 function heroById(u,id){ return (u.heroes||[]).filter(function(h){return h.id===id;})[0]; }
-function heroUnlocked(m,h){ var p=m.parts[h.at]; return !!p&&slotDone(m,p,CHEST_SLOT); }
+function heroUnlocked(m,h){ if(mindNyitva()) return true; var p=m.parts[h.at]; return !!p&&slotDone(m,p,CHEST_SLOT); }
 function heroStars(id){ return S.heroStars[id]||0; }
 function startHero(ui,id){ if(hearts()<=0) return; var u=C.modules[ui], h=heroById(u,id); if(!h||!heroUnlocked(u,h)) return; var q=[]; for(var i=0;i<h.qs.length;i++) q.push(i); var queue=shuffle(q).slice(0,Q_PER_STATION);
   lesson={ui:ui,si:h.at,hero:id,qs:h.qs,queue:queue,total:queue.length,t0:Date.now(),pos:0,hearts:hearts(),firstTry:0,toReview:[],reviewing:false,mistakes:0,run:0,bestRun:0,failed:false,order:[],answered:null,picked:[]}; prepQ(); screen={name:'lesson'}; render(); }
