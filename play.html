@@ -1118,6 +1118,16 @@ var S = {
   heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), wish: load('bq-wish',null), setBonus: load('bq-set-bonus',{}), sound: load('bq-sound',true), notif: load('bq-notif',null), felbe: load('bq-felbe',null), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{}), szuloOk: load('bq-szulo-ok',false), betu: load('bq-betu',1), szuloKod: load('bq-szulo-kod',null)
 };
 // Betumeret: a gorgetheto tartalom (tortenetek, kerdesek) nagyobb lesz, a also menusor marad.
+// iPad / nagy kepernyo: a telefonra tervezett 430 px-es jatekot a viewport-meta segitsegevel
+// aranyosan felnagyitjuk (mint egy nagyitot az egesz oldalra), igy minden meres es erintes
+// valtozatlanul mukodik. Allo es fekvo helyzetben is ujraszamolja. Asztali bongeszon nem nyul hozza.
+function tabletMeret(){ var m=document.querySelector('meta[name=viewport]'); if(!m||!navigator.maxTouchPoints) return;
+  var sc=(window.visualViewport&&visualViewport.scale)||1, W=Math.round(innerWidth*sc), H=Math.round(innerHeight*sc), z=1;
+  if(Math.min(W,H)>=600){ z=Math.max(1,Math.min(W*0.94/430,H/640)); z=Math.floor(z*100)/100; }
+  var c=z>1?'width='+Math.floor(W/z)+',initial-scale='+z+',minimum-scale='+z+',maximum-scale='+z+',user-scalable=no,viewport-fit=cover'
+           :'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';
+  if(m.getAttribute('content')!==c) m.setAttribute('content',c); window.__btZoom=z; }
+tabletMeret(); addEventListener('orientationchange',function(){ setTimeout(tabletMeret,300); });
 function betuAlkalmaz(){ var v=document.getElementById('view'); if(v) v.style.zoom=(S.betu&&S.betu!==1)?String(S.betu):''; }
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
