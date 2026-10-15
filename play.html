@@ -51,7 +51,7 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outl
 .bspin{width:34px;height:34px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--brand);animation:bspin .8s linear infinite}
 @keyframes bspin{to{transform:rotate(360deg)}}
 
-#app{position:relative;height:100%;max-width:430px;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+#app{position:relative;height:100%;max-width:430px;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
 @media (min-width:460px){#app{box-shadow:0 0 0 1px var(--border),0 24px 60px -20px rgba(0,0,0,.5)}}
 #view{flex:1;overflow:auto;overflow-x:hidden;padding:14px 18px 24px;-webkit-overflow-scrolling:touch}
 #foot{flex:none}
@@ -983,7 +983,9 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
   window.__btIntroVar=true;
   // Az appban a burok (App.js) a telefon felso es also savjat is zoldre szinezi, amig ez latszik.
   function burok(be){ try{ window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify({t:'intro',be:be})); }catch(e){} }
-  burok(true);
+  // A burok (App.js) csak akkor veszi le a zold toltokepet, amikor az animacio mar tenyleg kirajzolodott, kulonben egy pillanatra feher villan.
+  var szolt=false; function lathato(){ if(szolt) return; szolt=true; burok(true); }
+  requestAnimationFrame(function(){ requestAnimationFrame(lathato); }); setTimeout(lathato,400);
   var ctx=null; try{ var A=window.AudioContext||window.webkitAudioContext; if(A) ctx=new A(); }catch(e){}
   var utak=el.querySelectorAll('path.ut'), arnyek=el.querySelectorAll('path.utarny'), pottyok=el.querySelectorAll('.potty');
   [].forEach.call(utak,function(p,i){ [p,arnyek[i]].forEach(function(q){ var L=q.getTotalLength(); q.style.strokeDasharray=L; q.style.strokeDashoffset=L; }); });
