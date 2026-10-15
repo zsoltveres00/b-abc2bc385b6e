@@ -1129,7 +1129,11 @@ function tabletMeret(){ var m=document.querySelector('meta[name=viewport]'); if(
            :'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';
   if(m.getAttribute('content')!==c) m.setAttribute('content',c); window.__btZoom=z; }
 tabletMeret(); addEventListener('orientationchange',function(){ setTimeout(tabletMeret,300); });
-function betuAlkalmaz(){ var v=document.getElementById('view'); if(v) v.style.zoom=(S.betu&&S.betu!==1)?String(S.betu):''; }
+// A betumeret csak a tortenetre es a feladatokra hat; az osveny, a menuk es a beallitasok
+// valtozatlanok maradnak (kulonben szetcsusznak).
+function betuAlkalmaz(){ var v=document.getElementById('view'); if(!v) return;
+  var kell=typeof screen!=='undefined'&&screen&&(screen.name==='story'||screen.name==='lesson');
+  v.style.zoom=(kell&&S.betu&&S.betu!==1)?String(S.betu):''; }
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
@@ -2058,7 +2062,7 @@ function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges())
 var view=document.getElementById('view'), foot=document.getElementById('foot'), sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim');
 function applyTheme(){ var t=S.theme||'auto'; if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t); }
 function render(){
-  closeSheet(); applyShields();
+  closeSheet(); applyShields(); betuAlkalmaz();
   if(screen.name!=='home'){ var jx=document.querySelector('.jump'); if(jx) jx.remove();
     // A kovetkezo modul sava csak az osvenyen kell, a tortenet- es feladatlapokon nem.
     var nx2=document.querySelector('.mnext'); if(nx2) nx2.remove(); }
