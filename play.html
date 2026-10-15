@@ -1114,7 +1114,7 @@ function load(k,def){ return nyers(pkulcs(k),def); }
 function save(k,v){ nyersIr(pkulcs(k),v); }
 function profilNev(id){ var p=PROFILOK.filter(function(x){return x.id===id;})[0]; return (p&&p.name)||''; }
 function mostaniProfil(){ return PROFILOK.filter(function(p){return p.id===PROFIL;})[0]||PROFILOK[0]; }
-function profilVált(id){ if(id===PROFIL) { whoOpen=false; closeSheet(); render(); return; } nyersIr('bq-prof',id); location.reload(); }
+function profilVált(id){ if(id===PROFIL) { whoOpen=false; closeSheet(); render(); return; } nyersIr('bq-prof',id); try{ sessionStorage.setItem('bt-tab',tab); }catch(e){} location.reload(); }
 function ujProfil(nev){ var n=2; while(PROFILOK.some(function(p){return p.id==='p'+n;})) n++;
   PROFILOK.push({id:'p'+n,name:nev||''}); nyersIr('bq-profiles',PROFILOK); profilVált('p'+n); }
 // Toroljuk a profil minden adatat; az elso jatekosnal a regi, toldalek nelkuli kulcsokat.
@@ -1155,6 +1155,12 @@ tabletMeret(); addEventListener('orientationchange',function(){ setTimeout(table
 // es a menukben; a korongok, gombok es az osveny merete nem valtozik. A --bt valtozot a CSS hasznalja.
 function betuAlkalmaz(){ var v=document.getElementById('view'); if(v) v.style.zoom='';
   document.documentElement.style.setProperty('--bt', String(betuSzorzo())); }
+// Egy jatekosnak egy neve van: a jatekoslista (PROFILOK) es az S.name mindig egyezik,
+// barhol irjak is be (profil oldal, elso inditas, jatekosvalto).
+(function(){ var mp=mostaniProfil(); if(!mp) return;
+  if(mp.name&&mp.name!==S.name){ S.name=mp.name; save('bq-name',S.name); }
+  else if(!mp.name&&S.name){ mp.name=S.name; nyersIr('bq-profiles',PROFILOK); } })();
+function nevBeall(v){ v=(v||'').trim(); S.name=v; var mp=mostaniProfil(); if(mp){ mp.name=v; nyersIr('bq-profiles',PROFILOK); } persist(); }
 function persist(){
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
@@ -1734,7 +1740,7 @@ function wishHtml(){ var s=T(); if(!S.wish) return ''; var i=C.gifts.findIndex(f
     '<i class="wsav"><i style="width:'+pct+'%"></i></i><em>'+esc(hiany?s.wishLeft(hiany):s.wishReady)+'</em></span></button>'; }
 
 // ---------- lesson ----------
-var screen={name:'home'}, tab='home', colTab='treasures', lesson=null, calOffset=0, editingName=false, keepScroll=null, whoOpen=false;
+var screen={name:'home'}, tab=(function(){ try{ var v=sessionStorage.getItem('bt-tab'); sessionStorage.removeItem('bt-tab'); return v||'home'; }catch(e){ return 'home'; } })(), colTab='treasures', lesson=null, calOffset=0, editingName=false, keepScroll=null, whoOpen=false;
 function starKey(uid,si){ return uid+'-'+si; }
 function stationStars(uid,si){ if(!done(uid,si)) return 0; var v=S.stars[starKey(uid,si)]; return v==null?2:v; }
 function starsFor(correct,total){ if(correct>=total) return 3; return correct*100>=TWO_STAR_PCT*total?2:1; }
@@ -2544,7 +2550,7 @@ function collectionHtml(){
   return h;
 }
 function statsHtml(){
-  var s=T(), h='<h1 class="brand mid">'+esc(s.tabStats)+'</h1><div class="tiles">';
+  var s=T(), h='<h1 class="brand mid">'+esc(s.tabStats)+'</h1>'+whoHtml()+'<div class="tiles">';
   function tile(i,c,t,v,d){ return '<div class="tile"><div class="t '+c+'">'+ico(i)+esc(t)+'</div><div class="v">'+esc(v)+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>'; }
   h+=tile('book','c-brand',s.statLevel,levelName(),S.xp+' XP')+tile('flame','c-gold',s.statStreak,s.days(displayStreak()),'')+tile('cal','c-ice',s.statWeek,s.lessons(lessonsThisWeek()),'')+tile('shield','c-brand',s.statShields,S.shields+'/'+SHIELD_MAX,s.shieldsUsed(shieldsUsed()));
   h+='</div>'+calendarHtml()+badgesHtml();
@@ -2974,11 +2980,11 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-profnew')){ var mez=document.getElementById('profName'); ujProfil(((mez&&mez.value)||'').trim()); return; }
   if(el.hasAttribute('data-profdel')){ if(confirm(T().profDelAsk(profilNev(el.dataset.profdel)||T().profNoName))) profilTörlés(el.dataset.profdel); return; }
   if(el.hasAttribute('data-profsheet')){ whoOpen=false; openSheet(profilSheet()); return; }
-  if(el.hasAttribute('data-savename')){ var mp=mostaniProfil(); if(mp){ mp.name=((document.getElementById('nameField')||{}).value||'').trim(); nyersIr('bq-profiles',PROFILOK); } var f=document.getElementById('nameField'); S.name=(f?f.value:'').trim(); editingName=false; persist(); render(); return; }
+  if(el.hasAttribute('data-savename')){ var f=document.getElementById('nameField'); nevBeall(f?f.value:''); editingName=false; render(); return; }
   if(el.hasAttribute('data-reset')){ if(confirm(T().resetConfirm)){ try{ var ks=[]; for(var ki=0;ki<localStorage.length;ki++){ var kk=localStorage.key(ki); if(kk&&kk.indexOf('bq-')===0) ks.push(kk); } ks.forEach(function(k){ localStorage.removeItem(k); }); }catch(x){} location.reload(); } return; }
 });
 scrim.addEventListener('click',closeSheet);
-sheet.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nameField'){ S.name=e.target.value.trim(); persist(); render(); } });
+sheet.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nameField'){ nevBeall(e.target.value); render(); } });
 addEventListener('resize',layoutPath);
 addEventListener('resize',function(){ if(tour) drawTourStep(); });
 view.addEventListener('scroll',function(){ if(screen.name==='home'&&tab==='home'){ syncStickyPart(); syncNextBar(); } },{passive:true});
