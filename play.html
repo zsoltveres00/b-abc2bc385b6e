@@ -223,16 +223,17 @@ img.mascot{object-fit:contain}
 .mascot.sad{filter:saturate(.5) brightness(.95);transform:rotate(-10deg)}
 .jump{position:absolute;right:14px;bottom:76px;width:46px;height:46px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 4px 12px var(--shadow);z-index:7}
 .jump svg{width:22px;height:22px;fill:#fff}
-.goal{display:flex;flex-direction:column;gap:6px;margin:-4px 0 12px;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-size:13px;font-weight:700}
-.goal svg{width:16px;height:16px;fill:var(--brand);flex:none}
-.goal img.gic{width:26px;height:26px;object-fit:contain;flex:none}
-/* A cel maga egy sorban maradjon telefonon is; a jobb oldali megjegyzes torhet. */
-.goal .gtop{display:flex;align-items:center;gap:8px}.goal .gcim{font-size:14px}
-.goal .gnap{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);text-align:right}
-.goal .gsav{height:6px;border-radius:99px;background:color-mix(in srgb,var(--brand) 14%,transparent);overflow:hidden}.goal .gsav i{display:block;height:100%;border-radius:99px;background:var(--brand)}
-.goal.ok .gsav i{background:var(--correct)}
-.goal .gkov{font-size:12px;font-weight:600;color:var(--muted)}
-.goal.ok{border-color:var(--correct)}.goal.ok svg{fill:var(--correct)}
+.goal{display:flex;align-items:center;gap:12px;margin:-4px 0 12px;padding:10px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
+.goal .gbal{display:flex;align-items:center;gap:8px;flex:none}
+.goal .gbal small{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.goal .gbal b{display:block;font-family:Spectral,Georgia,serif;font-size:19px;font-weight:700;line-height:1.1;color:var(--text)}
+.goal svg{width:20px;height:20px;fill:var(--brand);flex:none}
+.goal img.gic{width:30px;height:30px;object-fit:contain;flex:none}
+.goal .gvonal{align-self:stretch;width:1px;background:var(--border);flex:none}
+.goal .gjobb{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.goal .gjobb span{font-size:13px;font-weight:700;color:var(--text)}
+.goal .gjobb small{font-size:12px;font-weight:600;color:var(--muted)}
+.goal.ok{border-color:var(--correct)}.goal.ok svg{fill:var(--correct)}.goal.ok .gbal b{color:var(--correct)}
 /* intro: story + memory verse */
 .ititle{font-family:Spectral,Georgia,serif;font-size:24px;margin:0 0 12px}
 .story{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
@@ -1153,7 +1154,7 @@ var STR = {
     badgeGroups:{start:'Első lépések',xp:'Tapasztalat',days:'Tanult napok',streak:'Sorozat',chests:'Ládák',c:'Helyes válaszok',perfect:'Hibátlan állomások',cards:'Gyűjtemény'},badgeName:function(g,n){var v=gnum(n,' ');return g==='xp'?v+' XP':g==='days'?v+' tanult nap':g==='streak'?v+' napos sorozat':g==='chests'?v+' láda':g==='c'?v+' helyes válasz':g==='perfect'?v+' hibátlan állomás':v+' kincs';},badgeTier:function(g,n){var v=gnum(n,' ');return g==='xp'?'Gyűjts össze '+v+' tapasztalati pontot.':g==='days'?'Tanulj '+v+' különböző napon.':g==='streak'?'Tanulj '+v+' napon át megszakítás nélkül.':g==='chests'?'Nyiss ki '+v+' kincsesládát az ösvényen.':g==='c'?'Válaszolj helyesen '+v+' kérdésre elsőre.':g==='perfect'?'Zárj le '+v+' állomást hibátlanul, három csillaggal.':'Szerezz meg '+v+' kincset a gyűjteményedbe.';},badgeDesc:{fStation:'Teljesítetted az első állomást – elindultál az úton.',fStory:'Elolvastad az első történetet.',fChest:'Kinyitottad az első kincsesládát.',fPerfect:'Először zártál le egy állomást hibátlanul, három csillaggal.',fPart:'Végigjártad egy teljes rész mind a nyolc állomását.',fOlivia:'Teljesítetted Olívia első kis küldetését az ösvény mellett.',fHero:'Teljesítetted az első bibliai hős küldetését.',fCard:'Megvetted az első kincset a gyűjteményedbe.',fWeek:'Kinyitottad az első heti kincsesládát.',fModule:'Végigjártad egy egész modul minden részét.'},badges:{fStation:'Első állomás',fStory:'Első történet',fChest:'Első láda',fPerfect:'Első hibátlan',fPart:'Első rész kész',fOlivia:'Első Olívia-küldetés',fHero:'Első hős',fCard:'Első kincs',fWeek:'Első heti láda',fModule:'Első modul kész'},
     stageNames:['Tojás','Kis galamb','Galamb','Bátor galamb','Ezüst galamb','Arany galamb','Ragyogó galamb','Hírnök galamb','Bölcs galamb','Olívia, az őrző'],stageProgress:function(n){return 'még '+n+(n===1?' nap':' nap')+', és Olívia fejlődik'},stageMax:'Olívia teljesen felnőtt!',
     mascotEgg:'Tanulj mindennap, és hamarosan kikelek!',mascotSad:'Hiányoztál! Tanulj ma, hogy tovább nőjek.',mascotGrew:'Nőttem egyet! Köszönöm, hogy tanulsz.',
-    goalDone:'A mai cél megvan!',goalTodo:'Mai cél: 1 lecke',studyDays:function(n){return n===0?'Ez lesz az első tanult napod':'Eddig '+n+' napot tanultál'},
+    goalDone:'A mai cél megvan!',goalLabel:'Mai cél',goalAmount:'1 lecke',goalDoneShort:'Megvan!',goalTodo:'Mai cél: 1 lecke',studyDays:function(n){return n===0?'Ez lesz az első tanult napod':'Eddig '+n+' napot tanultál'},
     mascotHome:function(st,name,nx){ if(!nx) return 'Végigjártad az egész utat! 🏆'; if(nx.kind==='chest') return 'Egy láda vár rád – nyisd ki!'; if(st>=3) return (name?name+', ':'')+'már '+st+' napja tartod a sorozatot! 🔥'; return name?'Szia, '+name+'! Gyerünk tovább!':'Szia! Olívia vagyok, végigrepülöm veled az utat.'; },
     hintBtn:'Segíts, Olívia!',colorHint:function(n){return 'Koppints a rajzon oda, ahol a színes részlet van! Még '+n+' db.'},colorOk:'Megtaláltad mindet – nézd, kiszíneződött!',colorBad:'Megvan, de sokat tévesztettél – nézd meg jobban legközelebb!',fillHint:'Melyik szó hiányzik? Koppints rá!',fillTitle:'Pótold a hiányzó szót az igeversben!',fillAnswer:'A helyes szó:',rightAnswer:'A helyes válasz',qVerseTitle:'Ige ehhez a kérdéshez',qVerseSimple:'egyszerű fordítás',hintUsed:'Ebben az állomásban már segítettem',hintBubble:'Kizártam egy rossz választ!',
     chestBanner:'Kincsesláda',chestBannerSub:'KOPPINTS, ÉS NYISD KI',tapChest:'Koppints a ládára!',collectionSub:'Minden modulnak megvannak a saját kincsei – a drágábbak ritkábbak.',moduleSoon:'Ez a modul készül – hamarosan játszható.',moreSoon:'Hamarosan újabb kincsek ebben a modulban',lockedModule:'Még zárva',
@@ -1191,7 +1192,7 @@ var STR = {
     badgeGroups:{start:'First steps',xp:'Experience',days:'Study days',streak:'Streak',chests:'Chests',c:'Correct answers',perfect:'Flawless stations',cards:'Collection'},badgeName:function(g,n){var v=gnum(n,',');return g==='xp'?v+' XP':g==='days'?v+' study days':g==='streak'?v+'-day streak':g==='chests'?v+' chests':g==='c'?v+' correct answers':g==='perfect'?v+' flawless stations':v+' treasures';},badgeTier:function(g,n){var v=gnum(n,',');return g==='xp'?'Collect '+v+' experience points.':g==='days'?'Study on '+v+' different days.':g==='streak'?'Study '+v+' days in a row without a break.':g==='chests'?'Open '+v+' treasure chests along the path.':g==='c'?'Answer '+v+' questions correctly on the first try.':g==='perfect'?'Finish '+v+' stations flawlessly with three stars.':'Collect '+v+' treasures for your collection.';},badgeDesc:{fStation:'You finished your first station – the journey has begun.',fStory:'You read your first story.',fChest:'You opened your first treasure chest.',fPerfect:'You finished a station flawlessly with three stars for the first time.',fPart:'You completed all eight stations of a whole part.',fOlivia:'You finished Olivia’s first little quest beside the path.',fHero:'You finished your first Bible hero quest.',fCard:'You bought your first treasure for the collection.',fWeek:'You opened your first weekly chest.',fModule:'You completed every part of a whole module.'},badges:{fStation:'First station',fStory:'First story',fChest:'First chest',fPerfect:'First flawless',fPart:'First part done',fOlivia:'First Olivia quest',fHero:'First hero',fCard:'First treasure',fWeek:'First weekly chest',fModule:'First module done'},
     stageNames:['Egg','Little dove','Dove','Brave dove','Silver dove','Golden dove','Shining dove','Herald dove','Wise dove','Olivia the Guardian'],stageProgress:function(n){return n+(n===1?' more day':' more days')+' and Olivia grows'},stageMax:'Olivia is fully grown!',
     mascotEgg:'Study every day and I will hatch soon!',mascotSad:'I missed you! Study today so I can keep growing.',mascotGrew:'I grew! Thank you for studying.',
-    goalDone:'Today’s goal is done!',goalTodo:'Daily goal: 1 lesson',studyDays:function(n){return n===0?'This will be your first study day':n+(n===1?' day':' days')+' studied so far'},
+    goalDone:'Today’s goal is done!',goalLabel:'Today’s goal',goalAmount:'1 lesson',goalDoneShort:'Done!',goalTodo:'Daily goal: 1 lesson',studyDays:function(n){return n===0?'This will be your first study day':n+(n===1?' day':' days')+' studied so far'},
     mascotHome:function(st,name,nx){ if(!nx) return 'You walked the whole path! 🏆'; if(nx.kind==='chest') return 'A chest is waiting – open it!'; if(st>=3) return (name?name+', ':'')+'that\'s a '+st+'-day streak! 🔥'; return name?'Hi '+name+'! Let\'s keep going!':'Hi! I\'m Olivia, I\'ll fly the path with you.'; },
     hintBtn:'Help me, Olivia!',colorHint:function(n){return 'Tap the drawing where the coloured detail belongs! '+n+' to go.'},colorOk:'You found them all – look, it is coloured in!',colorBad:'Done, but with many misses – look closer next time!',fillHint:'Which word is missing? Tap it!',fillTitle:'Fill in the missing word of the verse!',fillAnswer:'The right word:',rightAnswer:'The right answer',qVerseTitle:'Verse for this question',qVerseSimple:'simplified wording',hintUsed:'I already helped on this station',hintBubble:'I removed one wrong answer!',
     chestBanner:'Treasure chest',chestBannerSub:'TAP TO OPEN',tapChest:'Tap the chest!',collectionSub:'Each module has its own treasures – the pricier ones are rarer.',moduleSoon:'This module is being written – coming soon.',moreSoon:'More treasures coming to this module soon',lockedModule:'Locked',
@@ -2099,10 +2100,12 @@ function xbackBtn(){ return '<button type="button" class="xback" data-home aria-
 // Ot kis sziv helyett egy sziv es a szam: egy pillantasbol leolvashato.
 function heartsHtml(n){ var t=(n<HEARTS)?('<span class="tm">'+mmss(msToNextHeart())+'</span>'):'';
   return '<span class="hearts" id="lessonHearts">'+heartIco(n>0)+'<b>'+n+'</b>'+t+'</span>'; }
-function goalHtml(){ var s=T(), ok=studiedToday(), st=stage(), kell=daysToNextStage(), nap=studyDays();
+function goalHtml(){ var s=T(), ok=studiedToday(), kell=daysToNextStage(), nap=studyDays();
   var kov=kell?s.stageProgress(kell):s.stageMax; kov=kov.charAt(0).toUpperCase()+kov.slice(1);
-  return '<div class="goal '+(ok?'ok':'')+'"><div class="gtop">'+(img(ok?'icon-goal-done':'icon-goal','gic')||ico(ok?'check':'flag'))+'<span class="gcim">'+esc(ok?s.goalDone:s.goalTodo)+'</span><small class="gnap">'+esc(s.studyDays(nap))+'</small></div>'+
-    '<div class="gkov">'+esc(kov)+'</div></div>'; }
+  // Bal oldalt a mai cel (cimke + nagy betuvel a feladat), fuggoleges vonal, jobb oldalt a tanult napok es Olivia kovetkezo lepese.
+  return '<div class="goal '+(ok?'ok':'')+'"><div class="gbal">'+(img(ok?'icon-goal-done':'icon-goal','gic')||ico(ok?'check':'flag'))+
+    '<div><small>'+esc(s.goalLabel)+'</small><b>'+esc(ok?s.goalDoneShort:s.goalAmount)+'</b></div></div><i class="gvonal"></i>'+
+    '<div class="gjobb"><span>'+esc(s.studyDays(nap))+'</span><small>'+esc(kov)+'</small></div></div>'; }
 // Hibabejelento: mindig a kepernyo legaljan, a fo gomb alatt, halvanykek savban, zaszloval.
 function jelezGomb(szoveg){ return '<button type="button" class="qreport" data-report><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h1.6v18H5z"/><path d="M7.5 4.2c2.7-1.5 5 .9 7.7 0 1.4-.5 2.6-.9 3.8-.7v9c-1.2-.2-2.4.2-3.8.7-2.7.9-5-1.5-7.7 0z"/></svg>'+esc(szoveg)+'</button>'; }
 function renderStory(){
