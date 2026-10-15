@@ -199,6 +199,7 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 .difbtn.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
 .bsheet .bnew{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
 .bsheet h3{font-family:Spectral,Georgia,serif;font-size:22px;margin:8px 0 4px}.bsheet p{margin:0 auto;max-width:300px;font-size:15px;color:var(--muted);line-height:1.4}
+.bsheet .bst img,.bsheet .bst svg{width:22px;height:22px;flex:none}
 .bsheet .bst{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:700;color:var(--muted)}.bsheet.on .bst{color:var(--gold)}.bsheet .bst svg{width:16px;height:16px;fill:currentColor}
 .badge{cursor:pointer}
 .srow .st .coin{width:22px;height:22px}
@@ -1139,7 +1140,7 @@ var STAGES=[0,3,10,21,40,70,110,160,240,365];
 // ---------- strings ----------
 var STR = {
   hu:{brand:'BibleTravel',subtitle:'Utazás a Bibliában · Fedezd fel a Bibliát, éld át a kalandot!',greeting:function(n){return 'Szia, '+n+'!'},level:'Szint',
-    unitProgress:function(d,t){return d+'/'+t+' állomás'},partProgress:function(d,t){return d+'/'+t+' rész'},section:'MODUL',station:'ÁLLOMÁS',part:'RÉSZ',stStory:'Történet',stChest:'Kincsesláda',stTask:function(n){return (n+1)+'. feladat'},
+    unitProgress:function(d,t){return d+'/'+t+' állomás'},partProgress:function(d,t){return d+'/'+t+' rész'},section:'MODUL',station:'ÁLLOMÁS',part:'RÉSZ',partNo:function(n){return n+'. rész'},modNo:function(n){return n+'. MODUL'},stStory:'Történet',stChest:'Kincsesláda',stTask:function(n){return (n+1)+'. feladat'},
     partsBefore:function(n){return '↑ '+n+' kész rész'},partsAfter:function(n){return '↓ még '+n+' rész – mutasd mind'},
     modulSoon:'Ez a szakasz hamarosan elkészül. Addig is gyakorolhatsz a korábbi részeken!',
     loadingMore:'Betöltés…',
@@ -1176,8 +1177,8 @@ var STR = {
     statLevel:'Szint',statStreak:'Sorozat',statWeek:'Ezen a héten',statShields:'Pajzsok',shieldsUsed:function(n){return n+' pajzsot használtál fel'},lessons:function(n){return n+' lecke'},days:function(n){return n+' nap'},
     studiedDay:'tanult nap',missedDay:'kihagyott nap',shieldedDay:'pajzs védte nap',calendarTitle:'Naptár',monthSummary:function(s,m){return s+' tanult · '+m+' kihagyott nap'},
     reset:'Haladás törlése',resetConfirm:'Biztosan törlöd az összes haladást?',locale:'hu-HU',firstDay:1,webNote:'Webes próbaverzió – a haladás ebben a böngészőben mentődik.'},
-  en:{brand:'Bible Path',subtitle:'Learn the story of the Bible step by step',greeting:function(n){return 'Hi, '+n+'!'},level:'Level',
-    unitProgress:function(d,t){return d+'/'+t+' stations'},partProgress:function(d,t){return d+'/'+t+' parts'},section:'MODULE',station:'STATION',part:'PART',stStory:'Story',stChest:'Treasure chest',stTask:function(n){return 'Task '+(n+1)},
+  en:{brand:'BibleTravel',subtitle:'Learn the story of the Bible step by step',greeting:function(n){return 'Hi, '+n+'!'},level:'Level',
+    unitProgress:function(d,t){return d+'/'+t+' stations'},partProgress:function(d,t){return d+'/'+t+' parts'},section:'MODULE',station:'STATION',part:'PART',partNo:function(n){return 'Part '+n},modNo:function(n){return 'MODULE '+n},stStory:'Story',stChest:'Treasure chest',stTask:function(n){return 'Task '+(n+1)},
     partsBefore:function(n){return '↑ '+n+' parts done'},partsAfter:function(n){return '↓ '+n+' more parts – show all'},
     modulSoon:'This section is coming soon. Until then you can keep practising the earlier parts!',
     loadingMore:'Loading…',
@@ -1212,7 +1213,7 @@ var STR = {
     menu:'Menu',profile:'Profile',noName:'What should we call you?',joined:function(y){return 'Joined: '+y},account:'Account',accountHint:'Later you can save your progress across devices with an e-mail address.',charTitle:'My character',charOlivia:'Olivia’s forms',charHeroes:'Heroes',charAuto:'Always the current one',charLockOli:function(n){ return 'after '+n+' study days'; },charLockHero:'Earn it on the path',shieldsUsedTitle:'Shields used',shieldsLeft:function(n){return n+(n===1?' shield left':' shields left')},bestDays:function(n){return n+' study days'},partsWord:'parts',partsTitle:'Parts',language:'Language',comingSoon:'Coming soon',settings:'Settings',theme:'Appearance',themeHint:'Light or dark background.',themeLight:'Light',themeDark:'Dark',themeAuto:'Auto',ntTitle:'Notifications',ntWebHint:'In the browser you only see the settings: notifications are sent by the BibleTravel iPhone app.',ntProbaWeb:'This only sends a notification in the iPhone app',ntHint:'At most one short reminder a day. Never after 8 pm or during school hours.',ntTip:{napi:['Daily reminder','At your chosen time, if you have not studied yet that day. Includes the streak saver and unfinished parts.'],lada:['Sunday chest','On Sunday morning, if you have not opened it yet.'],sziv:['Hearts','When all five hearts are back.'],unnep:['Holidays','A holiday story at Easter, Pentecost and Christmas.'],szulo:['Weekly summary for parents','Sunday evening: how many days were studied this week. For parents.']},ntProbaGomb:'Send a test notification (in 1 minute)',ntProbaKesz:'Sent – it arrives in 1 minute ✓',ntProbaCim:'BibleTravel',ntProba:'This is how the notifications will look. 🕊️',ntKerdCim:'May I remind you tomorrow?',ntKerd:'If you like, I will let you know tomorrow when the next story is ready. At most once a day, never after 8 pm. You can turn it off any time in Settings.',ntIgen:'Yes, remind me',ntNem:'Not now',ntNapiCim:'Olivia is waiting 🕊️',ntNapi:function(r){ return r?'Today we continue with: '+r+'. One short lesson is enough!':'One short lesson is enough today. Shall we go on?'; },ntSzeriaCim:'Keep your flame? 🔥',ntSzeria:function(n){ return 'You have studied '+n+' days in a row. One short lesson today keeps it going.'; },ntKivansCim:'Your wish is on sale today!',ntKivans:function(n){ return n+' is 30% off in the shop today.'; },ntFolytCim:'Where were we?',ntFolyt:function(n){ return 'Unfinished: '+n+'. Shall we see how it goes on?'; },ntLadaCim:'Sunday chest 🎁',ntLada:'You can open the Sunday chest today. If you studied every day this week, the reward is doubled!',ntSzivCim:'Your hearts are back ❤️',ntSziv:'All five hearts are full again. Carry on!',ntSzuloCim:'Weekly summary',ntSzulo:function(n,sz){ return 'This week your child studied '+n+' days in BibleTravel. Current streak: '+sz+' days.'; },ntUnnepCim:{husvet:'Happy Easter!',punkosd:'Happy Pentecost!',karacsony:'Merry Christmas!'},ntUnnep:{husvet:'It is Easter today. Read what happened on the morning of the third day!',punkosd:'It is Pentecost today. See what happened when the Holy Spirit came!',karacsony:'It is Christmas today. Read the story of Jesus’ birth!'},felbeCim:'This task was interrupted',felbe:function(p){ return 'The task was left for more than '+p+' minutes, so it does not count as done. Start again when you are ready!'; },szuloCim:'Parental permission',szuloTag:'Parental permission',szuloKerd:'The book of Revelation has many frightening pictures (a dragon, war, judgement). A parent or another adult can unlock these parts.',szuloFeladat:function(a,b){ return 'For parents: what is '+a+' × '+b+'?'; },szuloRossz:'That is not right. Here is another question.',szuloNyit:'Unlock',szuloKodKer:'Enter the four-digit parent code:',szuloKodRossz:'That is not the right code.',szuloFelejt:'I forgot the code',szuloElsoCim:'Set a parent code',szuloElso:'First a parent should set a four-digit code. To do that, solve this first:',szuloUjKod:'New four-digit code:',szuloUjKod2:'Once more, to check:',szuloKodHiba:'The two codes do not match, or they are not exactly four digits.',szuloKodMent:'Save code and unlock',szuloSet:'Book of Revelation',szuloSetHint:{zar:'Locked: opens only with parental permission.',nyit:'Unlocked: a parent has allowed it.'},szuloZarGomb:'Locked',szuloNyitGomb:'Unlocked',betuCim:'Text size',betuHint:'Larger text in the stories and questions.',betuNev:['Normal','Larger','Largest'],hapticTitle:'Vibration',hapticHint:'Vibrates on chests, at the end of a task and when you keep your streak.',soundTitle:'Sounds',soundHint:'Short sounds for answers, chests and badges.',mapBg:'Map background',mapBgOn:'On',mapBgOff:'Off',mapBgHint:'A painted landscape behind the path. Turn it off on slower phones or connections.',yourName:'Your name',editName:'Name',namePlaceholder:'What should we call you?',save:'Save',close:'Close',
     collectionIntro:'Collect all 8 cards! One card costs:',owned:'Owned',buy:'Buy',cardsOwned:function(n,t){return n+'/'+t+' cards'},
     statLevel:'Level',statStreak:'Streak',statWeek:'This week',statShields:'Shields',shieldsUsed:function(n){return n+(n===1?' shield used':' shields used')},lessons:function(n){return n+(n===1?' lesson':' lessons')},days:function(n){return n+(n===1?' day':' days')},
-    studiedDay:'studied',missedDay:'missed',shieldedDay:'shielded day',calendarTitle:'Calendar',monthSummary:function(s,m){return s+' studied · '+m+' missed days'},
+    studiedDay:'studied',missedDay:'missed',shieldedDay:'shielded day',calendarTitle:'Calendar',monthSummary:function(s,m){return s+' studied · '+m+(m===1?' missed day':' missed days')},
     reset:'Reset progress',resetConfirm:'Really delete all progress?',locale:'en-US',firstDay:0,webNote:'Web trial – progress is saved in this browser.'}
 };
 function T(){ return STR[S.lang]; }
@@ -1796,7 +1797,7 @@ function previewSheet(mi,pi,slot){
   var sum=elsoMondat(story);
   if(sum.length>150) sum=sum.slice(0,147).replace(/\s+\S*$/,'')+'…';
   var lbl=slot===STORY_SLOT?s.stStory:s.stTask(taskIndex(slot));
-  openPop('<small>'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+lbl)+'</small><h3>'+esc(NM(p))+'</h3>'+
+  openPop('<small>'+esc(s.partNo(pi+1)+' · '+lbl)+'</small><h3>'+esc(NM(p))+'</h3>'+
     '<p>'+esc(sum)+'</p>'+
     (REF(p)?'<p class="rhint">'+esc(REF(p))+'</p>':'')+
     '<button type="button" class="primary" data-go="'+mi+','+pi+','+slot+'">'+esc(slot===STORY_SLOT?s.readStart:s.taskStart)+'</button>',
@@ -2097,10 +2098,10 @@ function mascotLine(nx){ var s=T(); if(stage()===0) return s.mascotEgg; if(masco
 // Lesson header: module icon + "1. module · 2/30. station".
 function lessonTag(m,l){ var s=T(); if(l.practice) return '<span class="ltag">'+ico('redo')+'<b>'+esc(s.fixTag)+'</b></span>';
   if(l.hero){ var hr=heroById(m,l.hero); return '<span class="ltag">'+(img(hr.img,'hmini')||'')+'<b>'+esc(s.heroQuest)+'</b> · '+esc(NM(hr))+'</span>'; }
-  if(l.olivia) return '<span class="ltag">'+(img('dove-teach','hmini')||'')+'<b>'+esc(s.oliviaQuest)+'</b> · '+esc((l.pi+1)+'. '+s.part.toLowerCase())+'</span>';
+  if(l.olivia) return '<span class="ltag">'+(img('dove-teach','hmini')||'')+'<b>'+esc(s.oliviaQuest)+'</b> · '+esc(s.partNo(l.pi+1))+'</span>';
   if(l.test!=null){ var bp=blockParts(m,l.test); return '<span class="ltag">'+(img('test-levelup','hmini')||ico('rosette'))+'<b>'+esc(s.testTag)+'</b> · '+esc(s.testTitle(bp[0]+1,bp[bp.length-1]+1))+'</span>'; }
   var lbl=l.slot===STORY_SLOT?s.stStory:s.stTask(taskIndex(l.slot));
-  return '<span class="ltag">'+(img(m.icon||('unit-'+m.id),'hmini')||'')+'<b>'+(l.pi+1)+'. '+esc(s.part.toLowerCase())+'</b> · '+esc(lbl)+'</span>'; }
+  return '<span class="ltag">'+(img(m.icon||('unit-'+m.id),'hmini')||'')+'<b>'+esc(s.partNo(l.pi+1))+'</b> · '+esc(lbl)+'</span>'; }
 // One green bar for the whole station; review questions extend the total so the bar only fills at the very end.
 function progressHtml(){ var s=T(), total=lesson.grand||lesson.queue.length, done=lesson.doneCount||0, pct=Math.round(100*done/total);
   return '<div class="prow">'+xbackBtn()+'<div class="pbar '+(lesson.reviewing?'rev':'')+'"><i style="width:'+pct+'%"></i></div></div>'+(lesson.reviewing?'<div class="rt">'+ico('redo')+esc(s.reviewTag)+'</div>':''); }
@@ -2206,7 +2207,7 @@ function reviewSheet(mi,pi,slot){
   var kindLbl=slot===STORY_SLOT?s.stStory:s.stTask(taskIndex(slot));
   var fresh=!S.reviewed[key];
   if(fresh){ S.reviewed[key]=true; S.xp+=REVIEW_XP; persist(); keepScroll=view.scrollTop; render(); }
-  openPop('<small>'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+kindLbl)+'</small><h3>'+esc(NM(p))+'</h3>'+
+  openPop('<small>'+esc(s.partNo(pi+1)+' · '+kindLbl)+'</small><h3>'+esc(NM(p))+'</h3>'+
     (stars?'<div class="rstars">'+starIco(stars)+'</div>':'')+
     '<p>'+esc(sum)+'</p>'+
     (fresh?'<div class="rxp">+'+REVIEW_XP+' XP</div>':'')+
@@ -2272,7 +2273,7 @@ function mbarHtml(m,mi,un){
     '<button type="button" class="mbadge" data-mpick="'+mi+'" aria-label="'+esc(s.partsPick)+'">'+
       (kep||'<b>'+(mi+1)+'</b>')+'</button>'+
     '<i class="mdiv"></i>'+
-    '<div class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+(un?' · '+esc(NM(m)):'')+'</small>'+
+    '<div class="mtx"><small>'+esc(s.modNo(mi+1))+(un?' · '+esc(NM(m)):'')+'</small>'+
       (un?'<b class="pnow"></b>':'<b>'+esc(NM(m))+'</b>')+'</div>'+
     (un?'':ico('lock'))+'</div>';
 }
@@ -2289,7 +2290,7 @@ function ugrasReszre(kulcs,proba){
 // Resz-valaszto: a modul osszes resze egy listaban, oda lehet ugrani egy koppintassal.
 function modulValaszto(mi){
   var s=T(), m=C.modules[mi], nx=nextNode();
-  var h='<h4>'+esc((mi+1)+'. '+s.section+' · '+NM(m))+'</h4>';
+  var h='<h4>'+esc(s.modNo(mi+1)+' · '+NM(m))+'</h4>';
   if(!m.parts||!m.parts.length){ openSheet(h+'<p class="picknote">'+esc(s.modulSoon)+'</p>'); return; }
   h+='<div class="picklist">';
   m.parts.forEach(function(p,pi){
@@ -2321,7 +2322,7 @@ function pathHtml(){
       var zarul=blockEnd(m,pi);
       html+='<div class="pgroup'+(tapadFent?' tfent':'')+(zarul?' tlent':'')+'" style="--psz:'+partHue(pi)+'">';
       tapadFent=false;
-      html+='<div class="phead '+(pdone?'done':pun?'':'lock')+'" data-pi="'+mi+','+pi+'" data-part="'+esc((pi+1)+'. '+s.part.toLowerCase()+' · '+NM(p))+'"><b>'+(pi+1)+'.</b> '+esc(NM(p))+(REF(p)?'<i>'+esc(REF(p))+'</i>':'')+(szuloKell(mi,pi)?'<span class="szulotag">'+ico('lock')+esc(s.szuloTag)+'</span>':'')+'</div>';
+      html+='<div class="phead '+(pdone?'done':pun?'':'lock')+'" data-pi="'+mi+','+pi+'" data-part="'+esc(s.partNo(pi+1)+' · '+NM(p))+'"><b>'+(pi+1)+'.</b> '+esc(NM(p))+(REF(p)?'<i>'+esc(REF(p))+'</i>':'')+(szuloKell(mi,pi)?'<span class="szulotag">'+ico('lock')+esc(s.szuloTag)+'</span>':'')+'</div>';
       for(var slot=0;slot<SLOTS;slot++){
         var kind=slotKind(slot), d=slotDone(m,p,slot), unl=slotUnlocked(mi,pi,slot);
         var isNext=nx&&nx.mi===mi&&nx.pi===pi&&nx.slot===slot;
@@ -2416,7 +2417,7 @@ function syncNextBar(){
     nb.style.cssText='--mc:'+m.color+(un?';background:'+m.color:'');
     var kep=img(m.icon||('unit-'+m.id));
     nb.innerHTML='<span class="mbadge">'+(kep||'<b>'+(mi+1)+'</b>')+'</span><i class="mdiv"></i>'+
-      '<span class="mtx"><small>'+(mi+1)+'. '+esc(s.section)+(un?' · '+esc(NM(m)):'')+'</small><b>'+esc(nagy)+'</b></span>';
+      '<span class="mtx"><small>'+esc(s.modNo(mi+1))+(un?' · '+esc(NM(m)):'')+'</small><b>'+esc(nagy)+'</b></span>';
   }
   nb.classList.add('on');
 }
@@ -2465,7 +2466,7 @@ function collectionHtml(){
     var un=moduleUnlocked(ui);
     // Ugyanaz a hosszu, szines modulsav, mint az osvenyen (csak itt nem ragad fel es nem gomb).
     h+='<div class="mbar coll'+(un?'':' lock')+'" style="--mc:'+u.color+(un?';background:'+u.color:'')+'"><span class="mbadge">'+(img(u.icon||('unit-'+u.id))||'<b>'+(ui+1)+'</b>')+'</span><i class="mdiv"></i>'+
-      '<div class="mtx"><small>'+(ui+1)+'. '+esc(s.section)+(un?'':' · '+esc(s.lockedModule))+'</small><b>'+esc(NM(u))+'</b></div>'+(un?'':ico('lock'))+'</div>';
+      '<div class="mtx"><small>'+esc(s.modNo(ui+1))+(un?'':' · '+esc(s.lockedModule))+'</small><b>'+esc(NM(u))+'</b></div>'+(un?'':ico('lock'))+'</div>';
     if(u.blurb) h+='<p class="mblurb">'+esc(L(u.blurb))+'</p>';
     var tr=(C.trophies||[]).filter(function(t){return t.unit===u.id;})[0];
     if(tr){ var to=unitComplete(u); h+='<div class="hcard '+(to?'on':'')+'"><div class="em">'+(img(tr.img)||'🏆')+'</div><div class="tx"><small>'+esc(s.trophyTag)+'</small><b>'+esc(L(tr))+'</b><span>'+esc(to?L(tr.bio):((u.parts||[]).length?s.trophyLocked(partsDoneIn(u),u.parts.length):s.moduleSoon))+'</span></div><i class="seal">'+(to?ico('seal'):ico('lock'))+'</i></div>'; }
