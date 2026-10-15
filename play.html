@@ -520,10 +520,14 @@ button.pskip.pmore:active{transform:scale(.98)}
 .mbar.lock .mdiv{background:color-mix(in srgb,var(--mc) 55%,transparent)}
 .mbar.lock .mtx small{opacity:1;color:color-mix(in srgb,var(--mc) 70%,var(--text))}
 /* A lap aljan mindig latszik a kovetkezo modul sava, hogy konnyu legyen atlepni ra. */
-.mnext{position:absolute;left:14px;right:14px;bottom:70px;z-index:6;display:flex;align-items:center;color:#fff;
+.mnext{position:absolute;left:8px;right:8px;bottom:70px;z-index:6;display:flex;align-items:center;color:#fff;
   padding:7px 54px 7px 7px;border-radius:16px;box-shadow:0 8px 20px -6px var(--shadow);
   opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
 .mnext.on{opacity:1;transform:none;pointer-events:auto}
+/* A modulsav ugyanolyan szeles legyen, mint alatta a reszek szines savja. */
+#path .mbar{margin-left:-10px;margin-right:-10px}
+/* Ha az also modulsav latszik, a "vissza a helyedre" kerek gomb folotte alljon, ne takarja ki a sav veget. */
+#app:has(.mnext.on) .jump{bottom:136px}
 /* Amikor lap vagy kartya nyilik meg (a sotetito hatter latszik), a sav tunjon el. */
 #scrim.show ~ .mnext{opacity:0;transform:translateY(10px);pointer-events:none}
 .mnext.on:active{transform:scale(.985)}
