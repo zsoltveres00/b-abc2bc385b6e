@@ -221,7 +221,7 @@ img.mascot{object-fit:contain}
 .mascot.crown{position:relative}
 .mascot.gold{filter:sepia(.7) saturate(2.2) hue-rotate(-12deg) drop-shadow(0 0 5px var(--star))}
 .mascot.sad{filter:saturate(.5) brightness(.95);transform:rotate(-10deg)}
-.jump{position:absolute;right:14px;bottom:76px;width:46px;height:46px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 4px 12px var(--shadow);z-index:7}
+.jump{position:absolute;right:14px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 4px 12px var(--shadow);z-index:7}
 .jump svg{width:22px;height:22px;fill:#fff}
 .goal{display:flex;align-items:center;gap:12px;margin:-4px 0 12px;padding:10px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
 .goal .gbal{display:flex;align-items:center;gap:8px;flex:none}
@@ -524,7 +524,7 @@ button.pskip.pmore:active{transform:scale(.98)}
 .mbar.lock .mdiv{background:color-mix(in srgb,var(--mc) 55%,transparent)}
 .mbar.lock .mtx small{opacity:1;color:color-mix(in srgb,var(--mc) 70%,var(--text))}
 /* A lap aljan mindig latszik a kovetkezo modul sava, hogy konnyu legyen atlepni ra. */
-.mnext{position:absolute;left:8px;right:8px;bottom:70px;z-index:6;display:flex;align-items:center;color:#fff;
+.mnext{position:absolute;left:8px;right:8px;bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;align-items:center;color:#fff;
   padding:7px 54px 7px 7px;border-radius:16px;box-shadow:0 8px 20px -6px var(--shadow);
   opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
 .mnext.on{opacity:1;transform:none;pointer-events:auto}
@@ -533,7 +533,7 @@ button.pskip.pmore:active{transform:scale(.98)}
 /* A fejlec elemei (lila kartya, jatekosvalto, napi cel, kivansag) ugyanolyan szelesek, mint a modulok es a reszek. */
 #view>.hero,#view>.whowrap,#view>.goal,#view>.wishbar{margin-left:-10px;margin-right:-10px}
 /* Ha az also modulsav latszik, a "vissza a helyedre" kerek gomb folotte alljon, ne takarja ki a sav veget. */
-#app:has(.mnext.on) .jump{bottom:136px}
+#app:has(.mnext.on) .jump{bottom:calc(136px + env(safe-area-inset-bottom,0px))}
 /* Amikor lap vagy kartya nyilik meg (a sotetito hatter latszik), a sav tunjon el. */
 #scrim.show ~ .mnext{opacity:0;transform:translateY(10px);pointer-events:none}
 .mnext.on:active{transform:scale(.985)}
