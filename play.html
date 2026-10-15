@@ -2686,10 +2686,15 @@ function menuHtml(){
 // Avatars: Olivia in her current stage, plus every hero whose quest is finished.
 // Valaszthato profilkepek: Olivia minden alakja (amit mar elert) es 16 hos, modulonkent ketto, fele ferfi, fele no.
 // A meg el nem ert alak vagy hos is latszik, halvanyan, lakattal: igy latszik, mire lehet majd cserelni.
-var AVATAR_HOSOK=['adam','eve','moses','miriam','gideon','ruth','david','abigail','nehemiah','esther','john-baptist','mary','stephen','lydia','timothy','phoebe'];
+// 9 ismert hos, vegyesen ferfiak es nok (Zsolt kerese, 2026-10-15).
+var AVATAR_HOSOK=['noah','abraham','eve','moses','ruth','david','esther','mary','john-baptist'];
 function hosById(id){ var r=null; C.modules.forEach(function(m){ (m.heroes||[]).forEach(function(h){ if(h.id===id) r=h; }); }); return r; }
-function avatarList(mind){ var s=T(), st=stage(), out=[{id:'olivia',name:s.charAuto,html:mascotHtml(),nyitva:true,csop:'oli'}];
-  if(mind) STAGES.forEach(function(nap,k){ out.push({id:'olivia-'+k,name:s.stageNames[k],html:mascotHtml(null,k),nyitva:st>=k,csop:'oli',zar:s.charLockOli(nap)}); });
+// Olivia alakjai harmasaval latszanak: az elso sor mindig, a kovetkezo sor akkor, amikor az elozo sor masodik alakja megnyilt.
+// A legutobb elert alak kivalasztasa = 'olivia', vagyis a kep magatol tovabb no; egy korabbi alak fix marad.
+function avatarList(mind){ var s=T(), st=stage(), out=[];
+  var lathato=Math.min(STAGES.length,3*(Math.floor((st+2)/3)+1));
+  if(mind) STAGES.forEach(function(nap,k){ if(k>=lathato) return; out.push({id:k===st?'olivia':'olivia-'+k,name:s.stageNames[k],html:mascotHtml(null,k),nyitva:st>=k,csop:'oli',zar:s.charLockOli(nap)}); });
+  else out.push({id:'olivia',name:s.stageNames[st],html:mascotHtml(),nyitva:true,csop:'oli'});
   AVATAR_HOSOK.forEach(function(id){ var hr=hosById(id); if(!hr) return; var ok=heroStars(id)>0;
     if(ok||mind) out.push({id:id,name:NM(hr),html:img(hr.img)||'<i>'+esc(NM(hr).charAt(0))+'</i>',nyitva:ok,csop:'hos',zar:s.charLockHero}); });
   return out;
@@ -2703,16 +2708,16 @@ function profilePage(){
   var h='<div class="prof"><div class="phead2">'+avatarHtml('pav')+'<div><h1>'+esc(S.name||s.noName)+'</h1><span>'+esc(s.joined(joined))+'</span></div>'+(S.name?'<button type="button" class="edit" data-editname aria-label="'+esc(s.yourName)+'">'+ico('person')+'<span>'+esc(s.editName)+'</span></button>':'')+'</div>';
   // The name field opens right here under the name, not as a sheet from the bottom.
   if(editingName||!S.name) h+='<div class="namebox"><label class="lbl" for="nameField">'+esc(s.yourName)+'</label><input id="nameField" class="field" type="text" autocomplete="nickname" placeholder="'+esc(s.namePlaceholder)+'" value="'+esc(S.name)+'"><button type="button" class="primary" data-savename>'+esc(s.save)+'</button></div>';
+  h+='<h3 class="sh">'+esc(s.overview)+'</h3><div class="tiles">';
+  function tile(i,c,t,v,d){ return '<div class="tile"><div class="t '+c+'">'+ico(i)+esc(t)+'</div><div class="v">'+esc(v)+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>'; }
+  h+=tile('book','c-brand',s.statLevel,levelName(),S.xp+' XP')+tile('flame','c-gold',s.statStreak,s.days(displayStreak()),s.bestDays(studyDays()))+
+     tile('shield','c-brand',s.shieldsUsedTitle,shieldsUsed(),s.shieldsLeft(S.shields))+tile('cal','c-ice',s.statWeek,s.lessons(lessonsThisWeek()),'');
+  h+='</div>';
   // A "Fiok (kesobb e-mail)" sor az elso kiadasbol kimarad: nincs fiok, minden a keszuleken marad.
   h+='<h3 class="sh">'+esc(s.charTitle)+'</h3>';
   var csopCim={oli:s.charOlivia,hos:s.charHeroes}, elozo=null;
   avatarList(true).forEach(function(a){ if(a.csop!==elozo){ if(elozo) h+='</div>'; h+='<h4 class="chcim">'+esc(csopCim[a.csop])+'</h4><div class="chars">'; elozo=a.csop; }
     h+='<button type="button" class="ch '+((S.avatar||'olivia')===a.id?'on':'')+(a.nyitva?'':' zarva')+'" '+(a.nyitva?'data-avatar="'+esc(a.id)+'"':'disabled')+'>'+a.html+'<small>'+esc(a.name)+'</small>'+(a.nyitva?'':'<em>'+ico('lock')+esc(a.zar)+'</em>')+'</button>'; });
-  h+='</div>';
-  h+='<h3 class="sh">'+esc(s.overview)+'</h3><div class="tiles">';
-  function tile(i,c,t,v,d){ return '<div class="tile"><div class="t '+c+'">'+ico(i)+esc(t)+'</div><div class="v">'+esc(v)+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>'; }
-  h+=tile('book','c-brand',s.statLevel,levelName(),S.xp+' XP')+tile('flame','c-gold',s.statStreak,s.days(displayStreak()),s.bestDays(studyDays()))+
-     tile('shield','c-brand',s.shieldsUsedTitle,shieldsUsed(),s.shieldsLeft(S.shields))+tile('cal','c-ice',s.statWeek,s.lessons(lessonsThisWeek()),'');
   return h+'</div></div>';
 }
 function ertesitesBeallitas(s){ var n=nApi(), be=!!(S.notif&&S.notif.on);
