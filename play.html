@@ -940,6 +940,8 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
 @keyframes iragyog{0%{filter:drop-shadow(0 0 0 rgba(255,230,160,0))}40%{filter:drop-shadow(0 0 40px rgba(255,230,160,.95))}100%{filter:drop-shadow(0 0 12px rgba(255,230,160,.35))}}
 #intro .icim{margin-top:4vh;color:#f8f4ea;font-family:Spectral,Georgia,serif;font-size:clamp(34px,9vw,56px);font-weight:700;opacity:0;transform:translateY(10px);transition:opacity .6s ease-out,transform .6s ease-out}
 #intro .ialcim{color:#e1b566;font-family:Spectral,Georgia,serif;font-size:clamp(14px,3.6vw,19px);opacity:0;margin-top:6px;transition:opacity .6s ease-out .2s}
+#intro.var .potty.ragyog{animation:ivar 1.6s ease-in-out infinite}
+@keyframes ivar{0%,100%{filter:drop-shadow(0 0 12px rgba(255,230,160,.35))}50%{filter:drop-shadow(0 0 34px rgba(255,230,160,.85))}}
 #intro.felirat .icim{opacity:1;transform:none}#intro.felirat .ialcim{opacity:.95}
 </style>
 <div id="intro" hidden>
@@ -992,7 +994,8 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
     setTimeout(function(){ el.classList.add('felirat'); },T[4]+250);
   },0);
   var vege=false;
-  function bezar(){ if(vege) return; vege=true; el.classList.add('ki'); setTimeout(function(){ burok(false); },300); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },550); }
+  // Amig a tartalom toltodik (telefonon nehany masodperc), az animacio vegso kepe marad fent, nem ures kepernyo.
+  function bezar(){ if(vege) return; if(!window.__btKesz){ el.classList.add('var'); setTimeout(bezar,150); return; } vege=true; el.classList.add('ki'); setTimeout(function(){ burok(false); },300); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },550); }
   setTimeout(bezar,T[4]+2000);
   el.addEventListener('click',function(){ if(Date.now()-kezd>400) bezar(); });
 })();
@@ -1031,7 +1034,9 @@ hoz('data/core.json').then(function(core){
 }).then(function(C){
   var b=document.getElementById('boot'); if(b) b.remove();
   indul(C);
+  window.__btKesz=true;
 }).catch(function(e){
+  window.__btKesz=true;
   var t=document.getElementById('bootTx');
   if(t) t.innerHTML='A tartalom nem tudott betöltődni.<br><small>'+
     String(e&&e.message||e).replace(/[<>&]/g,'')+'</small><br><br>'+
@@ -2845,7 +2850,7 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-profile')){ closeSheet(); tab='profile'; editingName=true; render(); setTimeout(function(){ var f=document.getElementById('nameField'); if(f) f.focus(); },60); return; }
   if(d.avatar){ S.avatar=d.avatar; persist(); render(); return; }
   if(el.hasAttribute('data-whotoggle')){ whoOpen=!whoOpen; keepScroll=view.scrollTop; render();
-    if(whoOpen){ var wb=document.querySelector('.whowrap'); if(wb&&wb.scrollIntoView) try{ wb.scrollIntoView({block:'start'}); }catch(e){ wb.scrollIntoView(); } }
+    if(whoOpen){ var wb=document.querySelector('.whowrap'); if(wb&&wb.scrollIntoView) try{ wb.scrollIntoView({block:'nearest'}); }catch(e){} }
     return; }
   if(el.hasAttribute('data-profswitch')){ profilVált(el.dataset.profswitch); return; }
   if(el.hasAttribute('data-profnew')){ var mez=document.getElementById('profName'); ujProfil(((mez&&mez.value)||'').trim()); return; }
