@@ -1011,7 +1011,9 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
   },0);
   var vege=false;
   // Amig a tartalom toltodik (telefonon nehany masodperc), az animacio vegso kepe marad fent, nem ures kepernyo.
-  function bezar(){ if(vege) return; if(!window.__btKesz){ el.classList.add('var'); setTimeout(bezar,150); return; } vege=true; el.classList.add('ki'); setTimeout(function(){ burok(false); },300); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },550); }
+  function bezar(){ if(vege) return; if(!window.__btKesz){ el.classList.add('var'); setTimeout(bezar,150); return; } vege=true; el.classList.add('ki');
+    // A telefon felso/also savja csak akkor valt vissza, amikor az animacio mar teljesen elhalvanyult, kulonben ott villan egy vilagos csik.
+    setTimeout(function(){ burok(false); },560); setTimeout(function(){ el.remove(); try{ ctx&&ctx.close(); }catch(e){} },600); }
   setTimeout(bezar,T[4]+2000);
   el.addEventListener('click',function(){ if(Date.now()-kezd>400) bezar(); });
 })();
