@@ -3081,9 +3081,10 @@ flushReports();
 seedBadges();
 // A legelso inditaskor Olivia bemutatkozik, es felajanlja a rovid szintfelmerest.
 if(S.placed==null&&!partsDoneAll()&&!S.xp) screen={name:'intro'};
-// Minden inditaskor "Ki jatszik?" (kiveve a legelso inditast es a jatekosvaltas utani ujratoltest).
+// Inditaskor "Ki jatszik?", ha legalabb ket jatekos van (kiveve a legelso inditast es a jatekosvaltas utani ujratoltest).
 else { var kjVolt=false; try{ kjVolt=sessionStorage.getItem('bt-kj')==='1'; sessionStorage.removeItem('bt-kj'); }catch(e){}
-  if(!kjVolt) screen={name:'kijatszik'}; }
+  // Egy jatekosnal nincs mibol valasztani: egyenesen az osveny jon (Zsolt, 2026-10-16).
+  if(!kjVolt&&PROFILOK.length>1) screen={name:'kijatszik'}; }
 render();
 if(screen.name==='home'&&!popBadges()) maybeTour('home');
 setTimeout(utemez,1500);
