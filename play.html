@@ -2483,7 +2483,7 @@ function chestHtml(open,size){ var im=img(open?'chest-open':'chest-closed','cimg
 // The round button in the corner scrolls back to the station you are on.
 // The station you are on lands in the middle of the screen, so the finished part is visible
 // above it and the locked road below. soft: keeps the view as it is if it is already centred.
-function jumpToCurrent(soft){
+function jumpToCurrent(soft,anim){
   // Oda ugrunk vissza, ahol utoljara jatszott - nem mindig az elso modulra.
   var n=null, la=S.lastAt;
   if(la&&la.u!=null){ var ms='.node[data-slot^="'+la.u+',"]';
@@ -2494,7 +2494,23 @@ function jumpToCurrent(soft){
   var mid=vb.height/2, at=nb.top+nb.height/2-vb.top;
   if(soft&&Math.abs(at-mid)<vb.height*0.28) return;
   var bar=view.querySelector('.mbar'), top=bar?bar.getBoundingClientRect().height+40:70;
-  view.scrollTop+=at-Math.max(mid,top); syncStickyPart(); syncNextBar(); }
+  var cel=view.scrollTop+at-Math.max(mid,top);
+  if(anim){ simaGorgetes(cel); return; }
+  view.scrollTop=cel; syncStickyPart(); syncNextBar(); }
+// A lila gomb ne ugorjon, hanem gyors, sima gorgetessel vigyen vissza:
+// az elejen felgyorsul, a vegen lelassul. Hosszabb utnal kicsit tovabb tart, de 0,9 mp-nel soha.
+var gorgetesId=0;
+function simaGorgetes(cel){
+  var tol=view.scrollTop, ut=cel-tol; if(Math.abs(ut)<2) return;
+  var ido=Math.min(900,Math.max(350,Math.abs(ut)/4)), kezd=null, id=++gorgetesId;
+  function lep(most){ if(id!==gorgetesId) return; if(kezd==null) kezd=most;
+    var t=Math.min(1,(most-kezd)/ido), e=t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    view.scrollTop=tol+ut*e; syncStickyPart(); syncNextBar();
+    if(t<1) requestAnimationFrame(lep); }
+  requestAnimationFrame(lep);
+}
+// Ha a gyerek gorgetes kozben maga is gorget, a mi animacionk alljon le.
+['touchstart','wheel'].forEach(function(ev){ view.addEventListener(ev,function(){ gorgetesId++; },{passive:true}); });
 // Minden megnyitott modul sava a sajat reszet mutassa, ne csak az elso.
 function syncStickyPart(){
   view.querySelectorAll('.mbar .pnow').forEach(function(bar){
@@ -2984,7 +3000,7 @@ document.getElementById('app').addEventListener('click',function(e){
   if(d.test!=null){ p=d.test.split(','); closePop(); scrim.classList.remove('show'); startTest(+p[0],+p[1]); return; }
   if(d.pick!=null){ pickOrder(+d.pick); return; }
   if(el.hasAttribute('data-orderreset')){ resetOrder(); return; }
-  if(el.hasAttribute('data-jump')){ jumpToCurrent(); return; }
+  if(el.hasAttribute('data-jump')){ jumpToCurrent(false,true); return; }
   // A lap aljan ulo sav a kovetkezo modul elejere visz.
   if(el.hasAttribute('data-gomod')){ var mb=view.querySelector('#path .mbar[data-mi="'+el.dataset.mi+'"]');
     if(mb) view.scrollTop+=mb.getBoundingClientRect().top-view.getBoundingClientRect().top-36;
