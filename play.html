@@ -2363,10 +2363,15 @@ function renderHome(){
 // The path: each part is a winding run of 8 stations (story, 3 tasks, chest, 3 tasks).
 // The whole module can be scrolled through so the road ahead is visible; only a very long
 // module is cut off (there can be 100 parts per module).
-var PART_WINDOW=40, mindResz={};
+// A modul, ahol eppen jatszik, elore 20 reszt mutat; a tobbi modul csak a kovetkezo 3-at,
+// alatta a "mutasd mind" gombbal. Igy az osveny nem rajzol egyszerre tobb szaz reszt,
+// es a fooldalra valtas telefonon is gyors marad.
+var PART_WINDOW=20, MAS_WINDOW=3, mindResz={};
 function partWindow(mi,parts){ if(mindResz[mi]) return {from:0,to:parts.length-1};
-  var nx=nextNode(), cur=(nx&&nx.mi===mi)?nx.pi:(moduleUnlocked(mi)?partsDoneIn(C.modules[mi]):0);
-  return {from:0,to:Math.min(parts.length-1,Math.max(cur+PART_WINDOW,PART_WINDOW))}; }
+  var nx=nextNode(), la=S.lastAt, aktiv=(nx&&nx.mi===mi)||(la&&la.u===mi);
+  var cur=(nx&&nx.mi===mi)?nx.pi:(moduleUnlocked(mi)?partsDoneIn(C.modules[mi]):0);
+  var elore=aktiv?PART_WINDOW:MAS_WINDOW;
+  return {from:0,to:Math.min(parts.length-1,Math.max(cur+elore,elore-1))}; }
 // A modul sava: a jelveny gomb megnyitja a resz-valasztot, utana elvalaszto vonal es a nev.
 function mbarHtml(m,mi,un){
   var s=T(), kep=img(m.icon||('unit-'+m.id));
@@ -2525,9 +2530,13 @@ function syncNextBar(){
 function layoutPath(){
   var path=document.getElementById('path'); if(!path) return;
   var w=path.clientWidth;
-  path.querySelectorAll('.node').forEach(function(n){
+  // Elobb minden szelesseget kiolvasunk, csak utana irunk: ha a ketto valtakozik,
+  // a bongeszo minden allomasnal ujraszamolja az egesz lapot (ez tobb masodperc volt).
+  var nodes=Array.prototype.slice.call(path.querySelectorAll('.node'));
+  var sws=nodes.map(function(n){ return (n.parentNode&&n.parentNode.clientWidth)||w; });
+  nodes.forEach(function(n,i){
     var slot=+(n.dataset.slot||'0,0,0').split(',')[2];
-    var sw=(n.parentNode&&n.parentNode.clientWidth)||w, cx=sw/2, amp=Math.min(sw/2-96,92);
+    var sw=sws[i], cx=sw/2, amp=Math.min(sw/2-96,92);
     n.style.left=(cx+amp*Math.sin(slot/SLOTS*2*Math.PI))+'px';
   });
   // A szintlepo kornel az ut megall a kor szelenel, es onnan indul tovabb,
