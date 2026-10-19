@@ -2176,9 +2176,12 @@ function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges())
 
 // ---------- rendering ----------
 var view=document.getElementById('view'), foot=document.getElementById('foot'), sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim');
+// Pro-funkciok (heti kimutatas, szinvilag, Olivia ruhatara): Zsolt dontese 2026-10-19 szerint csak minta,
+// a Pro indulasaig rejtve. A napi naplo kozben csendben gyulik, hogy indulaskor legyen mibol mutatni.
+var PRO_FUNKCIOK=false;
 var SZINVILAG={alap:['#5B3FD1','#9B4DE0'],tenger:['#1E6FB8','#18A5C4'],ret:['#2E7D46','#7CB342'],sivatag:['#A65A16','#E0962F'],alkony:['#C2416B','#F07C52']};
 function applyTheme(){ var t=S.theme||'auto'; if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t);
-  var z=S.szin||'alap'; if(z==='alap'||!SZINVILAG[z]) document.documentElement.removeAttribute('data-szin'); else document.documentElement.setAttribute('data-szin',z); }
+  var z=PRO_FUNKCIOK?(S.szin||'alap'):'alap'; if(z==='alap'||!SZINVILAG[z]) document.documentElement.removeAttribute('data-szin'); else document.documentElement.setAttribute('data-szin',z); }
 function render(){
   closeSheet(); applyShields(); betuAlkalmaz();
   if(screen.name!=='home'){ var jx=document.querySelector('.jump'); if(jx) jx.remove();
@@ -2251,7 +2254,7 @@ var STAGE_CLS=['',' young','',' big',' silver',' gold',' gold glow',' gold glow 
 function mascotHtml(cls,st,pose){ var s=st==null?stage():st, sym=s===0?'egg':'dove', extra=STAGE_CLS[s]||'', sad=mascotSad();
   if(s===0){ var e=img('dove-egg','mascot '+(cls||'')); if(e) return e; }
   // Olivia ruhaja (Pro-jelolt): csak a sajat, integeto alakjan latszik, ha a ruha kepe megvan.
-  if(s>=1&&st==null&&!pose&&!sad&&S.ruha&&hasImg('dove-ruha-'+S.ruha)){ var rk=img('dove-ruha-'+S.ruha,'mascot '+(cls||'')); if(rk) return rk; }
+  if(PRO_FUNKCIOK&&s>=1&&st==null&&!pose&&!sad&&S.ruha&&hasImg('dove-ruha-'+S.ruha)){ var rk=img('dove-ruha-'+S.ruha,'mascot '+(cls||'')); if(rk) return rk; }
   if(s>=1){ var p=pose||(sad?'sad':'wave'); if(s>=5&&!pose&&!sad&&hasImg('dove-gold')){ p='gold'; extra=extra.replace(' gold',''); } var im=img('dove-'+p,'mascot '+(cls||'')+extra); if(im) return im; }
   return '<svg class="mascot '+(cls||'')+extra+(sad?' sad':'')+'"><use href="#i-'+sym+'"/></svg>'; }
 function mascotLine(nx){ var s=T(); if(stage()===0) return s.mascotEgg; if(mascotSad()) return s.mascotSad; return s.mascotHome(displayStreak(),S.name,nx); }
@@ -2901,7 +2904,7 @@ function avatarHtml(cls){ var id=S.avatar||'olivia';
   var m=/^olivia-(\d+)$/.exec(id); if(m) return mascotHtml(cls,+m[1]);
   return (img(id.indexOf('hero-')===0?id:('hero-'+id),'mascot'+(cls?' '+cls:''))||mascotHtml(cls)); }
 // Olivia ruhatara: a ruhak listaja a content/ruhak.json-bol jon; amelyiknek meg nincs kepe, az "hamarosan".
-function ruhatarHtml(){ var s=T(), r=C.ruhak||[]; if(!r.length||stage()<1) return '';
+function ruhatarHtml(){ var s=T(), r=C.ruhak||[]; if(!PRO_FUNKCIOK||!r.length||stage()<1) return '';
   var L=function(o){ return o?(S.lang==='hu'?o.hu:(o.en||o.hu)):''; };
   var h='<h4 class="chcim">'+esc(s.ruhaCim)+'</h4><p class="picknote" style="text-align:left;margin:-2px 2px 8px">'+esc(s.ruhaHint)+'</p><div class="chars">';
   h+='<button type="button" class="ch'+(!S.ruha?' on':'')+'" data-ruha="-">'+mascotHtml(null,stage(),'wave')+'<small>'+esc(s.ruhaNincs)+'</small></button>';
@@ -2966,7 +2969,7 @@ function kimutatasHtml(){ var s=T(), k=s.kim, ma=startOfDay(new Date()), kezd=ad
   return h+'<p class="picknote" style="text-align:left;margin:2px 2px 10px">'+esc(k.helyi)+'</p>'; }
 function szuloPage(){ var s=T(), chev='<svg class="chev"><use href="#i-chev"/></svg>';
   var h='<div class="hrow"><h1 class="brand">'+esc(s.parentsTitle)+'</h1></div><p class="picknote" style="text-align:left;margin:-4px 0 6px">'+esc(s.parentsNote)+'</p><div class="setlist">';
-  h+='<div class="setsec">'+esc(s.kim.cim)+'</div>'+kimutatasHtml();
+  if(PRO_FUNKCIOK) h+='<div class="setsec">'+esc(s.kim.cim)+'</div>'+kimutatasHtml();
   h+='<div class="setsec">'+esc(s.secPlayers)+'</div><div class="setgrp">';
   PROFILOK.forEach(function(p){ var xp=nyers(masKulcs('bq-xp',p.id),0)||0;
     h+='<div class="mrow">'+ico('person')+'<span class="mtx"><b>'+esc(p.name||s.profNoName)+'</b><span>'+esc(s.kjXp(xp))+'</span></span>'+(p.id===PROFIL?'<span class="det">✓</span>':'')+'</div>'; });
@@ -3003,7 +3006,7 @@ function settingsPage(){
     '<p class="picknote" style="margin-top:2px">'+esc(S.diffLock?s.diffLockNote:s.diffAutoNote(s.diffName[S.diff||'m']))+'</p>'+
     '</div><div class="setsec">'+esc(s.secRead)+'</div><div class="setgrp">'+
     '<div class="mrow sor"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.theme)+'</b><span>'+esc(s.themeHint)+'</span></div><span class="lang"><button type="button" data-theme="light" class="'+(S.theme==='light'?'on':'')+'">'+esc(s.themeLight)+'</button><button type="button" data-theme="dark" class="'+(S.theme==='dark'?'on':'')+'">'+esc(s.themeDark)+'</button><button type="button" data-theme="auto" class="'+(S.theme==='auto'||!S.theme?'on':'')+'">'+esc(s.themeAuto)+'</button></span></div>'+
-    '<div class="mrow sor"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.szinCim)+'</b><span>'+esc(s.szinNev[S.szin||'alap']||s.szinNev.alap)+'</span></div><span class="szinek">'+Object.keys(SZINVILAG).map(function(k){ var c=SZINVILAG[k]; return '<button type="button" data-szin="'+k+'" class="'+((S.szin||'alap')===k?'on':'')+'" style="background:linear-gradient(135deg,'+c[0]+' 50%,'+c[1]+' 50%)" aria-label="'+esc(s.szinNev[k])+'"></button>'; }).join('')+'</span></div>'+
+    (!PRO_FUNKCIOK?'':'<div class="mrow sor"><svg><use href="#i-theme"/></svg><div class="mtx"><b>'+esc(s.szinCim)+'</b><span>'+esc(s.szinNev[S.szin||'alap']||s.szinNev.alap)+'</span></div><span class="szinek">'+Object.keys(SZINVILAG).map(function(k){ var c=SZINVILAG[k]; return '<button type="button" data-szin="'+k+'" class="'+((S.szin||'alap')===k?'on':'')+'" style="background:linear-gradient(135deg,'+c[0]+' 50%,'+c[1]+' 50%)" aria-label="'+esc(s.szinNev[k])+'"></button>'; }).join('')+'</span></div>')+
     '<div class="mrow sor">'+ico('book')+'<div class="mtx"><b>'+esc(s.betuCim)+'</b><span>'+esc(s.betuHint)+'</span></div><span class="lang">'+[1,1.15,1.3].map(function(z,k){ return '<button type="button" data-betu="'+z+'" class="'+(Math.abs(betuSzorzo()-z)<.01?'on':'')+'" style="font-size:'+(12+k*3)+'px" aria-label="'+esc(s.betuNev[k])+'">A</button>'; }).join('')+'</span></div>'+
     '<div class="mrow">'+ico('book')+'<div class="mtx"><b>'+esc(s.igeMutatCim)+'</b><span>'+esc(s.igeMutatHint)+'</span></div><span class="lang"><button type="button" data-igemutat="1" class="'+(S.igeMutat!==false?'on':'')+'">'+esc(s.mapBgOn)+'</button><button type="button" data-igemutat="0" class="'+(S.igeMutat===false?'on':'')+'">'+esc(s.mapBgOff)+'</button></span></div>'+
     '</div><div class="setsec">'+esc(s.secSound)+'</div><div class="setgrp">'+
