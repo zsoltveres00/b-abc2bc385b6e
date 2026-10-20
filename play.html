@@ -2195,8 +2195,12 @@ var view=document.getElementById('view'), foot=document.getElementById('foot'), 
 // Pro-funkciok (heti kimutatas, szinvilag, Olivia ruhatara): Zsolt dontese 2026-10-19 szerint csak minta,
 // a Pro indulasaig rejtve. A napi naplo kozben csendben gyulik, hogy indulaskor legyen mibol mutatni.
 var PRO_FUNKCIOK=false;
+// Az appban a telefon felso sava (ora, akku) a jatek hatterehez igazodjon: vilagos hatteren fekete, sotet hatteren feher.
+function savJelzes(){ try{ var t=S.theme||'auto', sotet=t==='dark'||(t==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches); burokUzen({t:'sav',sotet:!!sotet}); }catch(e){} }
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',savJelzes); }catch(e){}
 var SZINVILAG={alap:['#5B3FD1','#9B4DE0'],tenger:['#1E6FB8','#18A5C4'],ret:['#2E7D46','#7CB342'],sivatag:['#A65A16','#E0962F'],alkony:['#C2416B','#F07C52']};
 function applyTheme(){ var t=S.theme||'auto'; if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t);
+  savJelzes();
   var z=PRO_FUNKCIOK?(S.szin||'alap'):'alap'; if(z==='alap'||!SZINVILAG[z]) document.documentElement.removeAttribute('data-szin'); else document.documentElement.setAttribute('data-szin',z); }
 function render(){
   closeSheet(); applyShields(); betuAlkalmaz();
