@@ -223,7 +223,7 @@ img.mascot{object-fit:contain}
 .mascot.gold{filter:sepia(.7) saturate(2.2) hue-rotate(-12deg) drop-shadow(0 0 5px var(--star))}
 .mascot.sad{filter:saturate(.5) brightness(.95);transform:rotate(-10deg)}
 .jump{position:absolute;right:14px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 4px 12px var(--shadow);z-index:7}
-.jump svg{width:22px;height:22px;fill:#fff}
+.jump svg{width:22px;height:22px;fill:#fff;transition:transform .2s}.jump.fel svg{transform:rotate(180deg)}
 /* Modulvalaszto: a lila nyil folott, barmelyik modulra egy koppintassal (fel es le is). */
 .modgomb{position:absolute;right:14px;bottom:calc(132px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;background:var(--surface);color:var(--brand);border:1.5px solid var(--brand);display:grid;place-items:center;box-shadow:0 4px 12px var(--shadow);z-index:7}
 .modgomb svg{width:22px;height:22px}
@@ -1726,8 +1726,22 @@ function placementPool(d){ var out=[], m=C.modules[0];
     (st[d]||[]).forEach(function(it){ if(it.o&&it.o.length>=2&&(it.q||'').indexOf('_____')<0) out.push({kind:st.kind,it:it}); });
   }); });
   return out; }
+// Kezzel valogatott kerdesek, amelyek a resz ismerete nelkul is egyertelmuek (Zsolt kerese, 2026-10-25):
+// a felmeres elejen nincs tortenet, ezert az olyan kerdes, mint "Hanyadik nap volt ez?", nem jo ide.
+// Alak: resz-azonosito|allomas sorszama|kerdes sorszama az 1. modulban.
+var PLACE_VALOGATOTT={
+  e:['p1|0|0','p3|0|3','p5|0|0','p5|0|5','p6|5|2','p7|0|0','p11|0|3','p11|0|7','p12|0|0','p14|8|1','p15|5|2','p19|7|0'],
+  m:['p5|0|3','p5|0|8','p6|5|1','p8|0|4','p10|7|0','p11|0|3','p11|0|6','p12|0|8','p18|0|8','p22|7|1'],
+  h:['p3|0|3','p4|0|3','p8|0|5','p11|0|0','p14|0|4','p16|0|8','p19|7|0','p21|0|2','p22|0|5','p23|0|0','p24|0|7']};
+function placementValogatott(d){ var m=C.modules[0], out=[];
+  (PLACE_VALOGATOTT[d]||[]).forEach(function(k){ var x=k.split('|'), p=(m.parts||[]).filter(function(pp){ return pp.id===x[0]; })[0],
+      st=p&&p.stations&&p.stations[+x[1]], it=st&&st[d]&&st[d][+x[2]];
+    if(it&&it.o&&it.o.length>=2&&PLACE_SKIP.indexOf(st.kind)<0) out.push({kind:st.kind,it:it}); });
+  return out; }
 function buildPlacement(){ var qs=[];
-  DIFFS.forEach(function(d){ var pool=placementPool(d), want=PLACE_MIX[d]; if(!pool.length) return;
+  DIFFS.forEach(function(d){ var val=shuffle(placementValogatott(d)), want=PLACE_MIX[d];
+    if(val.length>=want){ val.slice(0,want).forEach(function(e){ qs.push({q:normQ(e.kind,e.it,d),d:d}); }); return; }
+    var pool=placementPool(d); if(!pool.length) return;
     // egyenletesen szedjuk oket a modul elejetol a vegeig, hogy ismerosebb es nehezebb resz is legyen
     var step=pool.length/want;
     for(var k=0;k<want;k++){ var e=pool[Math.floor(k*step)]; if(e) qs.push({q:normQ(e.kind,e.it,d),d:d}); } });
@@ -2254,7 +2268,10 @@ function renderPlace(){ var s=T(), e=placement.qs[placement.pos], q=e.q, pct=Mat
   var h='<div class="top"><span class="ltag">'+(img('dove-teach','hmini')||'')+'<b>'+esc(s.placeTag)+'</b></span><span class="hearts"><b>'+(placement.pos+1)+'/'+placement.qs.length+'</b></span></div>';
   h+='<div class="prow"><button type="button" class="xback" data-placeskip aria-label="'+esc(s.introSkip)+'">'+ico('x')+'</button><div class="pbar"><i style="width:'+pct+'%"></i></div></div>';
   h+='<div class="q">'+esc(S.lang==='hu'?q.hu.q:q.en.q)+'</div><div class="opts">';
-  (S.lang==='hu'?q.hu.o:q.en.o).forEach(function(o,i){ h+='<button type="button" class="opt" data-place="'+i+'">'+esc(o)+'</button>'; });
+  // A valaszok sorrendje kerdesenkent kevert (a tartalomban a helyes valasz gyakran az elso).
+  if(!e.sor){ var ix=[]; for(var k=0;k<(q.hu.o||[]).length;k++) ix.push(k); e.sor=shuffle(ix); }
+  var opc=S.lang==='hu'?q.hu.o:q.en.o;
+  e.sor.forEach(function(i){ h+='<button type="button" class="opt" data-place="'+i+'">'+esc(opc[i])+'</button>'; });
   h+='</div><p class="rhint" style="margin-top:16px;text-align:center">'+esc(s.placeHint)+'</p>';
   view.innerHTML=h; foot.innerHTML=''; }
 function renderPlaceResult(){ var s=T(), lvl=screen.lvl;
@@ -2447,7 +2464,7 @@ function renderHome(){
   if(tab==='home'&&screen.name==='home'){ var nb=document.createElement('button'); nb.type='button'; nb.className='mnext'; nb.setAttribute('data-gomod',''); document.getElementById('app').appendChild(nb); }
   // The whole module is on screen now, so start the path at the station you are on;
   // a card opened from a node keeps the current scroll position instead.
-  if(tab==='home'){ layoutPath(); if(keepScroll!=null){ view.scrollTop=keepScroll; keepScroll=null; } else jumpToCurrent(true); syncStickyPart(); syncNextBar(); }
+  if(tab==='home'){ layoutPath(); if(keepScroll!=null){ view.scrollTop=keepScroll; keepScroll=null; } else jumpToCurrent(true); syncStickyPart(); syncNextBar(); jumpIrany(); }
 }
 // The path: each part is a winding run of 8 stations (story, 3 tasks, chest, 3 tasks).
 // The whole module can be scrolled through so the road ahead is visible; only a very long
@@ -2578,12 +2595,17 @@ function modListaLap(){ var s=T(), la=S.lastAt, nx=nextNode(), itt=la&&la.u!=nul
   C.modules.forEach(function(m,mi){ var un=moduleUnlocked(mi), kep=img(m.icon||('unit-'+m.id)), db=partsDoneIn(m), ossz=(m.parts||[]).length;
     h+='<button type="button" class="modsor'+(mi===itt?' itt':'')+(un?'':' zar')+'" style="background:'+m.color+'" data-gomod="" data-mi="'+mi+'"><span class="mbadge">'+(kep||'<b>'+(mi+1)+'</b>')+'</span><span class="mtx"><small>'+esc(s.modNo(mi+1))+'</small><b>'+esc(NM(m))+'</b></span><i>'+(un?esc(s.modListaDb(db,ossz)):ico('lock'))+'</i></button>'; });
   openSheet(h+'</div>'); }
-function jumpToCurrent(soft,anim){
-  // Oda ugrunk vissza, ahol utoljara jatszott - nem mindig az elso modulra.
-  var n=null, la=S.lastAt;
+// Oda ugrunk vissza, ahol utoljara jatszott - nem mindig az elso modulra.
+function jumpCel(){ var n=null, la=S.lastAt;
   if(la&&la.u!=null){ var ms='.node[data-slot^="'+la.u+',"]';
     n=view.querySelector(ms+'.next')||view.querySelector(ms+'.open')||view.querySelector('.node[data-slot^="'+la.u+','+la.p+',"]'); }
-  if(!n) n=view.querySelector('.node.next')||view.querySelector('.node.open');
+  return n||view.querySelector('.node.next')||view.querySelector('.node.open'); }
+// A lila gomb nyila arra mutat, amerre a cel van: ha fent, felfele, ha lent, lefele (Zsolt kerese, 2026-10-25).
+function jumpIrany(){ var jb=document.querySelector('.jump'), n=jb&&jumpCel(); if(!n) return;
+  var vb=view.getBoundingClientRect(), nb=n.getBoundingClientRect();
+  jb.classList.toggle('fel', nb.top+nb.height/2 < vb.top+vb.height/2); }
+function jumpToCurrent(soft,anim){
+  var n=jumpCel();
   if(!n) return;
   var vb=view.getBoundingClientRect(), nb=n.getBoundingClientRect();
   var mid=vb.height/2, at=nb.top+nb.height/2-vb.top;
@@ -3220,7 +3242,7 @@ scrim.addEventListener('click',closeSheet);
 sheet.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nameField'){ nevBeall(e.target.value); render(); } });
 addEventListener('resize',layoutPath);
 addEventListener('resize',function(){ if(tour) drawTourStep(); });
-view.addEventListener('scroll',function(){ if(screen.name==='home'&&tab==='home'){ syncStickyPart(); syncNextBar(); } },{passive:true});
+view.addEventListener('scroll',function(){ if(screen.name==='home'&&tab==='home'){ syncStickyPart(); syncNextBar(); jumpIrany(); } },{passive:true});
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layoutPath);
 
 // heart countdown tick
