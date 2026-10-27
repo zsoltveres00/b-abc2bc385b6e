@@ -1261,7 +1261,7 @@ function betuAlkalmaz(){ var v=document.getElementById('view'); if(v) v.style.zo
 // A szuloi kod kozos minden jatekosnak (a szulo egy kodot jegyez meg).
 S.szuloKod=nyers('bq-szulo-kod',S.szuloKod);
 function nevBeall(v){ v=(v||'').trim(); S.name=v; var mp=mostaniProfil(); if(mp){ mp.name=v; nyersIr('bq-profiles',PROFILOK); } persist(); }
-function persist(){
+function persist(){ widgetFrissit();
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
   save('bq-laststudy',S.lastStudy); save('bq-chests',S.chests); save('bq-gift-log',S.cards);
@@ -1494,6 +1494,15 @@ var HANGOK={
 var NOTIF_ALAP={on:false,ido:17,napi:true,lada:true,sziv:true,unnep:true,szulo:false};
 function vanBurok(){ return !!window.ReactNativeWebView; }
 function burokUzen(o){ try{ if(vanBurok()) window.ReactNativeWebView.postMessage(JSON.stringify(o)); }catch(e){} }
+// A kezdokepernyos widget adatai (szeria, a het napjai, kesz-e a mai lecke). Az app burka elmenti
+// egy kozos tarolóba, ahonnan a telefon widgetje olvassa (lasd app/App.js es app/targets/widget).
+function widgetAdat(){ var ma=startOfDay(new Date()), ws=weekStart(ma), kesz=played(ma)>0, w=[], n=[];
+  for(var i=0;i<7;i++){ var d=addDays(ws,i);
+    w.push(d>ma?'f':dayKey(d)===dayKey(ma)?(kesz?'ok':'t'):played(d)>0?'ok':shielded(d)?'p':missed(d)?'x':'f');
+    n.push(d.toLocaleDateString(T().locale,{weekday:'short'}).replace('.','')); }
+  return {v:1,d:[ma.getFullYear(),ma.getMonth()+1,ma.getDate()],s:displayStreak(),k:kesz,w:w,n:n,fd:T().firstDay,l:S.lang==='hu'?'hu':'en'}; }
+var widgetIdo=null;
+function widgetFrissit(){ if(!vanBurok()) return; clearTimeout(widgetIdo); widgetIdo=setTimeout(function(){ try{ burokUzen({t:'widget',adat:widgetAdat()}); }catch(e){} },800); }
 function notifBe(){ return !!(S.notif&&S.notif.on&&vanBurok()); }
 function nApi(){ return Object.assign({},NOTIF_ALAP,S.notif||{}); }
 function idopont(nap,ora,perc){ var d=new Date(nap); d.setHours(ora,perc||0,0,0); return d; }
@@ -1536,7 +1545,8 @@ function feladatAll(){ if(!lesson||screen.name!=='lesson') return; if(!lesson.ut
   var m=C.modules[lesson.ui], p=m&&m.parts[lesson.pi];
   if(p&&!lesson.hero&&lesson.test==null&&!lesson.practice) { S.felbe={mi:lesson.ui,pi:lesson.pi,nev:NM(p),ido:Date.now()}; persist(); }
   goHome(); var s=T(); openSheet('<div class="bsheet"><h3>'+esc(s.felbeCim)+'</h3><p>'+esc(s.felbe(FELBE_PERC))+'</p><button type="button" class="primary" style="margin-top:16px" data-closesheet>'+esc(s.continueBtn)+'</button></div>'); }
-document.addEventListener('visibilitychange',function(){ if(document.hidden){ utemez(); } else { feladatAll(); } });
+document.addEventListener('visibilitychange',function(){ if(document.hidden){ utemez(); widgetFrissit(); } else { feladatAll(); widgetFrissit(); } });
+setTimeout(widgetFrissit,2500);
 setInterval(feladatAll,30000);
 function hang(nev){ var c=hangCtx(); if(!c||!HANGOK[nev]) return; try{ HANGOK[nev](c); }catch(e){} }
 
