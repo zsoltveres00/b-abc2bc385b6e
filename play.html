@@ -981,6 +981,94 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
 .kjuj .kjplus{border-style:dashed;font-size:44px;font-weight:600;color:var(--brand);background:transparent}
 .kjszulo{margin-top:auto;display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:14px;border:1.5px dashed var(--muted);background:none;color:var(--muted);font-weight:800;font-size:15px}
 .kjszulo svg{width:16px;height:16px;fill:currentColor}
+/* ---------- Adventi naptar ---------- */
+.bar button[data-tab="advent"] img.nic{width:46px;height:46px;margin-top:-18px;filter:drop-shadow(0 4px 8px rgba(30,27,58,.3))}
+.advfej{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:2px 0 8px}
+.advfej span{font-size:12px;font-weight:800;letter-spacing:.06em;color:#C2416B}
+.advfej b{font-size:13px;font-weight:800;color:#C2416B;font-variant-numeric:tabular-nums;white-space:nowrap}
+.advkep{position:relative;width:100%;aspect-ratio:3/2;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);background:#E9E4EC;box-shadow:0 10px 24px var(--shadow)}
+.advkep i{background-image:var(--advkep);background-size:600% 400%;filter:grayscale(1) contrast(.75) brightness(1.25);opacity:.55;outline:1px solid rgba(255,255,255,.35);transition:filter .9s,opacity .9s}
+.advkep i.meg{filter:none;opacity:1;outline-color:rgba(255,255,255,.08)}
+.advkep i.friss{animation:advvillan 1.4s ease-out}
+@keyframes advvillan{0%{box-shadow:inset 0 0 0 3px #F2B544}100%{box-shadow:inset 0 0 0 0 rgba(242,181,68,0)}}
+.advdoboz{background:var(--surface);border-radius:20px;padding:14px;margin:12px 0;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 8px 20px var(--shadow)}
+.advcim{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline}
+.advcim b{font-family:Spectral,Georgia,serif;font-size:19px}
+.advcim span{font-size:12px;font-weight:800;color:#C2416B}
+.advbox{width:170px;height:170px;padding:0;border:0;background:transparent}
+.advbox img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(194,65,107,.25))}
+.advbox.r1{animation:advraz .35s}.advbox.r2{animation:advraz2 .35s}
+@keyframes advraz{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+@keyframes advraz2{25%{transform:rotate(8deg) scale(1.04)}75%{transform:rotate(-8deg) scale(1.04)}}
+.advpotty{display:flex;gap:8px}.advpotty i{width:11px;height:11px;border-radius:6px;background:#F1D3DC}.advpotty i.on{background:#C2416B}
+.advutas{margin:0;font-size:14px;font-weight:700;color:#9C2F52}
+.advnyer{align-self:stretch;display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px}
+.advnyer.be{animation:advbe .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes advbe{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+.advdarab{border-radius:14px;background:linear-gradient(160deg,#FFF1C2,#E7B34A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px}
+.advdarab .kocka{width:96px;height:96px;border-radius:10px;background-size:600% 400%;box-shadow:0 0 0 3px #fff,0 6px 14px rgba(120,80,10,.35);transform:rotate(-4deg)}
+.advdarab b{font-size:13px;color:#5A3A08}
+.advjobb{display:flex;flex-direction:column;gap:10px}
+.advjobb>div{flex:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px}
+.advjobb .kirdb{background:#1B2C5E;color:#FFE7A3;font-size:14px;font-weight:800;gap:2px}
+.advjobb .tal{background:#FFF3D2;border:1.5px solid #F2B544;color:#8A5A00}
+.advjobb .tal .sz{display:flex;align-items:center;gap:6px;font-size:22px;font-weight:900}
+.advjobb .tal small{font-size:11px;font-weight:700;color:#A8741F}
+img.advikon{width:30px;height:30px;object-fit:contain}
+.advige{align-self:stretch;border-radius:14px;background:#FFF8EC;border:1.5px solid #F5DDA8;padding:10px 12px;color:#1E1B3A}
+.advige p{margin:0;font-family:Spectral,Georgia,serif;font-size:15px;font-weight:600;line-height:1.4}
+.advige small{display:block;margin-top:4px;font-size:12px;font-weight:700;color:#B37A00}
+.advdoboz .primary{align-self:stretch;margin:0}
+.advdoboz .primary small{font-weight:600;opacity:.85}
+.advtk{align-self:stretch;border-radius:14px;background:#E8F7EE;color:#14532D;font-weight:700;font-size:14px;text-align:center;padding:12px}
+.advnapok{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:9px 6px;padding-top:6px}
+.advnap{position:relative;aspect-ratio:1;border-radius:11px;border:0;padding:0;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--text)}
+.advnap .sz{position:relative;z-index:1}
+.advnap.kesz{background-size:600% 400%;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.advnap .pipa{position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:8px;background:#22A559;display:grid;place-items:center}
+.advnap .pipa svg{width:10px;height:10px;fill:#fff}
+.advnap .cs{position:absolute;left:2px;top:2px;width:15px;height:15px;z-index:2}
+.advnap .cs svg{width:15px;height:15px;fill:#F2B544}
+.advnap img.mini{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);object-fit:contain;filter:drop-shadow(0 3px 4px rgba(194,65,107,.3))}
+.advnap.nyithato .sz,.advnap.mai .sz{margin-top:16px;background:#fff;color:#C2416B;border-radius:7px;padding:0 5px;font-size:13px;line-height:18px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.advnap.nyithato{animation:advbilleg 3s ease-in-out infinite}
+.advnap.nyithato:nth-child(odd){animation-delay:1.2s}
+@keyframes advbilleg{0%,80%,100%{transform:none}85%{transform:rotate(-7deg)}90%{transform:rotate(6deg)}95%{transform:rotate(-3deg)}}
+.advnap.mai{animation:advpul 1.6s ease-in-out infinite}
+.advnap.mai img.mini{filter:drop-shadow(0 0 8px rgba(242,181,68,.95))}
+@keyframes advpul{50%{transform:scale(1.07)}}
+.advnap.val::after{content:"";position:absolute;inset:-4px -4px -6px;border-radius:14px;border:3px solid var(--brand)}
+.advnap.zar{background:color-mix(in srgb,var(--muted) 14%,var(--surface));color:var(--muted)}
+.advnap .lk{position:absolute;right:3px;bottom:3px;width:11px;height:11px}
+.advnap .lk svg{width:11px;height:11px;fill:var(--muted)}
+.advido{margin:10px 0 0;font-size:12px;color:var(--muted);text-align:center}
+.advlap{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
+.advszem{font-size:12px;font-weight:800;letter-spacing:.08em;color:#C2416B}
+.advlap h2{margin:0;font-family:Spectral,Georgia,serif;font-size:24px}
+.advszoveg{margin:0;font-size:16px;line-height:1.55}
+.advhalad{display:flex;gap:6px}.advhalad i{flex:1;height:6px;border-radius:3px;background:color-mix(in srgb,var(--muted) 20%,transparent)}.advhalad i.on{background:#C2416B}
+.advkerdes{margin:0;font-family:Spectral,Georgia,serif;font-size:20px;font-weight:700;line-height:1.3}
+.advopc{display:flex;flex-direction:column;gap:8px}
+.advopc .opt.jo{border-color:#22A559;background:#E8F7EE;color:#14532D}
+.advopc .opt.rossz{border-color:#D04A4A;background:#FCECEC;color:#7A1B1B}
+.advbonusz{align-items:center;text-align:center}
+.advbonusz img.advolivia{width:120px;height:120px;object-fit:contain}
+.advbonusz .kor{width:130px;height:130px;border-radius:65px;background:radial-gradient(circle,#FFF3D2,#F2B544);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:17px;font-weight:900;color:#6B4200;box-shadow:0 0 0 6px #FFF3D2,0 10px 24px rgba(180,120,20,.35);animation:advbe .6s cubic-bezier(.3,1.6,.5,1)}
+.advbonusz .kor img.advikon{width:54px;height:54px}
+.advbonusz p{margin:0;color:var(--muted)}
+.advbonusz .primary{align-self:stretch}
+.advkartya{background:var(--surface);border-radius:18px;padding:14px;margin:14px 0}
+.advkartya h3{margin:0 0 10px;font-family:Spectral,Georgia,serif;font-size:20px}
+.advkepgomb{display:block;width:100%;padding:0;border:0;background:transparent;border-radius:18px}
+.advkepgomb.teljes .advkep{box-shadow:0 0 0 3px #F2B544,0 10px 24px var(--shadow)}
+.advnezo{position:fixed;inset:0;z-index:80;background:#0B0910;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.advnezo img{width:100%;height:auto;transition:transform .45s cubic-bezier(.3,1.2,.5,1),width .45s;border-radius:6px}
+.advnezo.fekvo img{width:min(100vh,calc(min(100vw,430px) * 1.5));max-width:none;transform:rotate(90deg);border-radius:0}
+.advnezosav{position:absolute;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px}
+.advnezosav button{display:flex;align-items:center;gap:6px;min-height:46px;padding:0 16px;border-radius:23px;border:0;background:rgba(11,9,16,.6);color:#fff;font-weight:700;font-size:14px}
+.advnezosav svg{width:20px;height:20px;fill:#fff}
+.advnezo.fekvo .advnezosav{left:14px;right:auto;top:0;bottom:0;width:48px;flex-direction:column;justify-content:center;align-items:center;gap:120px}
+.advnezo.fekvo .advnezosav button{transform:rotate(90deg);white-space:nowrap}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1230,7 +1318,7 @@ function allapotBetolt(){ return {
   progress: load('bq-progress',{}), heartLosses: load('bq-heart-losses',[]), streak: load('bq-streak',0),
   lastStudy: load('bq-laststudy',null), chests: load('bq-chests',{}), cards: load('bq-gift-log',[]),
   daily: load('bq-daily',{}), firstStudy: load('bq-first-study',null), stars: load('bq-stars',{}), weekChests: load('bq-week-chests',{}),
-  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), szin: load('bq-szin','alap'), ruha: load('bq-ruha',null), wish: load('bq-wish',null), setBonus: load('bq-set-bonus',{}), sound: load('bq-sound',true), igeMutat: load('bq-ige-mutat',true), notif: load('bq-notif',null), felbe: load('bq-felbe',null), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{}), szuloOk: load('bq-szulo-ok',false), betu: load('bq-betu',1), szuloKod: load('bq-szulo-kod',null), napi: load('bq-napi',{}), lastAt: load('bq-last-at',null)
+  heroStars: load('bq-hero-stars',{}), oliviaStars: load('bq-olivia-stars',{}), tests: load('bq-tests',{}), testDay: load('bq-test-day',{}), avatar: load('bq-avatar','olivia'), advent: load('bq-advent',null), diff: load('bq-diff','m'), diffSet: load('bq-diff-set',null), diffLock: load('bq-diff-lock',false), lastCheck: load('bq-last-check',0), recent: load('bq-recent',[]), mapBg: false /* terkep-hatter ideiglenesen kikapcsolva, lasd settingsPage */, theme: load('bq-theme','auto'), szin: load('bq-szin','alap'), ruha: load('bq-ruha',null), wish: load('bq-wish',null), setBonus: load('bq-set-bonus',{}), sound: load('bq-sound',true), igeMutat: load('bq-ige-mutat',true), notif: load('bq-notif',null), felbe: load('bq-felbe',null), haptics: load('bq-haptics',true), shields: load('bq-shields',0), shieldMonth: load('bq-shield-month',null), shielded: load('bq-shielded',{}), cnt: load('bq-cnt',{correct:0,perfect:0,chests:0,hints:0}), reviewed: load('bq-reviewed',{}), mistakes: load('bq-mistakes',[]), reports: load('bq-reports',[]), boost: load('bq-boost',null), weekDay: load('bq-week-day',null), badgeSeen: load('bq-badge-seen',null), placed: load('bq-placed',null), tour: load('bq-tour',{}), szuloOk: load('bq-szulo-ok',false), betu: load('bq-betu',1), szuloKod: load('bq-szulo-kod',null), napi: load('bq-napi',{}), lastAt: load('bq-last-at',null)
 }; }
 var S = allapotBetolt();
 // Betumeret: a gorgetheto tartalom (tortenetek, kerdesek) nagyobb lesz, a also menusor marad.
@@ -1265,7 +1353,7 @@ function persist(){ widgetFrissit();
   save('bq-lang',S.lang); save('bq-name',S.name); save('bq-xp',S.xp); save('bq-talents',S.talents);
   save('bq-progress',S.progress); save('bq-heart-losses',S.heartLosses); save('bq-streak',S.streak);
   save('bq-laststudy',S.lastStudy); save('bq-chests',S.chests); save('bq-gift-log',S.cards);
-  save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-szin',S.szin); save('bq-ruha',S.ruha); save('bq-wish',S.wish); save('bq-set-bonus',S.setBonus); save('bq-sound',S.sound); save('bq-ige-mutat',S.igeMutat); save('bq-notif',S.notif); save('bq-felbe',S.felbe); save('bq-haptics',S.haptics); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour); save('bq-szulo-ok',S.szuloOk); save('bq-betu',S.betu); save('bq-szulo-kod',S.szuloKod); save('bq-napi',S.napi); save('bq-last-at',S.lastAt); nyersIr('bq-szulo-kod',S.szuloKod);
+  save('bq-advent',S.advent); save('bq-daily',S.daily); save('bq-first-study',S.firstStudy); save('bq-stars',S.stars); save('bq-week-chests',S.weekChests); save('bq-hero-stars',S.heroStars); save('bq-olivia-stars',S.oliviaStars); save('bq-tests',S.tests); save('bq-test-day',S.testDay); save('bq-avatar',S.avatar); save('bq-diff',S.diff); save('bq-diff-set',S.diffSet); save('bq-diff-lock',S.diffLock); save('bq-last-check',S.lastCheck); save('bq-recent',S.recent); save('bq-mapbg',S.mapBg); save('bq-theme',S.theme); save('bq-szin',S.szin); save('bq-ruha',S.ruha); save('bq-wish',S.wish); save('bq-set-bonus',S.setBonus); save('bq-sound',S.sound); save('bq-ige-mutat',S.igeMutat); save('bq-notif',S.notif); save('bq-felbe',S.felbe); save('bq-haptics',S.haptics); save('bq-shields',S.shields); save('bq-shield-month',S.shieldMonth); save('bq-shielded',S.shielded); save('bq-cnt',S.cnt); save('bq-reviewed',S.reviewed); save('bq-mistakes',S.mistakes); save('bq-reports',S.reports); save('bq-boost',S.boost); save('bq-week-day',S.weekDay); save('bq-badge-seen',S.badgeSeen); save('bq-placed',S.placed); save('bq-tour',S.tour); save('bq-szulo-ok',S.szuloOk); save('bq-betu',S.betu); save('bq-szulo-kod',S.szuloKod); save('bq-napi',S.napi); save('bq-last-at',S.lastAt); nyersIr('bq-szulo-kod',S.szuloKod);
 }
 betuAlkalmaz();
 
@@ -2445,7 +2533,7 @@ function shopHtml(){ var s=T(), aj=napiAjanlat(), h='<h3 class="shopsec">'+esc(s
 function barHtml(){
   var s=T();
   function b(t,i,l){ return '<button data-tab="'+t+'" class="'+(tab===t?'on':'')+'" type="button">'+(img('nav-'+(t==='home'?'path':t),'nic')||ico(i))+l+'</button>'; }
-  return '<div class="bar">'+b('home','house',s.tabHome)+b('collection','chest',s.tabCollection)+b('stats','chart',s.tabStats)+
+  return '<div class="bar">'+b('home','house',s.tabHome)+b('collection','chest',s.tabCollection)+(adventAktiv()?b('advent','star',AS().tab):'')+b('stats','chart',s.tabStats)+
     '<button data-tab="menu" type="button">'+(img('nav-menu','nic')||'<span class="menu-dot">'+ico('dots')+'</span>')+s.menu+'</button></div>';
 }
 function renderHome(){
@@ -2458,6 +2546,7 @@ function renderHome(){
       chipsHtml()+goalHtml()+wishHtml();
     html+='<div class="path'+(S.mapBg?' mapbg':'')+'" id="path">'+pathHtml()+'</div>';
   } else if(tab==='collection'){ html+=collectionHtml(); }
+  else if(tab==='advent'&&adventAktiv()){ html+=adventHtml(); }
   else if(tab==='settings'){ html+=settingsPage(); }
   else if(tab==='szulo'){ html+=szuloPage(); }
   else if(tab==='profile'){ html+=profilePage(); }
@@ -2709,6 +2798,100 @@ function layoutPath(){
   svg.innerHTML='<path fill="none" stroke="var(--border)" stroke-width="5" stroke-linecap="round" d="'+d+'"/>'+
                 (walked?'<path fill="none" stroke="var(--walked)" stroke-width="5" stroke-linecap="round" d="'+walked+'"/>':'');
 }
+// ---------- Adventi naptar (december 1. - januar 6.) ----------
+// Minden nap egy ajandekdoboz: haromszori koppintasra kinyilik, es ad egy kirakosdarabot (a 24 darabbol a
+// betlehemi kep all ossze), talentumot vagy szorzot, a nap igejet es egy rovid tortenetet 3 kerdessel, a vegen
+// extra ajandekkal. A kihagyott napok januar 6-aig visszamenoleg is kinyithatok. Ha mind a 24 megvan, a kep
+// "Advent <ev>" kulonleges kartyakent a gyujtemenybe kerul, es jar hozza egy profilkep (Olivia sallal).
+// Tesztelni a bongeszoben lehet: play.html?advent=2026-12-09 (a megadott nap lesz a "ma").
+var ADV_TESZT=/[?&]advent=(\d{4})-(\d{1,2})-(\d{1,2})/.exec(location.search);
+var ADV_SOR=[14,9,20,3,16,8,1,22,10,5,18,12,0,23,7,15,2,19,11,6,21,4,13,17];
+var advValasztott=null, advKop=0, advAllas=null, advFriss=0;
+function advA(){ return C.advent||null; }
+function advNapja(a){ return new Date(a[0],a[1]-1,a[2]); }
+function advMa(){ return ADV_TESZT?new Date(+ADV_TESZT[1],+ADV_TESZT[2]-1,+ADV_TESZT[3]):startOfDay(new Date()); }
+function adventAktiv(){ var A=advA(); if(!A) return false; var m=advMa(); return m>=advNapja(A.kezd)&&m<=advNapja(A.veg); }
+// Hanyadik adventi napnal tartunk (1-24); december 24. utan mind a 24 nyithato.
+function advHanyadik(){ var A=advA(); return Math.max(1,Math.min(24,Math.round((advMa()-advNapja(A.kezd))/86400000)+1)); }
+function advAll(){ var A=advA(); if(!S.advent||S.advent.ev!==A.ev) S.advent={ev:A.ev,ny:{},tk:{}}; return S.advent; }
+function advDb(){ return Object.keys(advAll().ny).length; }
+function advKesz(){ var A=advA(); return !!(A&&S.advent&&S.advent.ev===A.ev&&Object.keys(S.advent.ny).length>=24); }
+function advPoz(n){ var c=ADV_SOR[n-1]; return (c%6*20)+'% '+(Math.floor(c/6)*100/3)+'%'; }
+function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
+  return hu?{tab:'Advent',cim:'ADVENT '+ev+' · A BETLEHEMI KÉP',mai:'MAI DOBOZ',vissza:'VISSZAMENŐLEG',kinyitva:'KINYITOTTAD',dec:function(n){return 'December '+n+'.';},
+    kopp:['Koppints rá háromszor!','Még kétszer!','Még egyszer!','Kinyílt!'],darab:function(n){return n+'. darab';},kirakos:function(n){return 'Kirakós '+n+'/24';},
+    talentum:'talentum',szorzo:'szorzó a mai leckékre',tort:'A nap története · 3 kérdés',plusz:'+ extra ajándék',tortKesz:function(x){return 'A nap története kész · '+x+' megszerezve';},
+    igeje:'a nap igéje',napTort:function(n){return 'DECEMBER '+n+'. · A NAP TÖRTÉNETE';},johet:'Jöhetnek a kérdések',kerdes:function(k){return k+'. KÉRDÉS A 3-BÓL';},tovabb:'Tovább',
+    ajandekot:'Megnézem az ajándékot',extra:'EXTRA AJÁNDÉK',hibatlan:'Hibátlan!',vegig:'Végigértél!',jo:function(n){return n+' jó válasz a 3-ból. A nap történetéért ezt kapod ajándékba.';},
+    visszaAdv:'Vissza az adventhez',sziv:'+1 szív',pajzs:'+1 pajzs',tal:function(n){return '+'+n+' talentum';},
+    kartya:'KÜLÖNLEGES KÁRTYA',kartyaCim:'Advent '+ev,db:function(n){return n+' / 24 darab';},
+    tipp:'Ha mind a 24 darab megvan, koppints a képre, és nagyban, elforgatva is megnézheted.',kesz:'Kész a kép! Koppints rá, és nagyban, elforgatva is megnézheted.',
+    hiany:function(n){return 'Még '+n+' darab hiányzik. Ha mind megvan, nagyban is megnézheted.';},forgat:'Elforgatás',allo:'Álló nézet',bezar:'Bezárás',
+    idoszak:'December 1-jétől január 6-áig. A kihagyott napok addig visszamenőleg is kinyithatók.',zarva:'még zárva',avZar:'Csak Advent '+ev+'-ban lehetett megszerezni: mind a 24 ajándékot ki kellett nyitni.'}
+  :{tab:'Advent',cim:'ADVENT '+ev+' · THE NATIVITY PICTURE',mai:"TODAY'S GIFT",vissza:'CATCH UP',kinyitva:'OPENED',dec:function(n){return 'December '+n;},
+    kopp:['Tap it three times!','Two more!','One more!','It opened!'],darab:function(n){return 'Piece '+n;},kirakos:function(n){return 'Puzzle '+n+'/24';},
+    talentum:'talents',szorzo:"multiplier on today's lessons",tort:"Today's story · 3 questions",plusz:'+ bonus gift',tortKesz:function(x){return "Today's story done · "+x+' earned';},
+    igeje:"today's verse",napTort:function(n){return 'DECEMBER '+n+" · TODAY'S STORY";},johet:'On to the questions',kerdes:function(k){return 'QUESTION '+k+' OF 3';},tovabb:'Next',
+    ajandekot:'See my gift',extra:'BONUS GIFT',hibatlan:'Perfect!',vegig:'All done!',jo:function(n){return n+' of 3 correct. Here is your gift for today\'s story.';},
+    visszaAdv:'Back to Advent',sziv:'+1 heart',pajzs:'+1 shield',tal:function(n){return '+'+n+' talents';},
+    kartya:'SPECIAL CARD',kartyaCim:'Advent '+ev,db:function(n){return n+' / 24 pieces';},
+    tipp:'When you have all 24 pieces, tap the picture to see it large and turned sideways.',kesz:'The picture is complete! Tap it to see it large and turned sideways.',
+    hiany:function(n){return n+' pieces still missing. When you have them all, you can see it large.';},forgat:'Turn',allo:'Upright',bezar:'Close',
+    idoszak:'From December 1 to January 6. Missed days can be opened later until then.',zarva:'still locked',avZar:'Only available in Advent '+ev+': all 24 gifts had to be opened.'}; }
+function advKepHtml(friss){ var A=advA(), ny=advAll().ny, h='<div class="advkep" style="--advkep:url(img/'+A.kep+'.png)">';
+  for(var c=0;c<24;c++){ var nap=ADV_SOR.indexOf(c)+1; h+='<i class="'+(ny[nap]?'meg':'')+(nap===friss?' friss':'')+'" style="background-position:'+(c%6*20)+'% '+(Math.floor(c/6)*100/3)+'%"></i>'; }
+  return h+'</div>'; }
+function advExtraSzoveg(x){ var a=AS(); return x.sziv?a.sziv:x.pajzs?a.pajzs:a.tal(x.t||0); }
+function advExtraKep(x){ return x.sziv?'shop-hearts':x.pajzs?'shop-shield':'talent-big'; }
+function adventHtml(){ var a=AS(), A=advA(), ma=advHanyadik(), all=advAll(), h='';
+  if(advValasztott==null||advValasztott>ma) advValasztott=ma;
+  var n=advValasztott, nap=A.napok[n-1], nyitva=!!all.ny[n];
+  h+='<div class="advfej"><span>'+esc(a.cim)+'</span><b>'+advDb()+' / 24</b></div>'+advKepHtml(advFriss);
+  h+='<div class="advdoboz"><div class="advcim"><b>'+esc(a.dec(n))+'</b><span>'+esc(nyitva?a.kinyitva:n===ma?a.mai:a.vissza)+'</span></div>';
+  if(!nyitva){ h+='<button type="button" class="advbox" data-advdoboz aria-label="'+esc(a.kopp[0])+'">'+(img('advent-doboz','advboxkep')||'🎁')+'</button>'+
+      '<div class="advpotty">'+[0,1,2].map(function(i){ return '<i class="'+(i<advKop?'on':'')+'"></i>'; }).join('')+'</div><p class="advutas">'+esc(a.kopp[advKop])+'</p>'; }
+  else { var r=nap.r, tk=!!all.tk[n];
+    var talKep=r.m===2?'boost-2':r.m===1.5?'boost-15':'talent-big', talNagy=r.t?('+'+r.t):(r.m===1.5?'1,5×':r.m+'×'), talKis=r.t&&r.m?(a.talentum+' + '+(r.m===1.5?'1,5×':r.m+'×')):r.t?a.talentum:a.szorzo;
+    h+='<div class="advnyer'+(advFriss===n?' be':'')+'"><div class="advdarab"><span class="kocka" style="background-image:url(img/'+A.kep+'.png);background-position:'+advPoz(n)+'"></span><b>'+esc(a.darab(n))+'</b></div>'+
+      '<div class="advjobb"><div class="kirdb">'+(img('advent-darab','advikon')||'')+'<span>'+esc(a.kirakos(n))+'</span></div><div class="tal"><span class="sz">'+(img(talKep,'advikon')||'')+'<span>'+esc(talNagy)+'</span></span><small>'+esc(talKis)+'</small></div></div></div>'+
+      '<div class="advige"><p>'+esc(S.lang==='hu'?nap.v.t:nap.ve.t)+'</p><small>'+esc((S.lang==='hu'?nap.v.r:nap.ve.r)+' · '+a.igeje)+'</small></div>'+
+      (tk?'<div class="advtk">'+esc(a.tortKesz(advExtraSzoveg(nap.x)))+'</div>':'<button type="button" class="primary" data-advtort>'+esc(a.tort)+' <small>'+esc(a.plusz)+'</small></button>'); }
+  h+='</div><div class="advnapok">';
+  for(var d=1;d<=24;d++){ var cl=all.ny[d]?'kesz':d===ma?'mai':d<ma?'nyithato':'zar', b='';
+    if(cl==='kesz') b='<span class="pipa">'+ico('check')+'</span>'+(all.tk[d]?'<span class="cs">'+ico('star')+'</span>':'');
+    else if(cl==='zar') b='<span class="lk">'+ico('lock')+'</span>'; else b=img('advent-mini','mini')||'';
+    h+='<button type="button" class="advnap '+cl+(d===n?' val':'')+'" data-advnap="'+d+'"'+(cl==='zar'?' disabled aria-label="'+esc(a.dec(d)+', '+a.zarva)+'"':' aria-label="'+esc(a.dec(d))+'"')+(cl==='kesz'?' style="background-image:url(img/'+A.kep+'.png);background-position:'+advPoz(d)+'"':'')+'>'+b+'<span class="sz">'+d+'</span></button>'; }
+  return h+'</div><p class="advido">'+esc(a.idoszak)+'</p>'; }
+// A dobozbol jaro jutalom: talentum es/vagy szorzo a nap vegeig.
+function advJutalom(n){ var r=advA().napok[n-1].r, ej=addDays(startOfDay(new Date()),1);
+  if(r.t) S.talents+=r.t;
+  if(r.m) szorzoIndit(r.m,Math.max(1,Math.round((ej-Date.now())/60000))); }
+function advExtra(n){ var x=advA().napok[n-1].x;
+  if(x.t) S.talents+=x.t;
+  else if(x.sziv){ if(S.heartLosses.length) S.heartLosses.shift(); else S.talents+=10; }
+  else if(x.pajzs) S.shields=Math.min(SHIELD_MAX,S.shields+1); }
+function advTortenet(n){ var a=AS(), nap=advA().napok[n-1], hu=S.lang==='hu'; advAllas={n:n,k:0,jo:0};
+  openSheet('<div class="advlap"><span class="advszem">'+esc(a.napTort(n))+'</span><h2>'+esc(hu?nap.c:nap.ce)+'</h2><p class="advszoveg">'+esc(hu?nap.t:nap.te)+'</p>'+
+    '<div class="advige"><p>'+esc(hu?nap.v.t:nap.ve.t)+'</p><small>'+esc(hu?nap.v.r:nap.ve.r)+'</small></div><button type="button" class="primary" data-advkerd>'+esc(a.johet)+'</button></div>'); }
+function advKerdes(){ var a=AS(), nap=advA().napok[advAllas.n-1], q=nap.q[advAllas.k], hu=S.lang==='hu', o='', h='';
+  advAllas.valaszolt=false;
+  for(var i=0;i<3;i++) h+='<i class="'+(i<=advAllas.k?'on':'')+'"></i>';
+  shuffle([0,1,2]).forEach(function(i){ o+='<button type="button" class="opt" data-advval="'+i+'">'+esc((hu?q.o:q.oe)[i])+'</button>'; });
+  openSheet('<div class="advlap"><span class="advszem">'+esc(a.kerdes(advAllas.k+1))+'</span><div class="advhalad">'+h+'</div><p class="advkerdes">'+esc(hu?q.q:q.qe)+'</p><div class="advopc">'+o+'</div><div id="advTov"></div></div>'); }
+function advVege(){ var a=AS(), n=advAllas.n, x=advA().napok[n-1].x, all=advAll();
+  if(!all.tk[n]){ all.tk[n]=1; advExtra(n); persist(); haptic('success'); }
+  openSheet('<div class="advlap advbonusz"><span class="advszem">'+esc(a.extra)+'</span>'+(img('dove-advent','advolivia')||'')+
+    '<div class="kor">'+(img(advExtraKep(x),'advikon')||'')+'<span>'+esc(advExtraSzoveg(x))+'</span></div><h2>'+esc(advAllas.jo===3?a.hibatlan:a.vegig)+'</h2><p>'+esc(a.jo(advAllas.jo))+'</p>'+
+    '<button type="button" class="primary" data-advvissza>'+esc(a.visszaAdv)+'</button></div>'); }
+// A gyujtemeny alja: az adventi kep kulonleges kartyakent; kesz kepnel koppintasra nagyban is megnezheto.
+function adventKartyaHtml(){ var A=advA(); if(!A) return ''; var van=S.advent&&S.advent.ev===A.ev;
+  if(!van&&!adventAktiv()) return ''; var a=AS(), db=van?Object.keys(S.advent.ny).length:0;
+  return '<div class="advkartya"><div class="advfej"><span>'+esc(a.kartya)+'</span><b>'+esc(a.db(db))+'</b></div><h3>'+esc(a.kartyaCim)+'</h3>'+
+    '<button type="button" class="advkepgomb'+(db>=24?' teljes':'')+'" data-advnezo>'+advKepHtml(0)+'</button><p class="advido" id="advTipp">'+esc(db>=24?a.kesz:a.tipp)+'</p></div>'; }
+// Teljes kep nezo: az app allo marad, a kep 90 fokkal elfordul, hogy kitoltse a kepernyot.
+function advNezo(){ var a=AS(), A=advA(); var v=document.createElement('div'); v.className='advnezo fekvo'; v.id='advNezo';
+  v.innerHTML='<img src="img/'+A.kep+'.png" alt="'+esc(a.kartyaCim)+'"><div class="advnezosav"><button type="button" data-advforgat>'+ico('redo')+'<span>'+esc(a.allo)+'</span></button><button type="button" data-advbe aria-label="'+esc(a.bezar)+'">'+ico('x')+'</button></div>';
+  document.getElementById('app').appendChild(v); }
 function collectionHtml(){
   var s=T(), n=C.gifts.filter(owns).length, h='<div class="hrow"><h1 class="brand">'+esc(s.tabCollection)+'</h1><span class="pill-right">'+s.cardsOwned(n,C.gifts.length)+'</span></div>';
   h+='<div class="card-bal">'+(img('talent-big','tbig')||'<i class="coin" style="width:36px;height:36px"></i>')+'<div><b>'+esc(s.talentsBalance(S.talents))+'</b><span>'+esc(s.chestHint)+'</span></div></div>';
@@ -2734,7 +2917,7 @@ function collectionHtml(){
     var have=C.gifts.filter(function(g){return g.unit===u.id;}).length;
     if(have<6) h+='<div class="soonrow">'+ico('spark')+esc(s.moreSoon)+'</div>';
   });
-  return h;
+  return h+adventKartyaHtml();
 }
 function statsHtml(){
   var s=T(), h='<h1 class="brand mid">'+esc(s.tabStats)+'</h1>'+whoHtml()+'<div class="tiles">';
@@ -2962,10 +3145,13 @@ function avatarList(mind){ var s=T(), st=stage(), out=[];
   else out.push({id:'olivia',name:s.stageNames[st],html:mascotHtml(),nyitva:true,csop:'oli'});
   AVATAR_HOSOK.forEach(function(id){ var hr=hosById(id); if(!hr) return; var ok=heroStars(id)>0;
     if(ok||mind) out.push({id:id,name:NM(hr),html:img(hr.img)||'<i>'+esc(NM(hr).charAt(0))+'</i>',nyitva:ok,csop:'hos',zar:s.charLockHero}); });
+  // Az adventi profilkep: aki mind a 24 adventi ajandekot kinyitotta (Olivia sallal es ajandekkal).
+  var A=advA(); if(A&&(advKesz()||(mind&&adventAktiv()))) out.push({id:'advent-'+A.ev,name:'Advent '+A.ev,html:img('dove-advent')||'<i>A</i>',nyitva:advKesz(),csop:'hos',zar:AS().avZar});
   return out;
 }
 function avatarHtml(cls){ var id=S.avatar||'olivia';
   if(id==='olivia') return mascotHtml(cls);
+  if(id.indexOf('advent-')===0) return img('dove-advent','mascot'+(cls?' '+cls:''))||mascotHtml(cls);
   var m=/^olivia-(\d+)$/.exec(id); if(m) return mascotHtml(cls,+m[1]);
   return (img(id.indexOf('hero-')===0?id:('hero-'+id),'mascot'+(cls?' '+cls:''))||mascotHtml(cls)); }
 // Olivia ruhatara: a ruhak listaja a content/ruhak.json-bol jon; amelyiknek meg nincs kepe, az "hamarosan".
@@ -3124,6 +3310,25 @@ document.getElementById('app').addEventListener('click',function(e){
   if(lesson&&screen.name==='lesson') lesson.utolso=Date.now();
   var el=e.target.closest('button,[data-tab],[data-color]'); if(!el) return;
   var d=el.dataset;
+  // Adventi naptar
+  if(d.advnap!=null){ advValasztott=+d.advnap; advKop=0; advFriss=0; render(); return; }
+  if(el.hasAttribute('data-advdoboz')){ var an=advValasztott, aall=advAll(); if(aall.ny[an]) return; advKop++; haptic('kopp');
+    el.className='advbox'; void el.offsetWidth; el.className='advbox '+(advKop%2?'r1':'r2');
+    if(advKop<3){ var ap=el.parentNode.querySelectorAll('.advpotty i'); for(var ai=0;ai<ap.length;ai++) ap[ai].classList.toggle('on',ai<advKop); var au=el.parentNode.querySelector('.advutas'); if(au) au.textContent=AS().kopp[advKop]; return; }
+    var aki=el.querySelector('img'); if(aki) aki.src='img/advent-doboz-nyitott.png';
+    aall.ny[an]=1; advJutalom(an); persist(); hang('kesz'); haptic('kesz');
+    setTimeout(function(){ advKop=0; advFriss=an; var sv=view.scrollTop; render(); view.scrollTop=sv; advFriss=0; },650); return; }
+  if(el.hasAttribute('data-advtort')){ advTortenet(advValasztott); return; }
+  if(el.hasAttribute('data-advkerd')){ advKerdes(); return; }
+  if(d.advval!=null&&advAllas&&!advAllas.valaszolt){ advAllas.valaszolt=true; var aq=advA().napok[advAllas.n-1].q[advAllas.k], ajo=+d.advval===aq.c; if(ajo) advAllas.jo++;
+    var abs=document.querySelectorAll('.advopc .opt'); for(var bi=0;bi<abs.length;bi++){ abs[bi].disabled=true; if(+abs[bi].dataset.advval===aq.c) abs[bi].classList.add('jo'); }
+    if(!ajo) el.classList.add('rossz'); haptic(ajo?'success':'error');
+    var at=document.getElementById('advTov'); if(at) at.innerHTML='<button type="button" class="primary" data-advtovabb>'+esc(advAllas.k<2?AS().tovabb:AS().ajandekot)+'</button>'; return; }
+  if(el.hasAttribute('data-advtovabb')){ advAllas.k++; if(advAllas.k<3) advKerdes(); else advVege(); return; }
+  if(el.hasAttribute('data-advvissza')){ closeSheet(); var sv2=view.scrollTop; render(); view.scrollTop=sv2; return; }
+  if(el.hasAttribute('data-advnezo')){ if(advKesz()){ advNezo(); return; } var tp=document.getElementById('advTipp'); if(tp) tp.textContent=AS().hiany(24-(S.advent&&S.advent.ev===advA().ev?Object.keys(S.advent.ny).length:0)); return; }
+  if(el.hasAttribute('data-advforgat')){ var nz=document.getElementById('advNezo'); if(nz){ var fk=nz.classList.toggle('fekvo'); el.querySelector('span').textContent=fk?AS().allo:AS().forgat; } return; }
+  if(el.hasAttribute('data-advbe')){ var nz2=document.getElementById('advNezo'); if(nz2) nz2.remove(); return; }
   if(d.tab){
     if(d.tab==='menu'){ openSheet(menuHtml()); if(!tourSeen('menu')) startTour('menu'); return; }
     tab=d.tab; render(); maybeTour(d.tab); return; }
