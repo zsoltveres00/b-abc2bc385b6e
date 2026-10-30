@@ -2824,7 +2824,7 @@ function advKesz(){ var A=advA(); return !!(A&&S.advent&&S.advent.ev===A.ev&&Obj
 function advPoz(n){ var c=ADV_SOR[n-1]; return (c%6*20)+'% '+(Math.floor(c/6)*100/3)+'%'; }
 function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
   return hu?{tab:'Advent',cim:'ADVENT '+ev+' · A BETLEHEMI KÉP',mai:'MAI DOBOZ',vissza:'VISSZAMENŐLEG',kinyitva:'KINYITOTTAD',dec:function(n){return 'December '+n+'.';},
-    kopp:['Koppints rá háromszor!','Még kétszer!','Még egyszer!','Kinyílt!'],darab:function(n){return n+'. darab';},kirakos:function(n){return 'Kirakós '+n+'/24';},
+    kopp:['Koppints rá háromszor!','Még kétszer!','Még egyszer!','Kinyílt!'],darab:function(n){return n+'. darab';},kirakos:function(n){return 'Kirakós: '+n+' / 24';},
     talentum:'talentum',szorzo:'szorzó a mai leckékre',tort:'A nap története · 3 kérdés',plusz:'+ extra ajándék',tortKesz:function(x){return 'A nap története kész · '+x+' megszerezve';},
     igeje:'a nap igéje',napTort:function(n){return 'DECEMBER '+n+'. · A NAP TÖRTÉNETE';},johet:'Jöhetnek a kérdések',kerdes:function(k){return k+'. KÉRDÉS A 3-BÓL';},tovabb:'Tovább',
     ajandekot:'Megnézem az ajándékot',extra:'EXTRA AJÁNDÉK',hibatlan:'Hibátlan!',vegig:'Végigértél!',jo:function(n){return n+' jó válasz a 3-ból. A nap történetéért ezt kapod ajándékba.';},
@@ -2834,7 +2834,7 @@ function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
     hiany:function(n){return 'Még '+n+' darab hiányzik. Ha mind megvan, nagyban is megnézheted.';},forgat:'Elforgatás',allo:'Álló nézet',bezar:'Bezárás',
     idoszak:'December 1-jétől január 6-áig. A kihagyott napok addig visszamenőleg is kinyithatók.',ntCim:'Ma is vár az adventi ajándékod!',ntSzoveg:'Nyisd ki a mai dobozt, és szerezd meg a betlehemi kép következő darabját!',ntPotCim:'Még pótolhatod!',ntPot:function(n){return 'Még '+n+' adventi ajándék vár rád. Január 6-ig kinyithatod őket.';},zarva:'még zárva',avZar:'Csak Advent '+ev+'-ban lehetett megszerezni: mind a 24 ajándékot ki kellett nyitni.'}
   :{tab:'Advent',cim:'ADVENT '+ev+' · THE NATIVITY PICTURE',mai:"TODAY'S GIFT",vissza:'CATCH UP',kinyitva:'OPENED',dec:function(n){return 'December '+n;},
-    kopp:['Tap it three times!','Two more!','One more!','It opened!'],darab:function(n){return 'Piece '+n;},kirakos:function(n){return 'Puzzle '+n+'/24';},
+    kopp:['Tap it three times!','Two more!','One more!','It opened!'],darab:function(n){return 'Piece '+n;},kirakos:function(n){return 'Puzzle: '+n+' / 24';},
     talentum:'talents',szorzo:"multiplier on today's lessons",tort:"Today's story · 3 questions",plusz:'+ bonus gift',tortKesz:function(x){return "Today's story done · "+x+' earned';},
     igeje:"today's verse",napTort:function(n){return 'DECEMBER '+n+" · TODAY'S STORY";},johet:'On to the questions',kerdes:function(k){return 'QUESTION '+k+' OF 3';},tovabb:'Next',
     ajandekot:'See my gift',extra:'BONUS GIFT',hibatlan:'Perfect!',vegig:'All done!',jo:function(n){return n+' of 3 correct. Here is your gift for today\'s story.';},
@@ -2858,7 +2858,7 @@ function adventHtml(){ var a=AS(), A=advA(), ma=advHanyadik(), all=advAll(), h='
   else { var r=nap.r, tk=!!all.tk[n];
     var talKep=r.m===2?'boost-2':r.m===1.5?'boost-15':'talent-big', talNagy=r.t?('+'+r.t):(r.m===1.5?'1,5×':r.m+'×'), talKis=r.t&&r.m?(a.talentum+' + '+(r.m===1.5?'1,5×':r.m+'×')):r.t?a.talentum:a.szorzo;
     h+='<div class="advnyer'+(advFriss===n?' be':'')+'"><div class="advdarab"><span class="kocka" style="background-image:url(img/'+A.kep+'.png);background-position:'+advPoz(n)+'"></span><b>'+esc(a.darab(n))+'</b></div>'+
-      '<div class="advjobb"><div class="kirdb">'+(img('advent-darab','advikon')||'')+'<span>'+esc(a.kirakos(n))+'</span></div><div class="tal"><span class="sz">'+(img(talKep,'advikon')||'')+'<span>'+esc(talNagy)+'</span></span><small>'+esc(talKis)+'</small></div></div></div>'+
+      '<div class="advjobb"><div class="kirdb">'+(img('advent-darab','advikon')||'')+'<span>'+esc(a.kirakos(advDb()))+'</span></div><div class="tal"><span class="sz">'+(img(talKep,'advikon')||'')+'<span>'+esc(talNagy)+'</span></span><small>'+esc(talKis)+'</small></div></div></div>'+
       '<div class="advige"><p>'+esc(S.lang==='hu'?nap.v.t:nap.ve.t)+'</p><small>'+esc((S.lang==='hu'?nap.v.r:nap.ve.r)+' · '+a.igeje)+'</small></div>'+
       (tk?'<div class="advtk">'+esc(a.tortKesz(advExtraSzoveg(nap.x)))+'</div>':'<button type="button" class="primary" data-advtort>'+esc(a.tort)+' <small>'+esc(a.plusz)+'</small></button>'); }
   h+='</div><div class="advnapok">';
