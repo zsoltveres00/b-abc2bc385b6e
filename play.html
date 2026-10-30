@@ -1588,7 +1588,9 @@ function widgetAdat(){ var ma=startOfDay(new Date()), ws=weekStart(ma), kesz=pla
   for(var i=0;i<7;i++){ var d=addDays(ws,i);
     w.push(d>ma?'f':dayKey(d)===dayKey(ma)?(kesz?'ok':'t'):played(d)>0?'ok':shielded(d)?'p':missed(d)?'x':'f');
     n.push(d.toLocaleDateString(T().locale,{weekday:'short'}).replace('.','')); }
-  return {v:1,d:[ma.getFullYear(),ma.getMonth()+1,ma.getDate()],s:displayStreak(),k:kesz,w:w,n:n,fd:T().firstDay,l:S.lang==='hu'?'hu':'en'}; }
+  var A=C.advent, adv=null;
+  if(A){ var ny=(S.advent&&S.advent.ev===A.ev)?S.advent.ny:{}; adv={k:A.kezd,v:A.veg,ev:A.ev,ny:Object.keys(ny).map(Number).sort(function(x,y){return x-y;})}; }
+  return {v:1,d:[ma.getFullYear(),ma.getMonth()+1,ma.getDate()],s:displayStreak(),k:kesz,w:w,n:n,fd:T().firstDay,l:S.lang==='hu'?'hu':'en',adv:adv}; }
 var widgetIdo=null;
 function widgetFrissit(){ if(!vanBurok()) return; clearTimeout(widgetIdo); widgetIdo=setTimeout(function(){ try{ burokUzen({t:'widget',adat:widgetAdat()}); }catch(e){} },800); }
 function notifBe(){ return !!(S.notif&&S.notif.on&&vanBurok()); }
@@ -1606,7 +1608,10 @@ function ertesitesLista(){ var s=T(), n=nApi(), most=Date.now(), ma=startOfDay(n
   function tesz(d,cim,szoveg){ if(d.getTime()>most+60000&&szabadIdo(d)) ki.push({ido:d.getTime(),cim:cim,szoveg:szoveg}); }
   for(var o=0;o<=7;o++){ var nap=addDays(ma,o), vas=dayKey(nap)===dayKey(addDays(weekStart(nap),6));
     // a fo uzenet (naponta egy)
-    if(ritkit.indexOf(o)>=0&&!(o===0&&napiMa)){
+    // Adventkor (dec. 1-24.) naponta egy emlekezteto a mai ajandekdobozra, ha meg nincs kinyitva; ez a nap fo uzenete.
+    var advU=advErtesites(nap,o);
+    if(advU){ if(n.napi) tesz(idopont(nap,n.ido),advU[0],advU[1]); }
+    else if(ritkit.indexOf(o)>=0&&!(o===0&&napiMa)){
       var un=n.unnep&&unnepNap(nap), gyerekIdo=(nap.getDay()===0||nap.getDay()===6)?10:15;
       var szeria=(S.streak||0)>=3&&((o===0&&!napiMa)||(o===1&&napiMa)), ajan=S.wish&&ajanlatNap(nap);
       if(un){ tesz(idopont(nap,gyerekIdo),s.ntUnnepCim[un],s.ntUnnep[un]); }
@@ -2827,7 +2832,7 @@ function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
     kartya:'KÜLÖNLEGES KÁRTYA',kartyaCim:'Advent '+ev,db:function(n){return n+' / 24 darab';},
     tipp:'Ha mind a 24 darab megvan, koppints a képre, és nagyban, elforgatva is megnézheted.',kesz:'Kész a kép! Koppints rá, és nagyban, elforgatva is megnézheted.',
     hiany:function(n){return 'Még '+n+' darab hiányzik. Ha mind megvan, nagyban is megnézheted.';},forgat:'Elforgatás',allo:'Álló nézet',bezar:'Bezárás',
-    idoszak:'December 1-jétől január 6-áig. A kihagyott napok addig visszamenőleg is kinyithatók.',zarva:'még zárva',avZar:'Csak Advent '+ev+'-ban lehetett megszerezni: mind a 24 ajándékot ki kellett nyitni.'}
+    idoszak:'December 1-jétől január 6-áig. A kihagyott napok addig visszamenőleg is kinyithatók.',ntCim:'Ma is vár az adventi ajándékod!',ntSzoveg:'Nyisd ki a mai dobozt, és szerezd meg a betlehemi kép következő darabját!',ntPotCim:'Még pótolhatod!',ntPot:function(n){return 'Még '+n+' adventi ajándék vár rád. Január 6-ig kinyithatod őket.';},zarva:'még zárva',avZar:'Csak Advent '+ev+'-ban lehetett megszerezni: mind a 24 ajándékot ki kellett nyitni.'}
   :{tab:'Advent',cim:'ADVENT '+ev+' · THE NATIVITY PICTURE',mai:"TODAY'S GIFT",vissza:'CATCH UP',kinyitva:'OPENED',dec:function(n){return 'December '+n;},
     kopp:['Tap it three times!','Two more!','One more!','It opened!'],darab:function(n){return 'Piece '+n;},kirakos:function(n){return 'Puzzle '+n+'/24';},
     talentum:'talents',szorzo:"multiplier on today's lessons",tort:"Today's story · 3 questions",plusz:'+ bonus gift',tortKesz:function(x){return "Today's story done · "+x+' earned';},
@@ -2837,7 +2842,7 @@ function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
     kartya:'SPECIAL CARD',kartyaCim:'Advent '+ev,db:function(n){return n+' / 24 pieces';},
     tipp:'When you have all 24 pieces, tap the picture to see it large and turned sideways.',kesz:'The picture is complete! Tap it to see it large and turned sideways.',
     hiany:function(n){return n+' pieces still missing. When you have them all, you can see it large.';},forgat:'Turn',allo:'Upright',bezar:'Close',
-    idoszak:'From December 1 to January 6. Missed days can be opened later until then.',zarva:'still locked',avZar:'Only available in Advent '+ev+': all 24 gifts had to be opened.'}; }
+    idoszak:'From December 1 to January 6. Missed days can be opened later until then.',ntCim:'Your Advent gift is waiting!',ntSzoveg:"Open today's box and get the next piece of the nativity picture!",ntPotCim:'You can still catch up!',ntPot:function(n){return n+' Advent gifts are still waiting for you. You can open them until January 6.';},zarva:'still locked',avZar:'Only available in Advent '+ev+': all 24 gifts had to be opened.'}; }
 function advKepHtml(friss){ var A=advA(), ny=advAll().ny, h='<div class="advkep" style="--advkep:url(img/'+A.kep+'.png)">';
   for(var c=0;c<24;c++){ var nap=ADV_SOR.indexOf(c)+1; h+='<i class="'+(ny[nap]?'meg':'')+(nap===friss?' friss':'')+'" style="background-position:'+(c%6*20)+'% '+(Math.floor(c/6)*100/3)+'%"></i>'; }
   return h+'</div>'; }
@@ -2884,6 +2889,13 @@ function advVege(){ var a=AS(), n=advAllas.n, x=advA().napok[n-1].x, all=advAll(
     '<div class="kor">'+(img(advExtraKep(x),'advikon')||'')+'<span>'+esc(advExtraSzoveg(x))+'</span></div><h2>'+esc(advAllas.jo===3?a.hibatlan:a.vegig)+'</h2><p>'+esc(a.jo(advAllas.jo))+'</p>'+
     '<button type="button" class="primary" data-advvissza>'+esc(a.visszaAdv)+'</button></div>'); }
 // A gyujtemeny alja: az adventi kep kulonleges kartyakent; kesz kepnel koppintasra nagyban is megnezheto.
+// Az adventi ertesites egy adott napra: [cim, szoveg], vagy null. Dec. 1-24: ha a napi doboz meg zarva.
+// Dec. 25. - jan. 6.: harom potlo emlekezteto (dec. 27., jan. 2., jan. 5.), ha meg van kinyitatlan nap.
+function advErtesites(nap){ var A=advA(); if(!A) return null; var k=advNapja(A.kezd), v=advNapja(A.veg), d=startOfDay(nap), a=AS();
+  if(d<k||d>v) return null; var ny=(S.advent&&S.advent.ev===A.ev)?S.advent.ny:{}, n=Math.round((d-k)/86400000)+1;
+  if(n<=24) return ny[n]?null:[a.ntCim,a.ntSzoveg];
+  var hiany=24-Object.keys(ny).length, md=(d.getMonth()+1)+'-'+d.getDate();
+  return (hiany>0&&['12-27','1-2','1-5'].indexOf(md)>=0)?[a.ntPotCim,a.ntPot(hiany)]:null; }
 function adventKartyaHtml(){ var A=advA(); if(!A) return ''; var van=S.advent&&S.advent.ev===A.ev;
   if(!van&&!adventAktiv()) return ''; var a=AS(), db=van?Object.keys(S.advent.ny).length:0;
   return '<div class="advkartya"><div class="advfej"><span>'+esc(a.kartya)+'</span><b>'+esc(a.db(db))+'</b></div><h3>'+esc(a.kartyaCim)+'</h3>'+
@@ -2895,6 +2907,7 @@ function advNezo(){ var a=AS(), A=advA(); var v=document.createElement('div'); v
 function collectionHtml(){
   var s=T(), n=C.gifts.filter(owns).length, h='<div class="hrow"><h1 class="brand">'+esc(s.tabCollection)+'</h1><span class="pill-right">'+s.cardsOwned(n,C.gifts.length)+'</span></div>';
   h+='<div class="card-bal">'+(img('talent-big','tbig')||'<i class="coin" style="width:36px;height:36px"></i>')+'<div><b>'+esc(s.talentsBalance(S.talents))+'</b><span>'+esc(s.chestHint)+'</span></div></div>';
+  if(adventAktiv()) h+=adventKartyaHtml();
   h+='<div class="tabs"><button type="button" class="'+(colTab==='treasures'?'on':'')+'" data-coltab="treasures">'+esc(s.treasuresTab)+'</button><button type="button" class="'+(colTab==='shop'?'on':'')+'" data-coltab="shop">'+esc(s.shopTab)+'</button></div>';
   if(colTab==='shop') return h+shopHtml();
   h+='<div class="intro">'+esc(s.collectionSub)+'</div>';
@@ -2917,7 +2930,7 @@ function collectionHtml(){
     var have=C.gifts.filter(function(g){return g.unit===u.id;}).length;
     if(have<6) h+='<div class="soonrow">'+ico('spark')+esc(s.moreSoon)+'</div>';
   });
-  return h+adventKartyaHtml();
+  return h+(adventAktiv()?'':adventKartyaHtml());
 }
 function statsHtml(){
   var s=T(), h='<h1 class="brand mid">'+esc(s.tabStats)+'</h1>'+whoHtml()+'<div class="tiles">';
@@ -3316,7 +3329,7 @@ document.getElementById('app').addEventListener('click',function(e){
     el.className='advbox'; void el.offsetWidth; el.className='advbox '+(advKop%2?'r1':'r2');
     if(advKop<3){ var ap=el.parentNode.querySelectorAll('.advpotty i'); for(var ai=0;ai<ap.length;ai++) ap[ai].classList.toggle('on',ai<advKop); var au=el.parentNode.querySelector('.advutas'); if(au) au.textContent=AS().kopp[advKop]; return; }
     var aki=el.querySelector('img'); if(aki) aki.src='img/advent-doboz-nyitott.png';
-    aall.ny[an]=1; advJutalom(an); persist(); hang('kesz'); haptic('kesz');
+    aall.ny[an]=1; advJutalom(an); persist(); utemez(); hang('kesz'); haptic('kesz');
     setTimeout(function(){ advKop=0; advFriss=an; var sv=view.scrollTop; render(); view.scrollTop=sv; advFriss=0; },650); return; }
   if(el.hasAttribute('data-advtort')){ advTortenet(advValasztott); return; }
   if(el.hasAttribute('data-advkerd')){ advKerdes(); return; }
