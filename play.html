@@ -145,6 +145,7 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 .whobar{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:13px 16px;border-radius:16px;
   background:var(--surface);border:1.5px solid color-mix(in srgb,var(--brand) 30%,var(--border));font-size:18px}
 .whobar svg{width:24px;height:24px;fill:var(--brand);flex:none}
+.whobar .wav{width:40px;height:40px;flex:none;object-fit:contain;margin:-6px 0}
 .whobar svg:last-child{margin-left:6px;width:16px;height:16px;fill:var(--brand)}
 .whobar b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .whobar span{font-size:15px;font-weight:800;color:var(--brand);margin-left:auto;background:color-mix(in srgb,var(--brand) 12%,var(--surface));padding:5px 12px;border-radius:999px;white-space:nowrap}
@@ -3327,16 +3328,22 @@ function settingsPage(){
     '</div>'+
     '</div>';
 }
+// A jatekos sajat karakterikonja (Zsolt kerese, 2026-11-01): a jelenleginel az eppen hasznalt, a tobbieknel az elmentett valasztasuk.
+function profAvatar(id,cls){ if(id===PROFIL) return avatarHtml(cls);
+  var a=nyers('bq-avatar'+(id===ELSO_PROFIL?'':'@'+id),'olivia')||'olivia', c='mascot'+(cls?' '+cls:''), im=null;
+  if(a.indexOf('advent-')===0) im=img('dove-advent',c);
+  else if(!/^olivia/.test(a)) im=img(a.indexOf('hero-')===0?a:('hero-'+a),c);
+  return im||mascotHtml(cls); }
 // "Ki jatszik most" sav es a lenyilo nevvalaszto: egy koppintas nyitja, a masodik valt.
 function whoHtml(){ var s=T();
   var h='<div class="whowrap">'+
-    '<button type="button" class="whobar'+(whoOpen?' open':'')+'" data-whotoggle>'+ico('person')+
+    '<button type="button" class="whobar'+(whoOpen?' open':'')+'" data-whotoggle>'+profAvatar(PROFIL,'wav')+
     '<b>'+esc(profilNev(PROFIL)||s.profNoName)+'</b><span>'+esc(s.profSwitch)+'</span>'+ico('chev')+'</button>';
   if(whoOpen){
     h+='<div class="whomenu">';
     PROFILOK.forEach(function(p){ var most=p.id===PROFIL;
       h+='<button type="button" class="wrow'+(most?' on':'')+'" data-profswitch="'+p.id+'">'+
-        mascotHtml('pav')+'<b>'+esc(p.name||s.profNoName)+'</b>'+
+        profAvatar(p.id,'pav')+'<b>'+esc(p.name||s.profNoName)+'</b>'+
         (most?'<svg><use href="#i-check"/></svg>':'')+'</button>'; });
     h+='<button type="button" class="wadd" data-profsheet>'+ico('person')+esc(s.profManage)+'</button>';
     h+='</div>'; }
