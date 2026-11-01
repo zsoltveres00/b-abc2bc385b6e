@@ -141,12 +141,13 @@ h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:
 #tourLayer .tcard.down .tip{top:-7px;border-right:0;border-bottom:0}
 #tourLayer .tcard.up .tip{bottom:-7px;border-left:0;border-top:0}
 /* Ki jatszik most: az osveny tetejen, egy koppintassal valthato. */
-.whobar{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 0;padding:9px 14px;border-radius:14px;
-  background:var(--surface);border:1px solid var(--border);font-size:14px}
-.whobar svg{width:16px;height:16px;fill:var(--brand);flex:none}
-.whobar svg:last-child{margin-left:auto;width:12px;height:12px;fill:var(--muted)}
-.whobar b{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.whobar span{font-size:12px;font-weight:600;color:var(--muted);margin-left:auto}
+/* Jatekos-sav (Zsolt kerese, 2026-11-01): nagyobb betuk es ikon, a "valtas" lila gomb, hogy jobban eszrevegyek. */
+.whobar{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:13px 16px;border-radius:16px;
+  background:var(--surface);border:1.5px solid color-mix(in srgb,var(--brand) 30%,var(--border));font-size:18px}
+.whobar svg{width:24px;height:24px;fill:var(--brand);flex:none}
+.whobar svg:last-child{margin-left:6px;width:16px;height:16px;fill:var(--brand)}
+.whobar b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.whobar span{font-size:15px;font-weight:800;color:var(--brand);margin-left:auto;background:color-mix(in srgb,var(--brand) 12%,var(--surface));padding:5px 12px;border-radius:999px;white-space:nowrap}
 .prow{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 .prow .pmain{flex:1;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1.5px solid transparent;min-width:0}
 .prow.on .pmain{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 9%,var(--surface))}
@@ -508,12 +509,12 @@ svg.fsvg{width:18px;height:18px;fill:var(--brand);vertical-align:-3px}
 .pgroup.tlent{margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0}
 .pgroup.tfent{border-top-left-radius:0;border-top-right-radius:0}
 .testnode{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-tap-highlight-color:transparent}
-.testnode .tcirc{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(var(--surface),color-mix(in srgb,var(--uc,var(--brand)) 14%,var(--surface)));border:3px dashed var(--uc,var(--brand));box-shadow:0 5px 0 color-mix(in srgb,var(--uc,var(--brand)) 35%,transparent),0 8px 10px var(--shadow);transition:transform .08s,box-shadow .08s}
+.testnode .tcirc{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(var(--surface),color-mix(in srgb,var(--uc,var(--brand)) 14%,var(--surface)));border:3px dashed var(--uc,var(--brand));box-shadow:0 5px 0 color-mix(in srgb,var(--uc,var(--brand)) 35%,transparent),0 8px 10px var(--shadow);transition:transform .08s,box-shadow .08s}
 .testnode:active .tcirc{transform:translateY(5px);box-shadow:0 1px 0 color-mix(in srgb,var(--uc,var(--brand)) 35%,transparent),0 3px 6px var(--shadow)}
-.testnode .tcirc svg{width:34px;height:34px;fill:var(--uc,var(--brand))}
-.testnode .tcirc img{width:52px;height:52px;object-fit:contain}
+.testnode .tcirc svg{width:46px;height:46px;fill:var(--uc,var(--brand))}
+.testnode .tcirc img{width:72px;height:72px;object-fit:contain}
 .testnode:not(.done) .tcirc img{filter:grayscale(.35) opacity(.85)}
-.testnode small{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface);padding:2px 10px;border-radius:999px}
+.testnode small{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface);padding:2px 10px;border-radius:999px}
 .testnode.done .tcirc{border-style:solid;border-color:var(--gold);background:linear-gradient(var(--surface),color-mix(in srgb,var(--gold) 20%,var(--surface)));box-shadow:0 5px 0 color-mix(in srgb,var(--gold) 45%,transparent),0 8px 10px var(--shadow)}
 .testnode.done .tcirc svg{fill:var(--gold)}
 .testnode.done small{color:var(--gold)}
@@ -2841,8 +2842,8 @@ function layoutPath(){
     if(done[k-1]) walked+=eleje+seg(a,b);
   }
   var svg=path.querySelector('svg.line'); svg.setAttribute('viewBox','0 0 '+w+' '+path.scrollHeight);
-  svg.innerHTML='<path fill="none" stroke="var(--border)" stroke-width="5" stroke-linecap="round" d="'+d+'"/>'+
-                (walked?'<path fill="none" stroke="var(--walked)" stroke-width="5" stroke-linecap="round" d="'+walked+'"/>':'');
+  svg.innerHTML='<path fill="none" stroke="var(--border)" stroke-width="7" stroke-linecap="round" d="'+d+'"/>'+
+                (walked?'<path fill="none" stroke="var(--walked)" stroke-width="7" stroke-linecap="round" d="'+walked+'"/>':'');
 }
 // ---------- Adventi naptar (december 1. - januar 6.) ----------
 // Minden nap egy ajandekdoboz: haromszori koppintasra kinyilik, es ad egy kirakosdarabot (a 24 darabbol a
