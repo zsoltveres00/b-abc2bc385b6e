@@ -1009,9 +1009,11 @@ img.bic{width:24px;height:24px;object-fit:contain;flex:none}img.bic.big{width:44
 .advfej{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:2px 0 8px}
 .advfej span{font-size:12px;font-weight:800;letter-spacing:.06em;color:#C2416B}
 .advfej b{font-size:13px;font-weight:800;color:#C2416B;font-variant-numeric:tabular-nums;white-space:nowrap}
-.advkep{position:relative;width:100%;aspect-ratio:3/2;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);background:#E9E4EC;box-shadow:0 10px 24px var(--shadow)}
+.advkep{position:relative;width:100%;aspect-ratio:3/2;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);background:#fff;box-shadow:0 10px 24px var(--shadow)}
 .advkep i{background-image:var(--advkep);background-size:600% 400%;filter:grayscale(1) contrast(.75) brightness(1.25);opacity:.55;outline:1px solid rgba(255,255,255,.35);transition:filter .9s,opacity .9s}
 .advkep i.meg{filter:none;opacity:1;outline-color:rgba(255,255,255,.08)}
+/* A meg nem megszerzett darab helye fehér (Zsolt, 2026-11-01): a kép csak darabonként tárul fel, egészben csak a 24. után. */
+.advkep i:not(.meg){background:#fff;filter:none;opacity:1;outline:1px solid #E6E1EC}
 .advkep i.friss{animation:advvillan 1.4s ease-out}
 @keyframes advvillan{0%{box-shadow:inset 0 0 0 3px #F2B544}100%{box-shadow:inset 0 0 0 0 rgba(242,181,68,0)}}
 .advdoboz{background:var(--surface);border-radius:20px;padding:14px;margin:12px 0;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 8px 20px var(--shadow)}
