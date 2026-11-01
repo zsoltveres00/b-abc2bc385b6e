@@ -2114,13 +2114,16 @@ function previewSheet(mi,pi,slot){
 function oliviaKey(m,p){ return m.id+'-'+p.id; }
 function oliviaStars(m,p){ return S.oliviaStars[oliviaKey(m,p)]||0; }
 function oliviaUnlocked(mi,pi){ var m=C.modules[mi], p=m.parts[pi]; return !!p&&slotDone(m,p,CHEST_SLOT); }
+// Uj kepernyo elejen a lap tetejere ugrunk; iPhone-on a meg futo lendulet-gorgetest is megallitjuk,
+// kulonben a hos/Olivia kuldetes a rovid kerdes alatti ures reszen nyilt meg (csak a hatter es a Jelezd gomb latszott).
+function lapTetejere(){ var v=document.getElementById('view'); if(!v) return; v.style.overflow='hidden'; v.scrollTop=0; void v.offsetHeight; v.style.overflow=''; v.scrollTop=0; }
 function startOlivia(mi,pi){
   if(hearts()<=0) return; var m=C.modules[mi], p=m.parts[pi];
   if(!oliviaUnlocked(mi,pi)) return;
   var qs=drawQuestions(m,p,SLOTS,OLIVIA_Q), queue=[]; for(var i=0;i<qs.length;i++) queue.push(i);
   if(!qs.length) return;
   lesson={ui:mi,pi:pi,olivia:true,qs:qs,queue:queue,total:queue.length,t0:Date.now(),pos:0,hearts:hearts(),firstTry:0,toReview:[],reviewing:false,mistakes:0,run:0,bestRun:0,failed:false,order:[],answered:null,picked:[]};
-  prepQ(); screen={name:'lesson'}; render();
+  prepQ(); screen={name:'lesson'}; render(); lapTetejere();
 }
 // Story station: read it, then it is done (no hearts, no questions).
 function finishStory(){
@@ -2134,8 +2137,8 @@ function heroById(u,id){ return (u.heroes||[]).filter(function(h){return h.id===
 function heroUnlocked(m,h){ if(mindNyitva()) return true; var p=m.parts[h.at]; return !!p&&slotDone(m,p,CHEST_SLOT); }
 function heroStars(id){ return S.heroStars[id]||0; }
 function startHero(ui,id){ if(hearts()<=0) return; var u=C.modules[ui], h=heroById(u,id); if(!h||!heroUnlocked(u,h)) return; var q=[]; for(var i=0;i<h.qs.length;i++) q.push(i); var queue=shuffle(q).slice(0,Q_PER_STATION);
-  lesson={ui:ui,si:h.at,hero:id,qs:h.qs,queue:queue,total:queue.length,t0:Date.now(),pos:0,hearts:hearts(),firstTry:0,toReview:[],reviewing:false,mistakes:0,run:0,bestRun:0,failed:false,order:[],answered:null,picked:[]}; prepQ(); screen={name:'lesson'}; render(); }
-function startQuiz(){ if(!lesson) return; screen={name:'lesson'}; render(); }
+  lesson={ui:ui,si:h.at,hero:id,qs:h.qs,queue:queue,total:queue.length,t0:Date.now(),pos:0,hearts:hearts(),firstTry:0,toReview:[],reviewing:false,mistakes:0,run:0,bestRun:0,failed:false,order:[],answered:null,picked:[]}; prepQ(); screen={name:'lesson'}; render(); lapTetejere(); }
+function startQuiz(){ if(!lesson) return; screen={name:'lesson'}; render(); lapTetejere(); }
 function curQ(){ return lesson.qs[lesson.queue[lesson.pos]]; }
 function lastInPass(){ return lesson.pos===lesson.queue.length-1; }
 function optCount(q){ if(q.type==='image') return (q.opts||[]).length; if(q.type==='pick') return q.imgs.length; return (q.hu.o||[]).length; }
