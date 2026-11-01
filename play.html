@@ -1938,12 +1938,23 @@ function ladaNyeremeny(het){
   var b=sorsol(LADA_SZORZO);
   return { talents:t, mult:b[0], perc:b[1] };
 }
-function szorzoIndit(mult,perc){ if(!mult||!perc) return; S.boost={m:mult,until:Date.now()+perc*60000}; }
-function szorzoMost(){ return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
+// Tobb szorzo egymas utan (Zsolt kerese, 2026-11-01): az azonos szorzo ideje hozzaadodik (10 + 15 perc = 25 perc),
+// a masik fajta szorzo pedig sorba all, es akkor indul, amikor az elozo lejart (elobb a 2x, utana az 1,5x).
+// S.boost = {m: most futo szorzo, until: meddig, sor: [{m, ms}] a varakozok}.
+function szorzoRendez(){ var b=S.boost; if(!b) return; var most=Date.now();
+  while(b.until<=most&&b.sor&&b.sor.length){ var k=b.sor.shift(); b.m=k.m; b.until+=k.ms; }
+  if(b.until<=most&&!(b.sor&&b.sor.length)) S.boost=null; }
+function szorzoIndit(mult,perc){ if(!mult||!perc) return; var ms=perc*60000; szorzoRendez();
+  var b=S.boost; if(!b){ S.boost={m:mult,until:Date.now()+ms,sor:[]}; return; }
+  if(!b.sor) b.sor=[];
+  if(b.m===mult){ b.until+=ms; return; }
+  var v=b.sor.filter(function(x){ return x.m===mult; })[0];
+  if(v) v.ms+=ms; else b.sor.push({m:mult,ms:ms}); }
+function szorzoMost(){ szorzoRendez(); return (S.boost&&S.boost.until>Date.now())?S.boost.m:1; }
 // Az allapotsorban latszik, ha eppen szorzo van ervenyben, es mennyi ideig.
 function szorzoChip(){ var m=szorzoMost(); if(m<=1) return '';
   return '<span class="st boost">'+(img(m===1.5?'boost-15':'boost-2','bic')||'<b>'+(m===1.5?'1,5':m)+'×</b>')+'<i>'+T().boostLeft(szorzoPerc())+'</i></span>'; }
-function szorzoPerc(){ if(!S.boost||S.boost.until<=Date.now()) return 0; return Math.max(1,Math.ceil((S.boost.until-Date.now())/60000)); }
+function szorzoPerc(){ szorzoRendez(); if(!S.boost||S.boost.until<=Date.now()) return 0; return Math.max(1,Math.ceil((S.boost.until-Date.now())/60000)); }
 function tapChest(){ if(screen.name!=='chest'||screen.taps>=3) return; screen.taps++; haptic(screen.taps>=3?'lada':'kopp'); hang(screen.taps>=3?'lada':'kopp');
   if(screen.taps>=3){ S.talents+=screen.talents; S.cnt.chests=(S.cnt.chests||0)+1;
     szorzoIndit(screen.mult,screen.perc);
