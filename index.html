@@ -46,7 +46,7 @@ a{color:var(--brand)}
 .jatekgomb small{display:block;font-weight:500;font-size:13px;opacity:.88;margin-top:2px}
 .jatekgomb:hover{filter:brightness(1.05)}
 .boltok{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
-.bolt{display:inline-flex;align-items:center;gap:10px;background:#0B0B0F;color:#fff;border:1px solid #3a3a42;border-radius:12px;padding:8px 18px 8px 14px;text-decoration:none;min-width:172px;cursor:default}
+.bolt{display:inline-flex;align-items:center;gap:10px;background:#0B0B0F;color:#fff;border:1px solid #3a3a42;border-radius:12px;padding:8px 14px;text-decoration:none;width:186px;cursor:default}
 .bolt small{display:block;font-size:11px;line-height:1.1;opacity:.85}
 .bolt b{display:block;font-size:19px;line-height:1.15;font-weight:600;letter-spacing:-.01em}
 .cimke{display:inline-block;font:700 12px system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);padding:6px 12px;border-radius:999px}
@@ -141,7 +141,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     <h1><img src="kezdolap/ikon.png" alt=""><span>BibleTravel</span></h1>
     <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés és egy kincsesláda, és a bibliai hősök sorban a gyűjteményedbe kerülnek.</p>
     <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the Bible heroes join your collection one by one.</p>
-    <a class="jatekgomb" data-jatek href="play.html?v=202611031130&lang=en">
+    <a class="jatekgomb" data-jatek href="play.html?v=202611031136&lang=en">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
       <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
     </a>
@@ -232,7 +232,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
   <p class="hu">Kezdd el most a böngészőben, ingyen.</p>
   <p class="en">Start now in your browser, for free.</p>
   <div class="gombok">
-    <a class="gomb fo" data-jatek href="play.html?v=202611031130&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
+    <a class="gomb fo" data-jatek href="play.html?v=202611031136&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
   </div>
 </div>
 </main>
@@ -256,7 +256,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     document.title=l==='hu'?'BibleTravel – Utazás a Bibliában':'BibleTravel – A journey through the Bible';
     gombok.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-nyelv')===l);});
     document.querySelectorAll('img[data-kep]').forEach(function(i){i.src='kezdolap/'+l+'-'+i.getAttribute('data-kep')+'.jpg';});
-    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031130&lang='+l;});
+    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031136&lang='+l;});
   }
   var l='en'; /* az oldal mindig angolul nyilik; magyarra a gombbal lehet valtani */
   gombok.forEach(function(b){b.onclick=function(){allit(b.getAttribute('data-nyelv'));};});
