@@ -38,12 +38,21 @@ a{color:var(--brand)}
 .nyelv button.on{background:var(--brand);color:var(--ink)}
 
 /* nyito resz */
-.hos{display:flex;flex-direction:column;align-items:center;text-align:center;gap:36px;padding-block:24px 56px}
-.hos>div:first-child{display:flex;flex-direction:column;align-items:center;max-width:640px}
+.hos{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center;padding-block:32px 64px}
+.hosszoveg{display:flex;flex-direction:column;align-items:flex-start}
+.hos h1{display:flex;align-items:center;gap:16px}
+.hos h1 img{width:clamp(48px,6vw,64px);height:auto;border-radius:16px;box-shadow:0 6px 14px var(--shadow)}
+.jatekgomb{display:inline-flex;align-items:center;gap:14px;padding:16px 30px 16px 26px;border-radius:18px;text-decoration:none;color:#fff;font-weight:700;font-size:19px;line-height:1.2;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 10px 24px var(--shadow)}
+.jatekgomb small{display:block;font-weight:500;font-size:13px;opacity:.88;margin-top:2px}
+.jatekgomb:hover{filter:brightness(1.05)}
+.boltok{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.bolt{display:inline-flex;align-items:center;gap:10px;background:#0B0B0F;color:#fff;border:1px solid #3a3a42;border-radius:12px;padding:8px 18px 8px 14px;text-decoration:none;min-width:172px;cursor:default}
+.bolt small{display:block;font-size:11px;line-height:1.1;opacity:.85}
+.bolt b{display:block;font-size:19px;line-height:1.15;font-weight:600;letter-spacing:-.01em}
 .cimke{display:inline-block;font:700 12px system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);padding:6px 12px;border-radius:999px}
-.hos h1{font-size:clamp(40px,6.4vw,68px);margin:16px 0 8px}
+.hos h1{font-size:clamp(40px,6.4vw,72px);margin:18px 0 10px}
 .hos h1 span{background:linear-gradient(120deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:34em;margin:0 auto 28px}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:34em;margin:0 0 28px}
 .gombok{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:min(360px,100%)}
 .gomb{position:relative;display:flex;justify-content:center;align-items:center;gap:12px;text-align:center;padding-inline:64px!important;border-radius:16px;padding:14px 22px;text-decoration:none;font-weight:700;line-height:1.2}
 .gomb small{display:block;font-weight:500;font-size:12px;opacity:.85}
@@ -59,7 +68,7 @@ a{color:var(--brand)}
 .telefon{justify-self:center;position:relative;width:min(320px,80vw)}
 .telefon .keret{background:#14112A;border-radius:44px;padding:10px;box-shadow:0 30px 60px var(--shadow)}
 .telefon img.kep{display:block;width:100%;border-radius:34px}
-.telefon .galamb{position:absolute;width:42%;left:-26%;bottom:6%;filter:drop-shadow(0 10px 14px var(--shadow))}
+.telefon .galamb{position:absolute;width:40%;left:-18%;bottom:4%;filter:drop-shadow(0 10px 14px var(--shadow))}
 
 /* szamok */
 .szamok{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-block:8px 56px}
@@ -104,6 +113,9 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 [data-l="hu"] .en,[data-l="en"] .hu{display:none!important}
 
 @media (max-width:820px){
+  .hos{grid-template-columns:1fr;gap:36px;text-align:center}
+  .hosszoveg{align-items:center}.lead{margin-inline:auto}.boltok{justify-content:center}
+  .telefon .galamb{left:-14%}
   .telefon .galamb{left:-14%}
   .szamok{grid-template-columns:repeat(2,minmax(0,1fr))}
   .lepesek,.miert{grid-template-columns:1fr}
@@ -123,26 +135,26 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 
 <main>
 <div class="hos">
-  <div>
+  <div class="hosszoveg">
     <span class="cimke"><span class="hu">Ingyenes bibliai játék 7–14 éveseknek</span><span class="en">A free Bible game for ages 7–14</span></span>
-    <h1><span>BibleTravel</span></h1>
-    <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés, egy kincsesláda, és a hősök sorban a gyűjteménybe kerülnek. Magyarul és angolul.</p>
-    <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the heroes join your collection one by one. In English and Hungarian.</p>
-    <div class="gombok">
-      <a class="gomb fo" data-jatek href="play.html?v=202611031106&lang=en">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
-        <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
+    <h1><img src="kezdolap/ikon.png" alt=""><span>BibleTravel</span></h1>
+    <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés és egy kincsesláda, és a bibliai hősök sorban a gyűjteményedbe kerülnek.</p>
+    <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the Bible heroes join your collection one by one.</p>
+    <a class="jatekgomb" data-jatek href="play.html?v=202611031121&lang=en">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+      <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
+    </a>
+    <div class="boltok">
+      <a class="bolt" aria-disabled="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.62c-.02-2.3 1.88-3.4 1.97-3.46-1.07-1.57-2.74-1.78-3.33-1.8-1.42-.14-2.77.83-3.49.83-.72 0-1.83-.81-3.01-.79-1.55.02-2.98.9-3.78 2.29-1.61 2.8-.41 6.94 1.16 9.21.77 1.11 1.68 2.36 2.88 2.31 1.16-.05 1.59-.75 2.99-.75 1.4 0 1.79.75 3.01.72 1.24-.02 2.03-1.13 2.79-2.25.88-1.29 1.24-2.53 1.26-2.6-.03-.01-2.42-.93-2.45-3.71zM14.08 5.86c.64-.77 1.07-1.85.95-2.92-.92.04-2.03.61-2.69 1.38-.59.68-1.11 1.77-.97 2.82 1.03.08 2.07-.52 2.71-1.28z"/></svg>
+        <span><small class="hu">Hamarosan az</small><small class="en">Coming soon on the</small><b>App Store</b></span>
       </a>
-      <a class="gomb mas" aria-disabled="true">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.62c-.02-2.3 1.88-3.4 1.97-3.46-1.07-1.57-2.74-1.78-3.33-1.8-1.42-.14-2.77.83-3.49.83-.72 0-1.83-.81-3.01-.79-1.55.02-2.98.9-3.78 2.29-1.61 2.8-.41 6.94 1.16 9.21.77 1.11 1.68 2.36 2.88 2.31 1.16-.05 1.59-.75 2.99-.75 1.4 0 1.79.75 3.01.72 1.24-.02 2.03-1.13 2.79-2.25.88-1.29 1.24-2.53 1.26-2.6-.03-.01-2.42-.93-2.45-3.71zM14.08 5.86c.64-.77 1.07-1.85.95-2.92-.92.04-2.03.61-2.69 1.38-.59.68-1.11 1.77-.97 2.82 1.03.08 2.07-.52 2.71-1.28z"/></svg>
-        <span><span class="hu">App Store<small>hamarosan iPhone-ra és iPadre</small></span><span class="en">App Store<small>coming soon for iPhone and iPad</small></span></span>
-      </a>
-      <a class="gomb mas" aria-disabled="true">
+      <a class="bolt" aria-disabled="true">
         <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 2.3 13.4 12 3.6 21.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1z"/><path fill="#FBBC04" d="m17 8.4-3.6 3.6L17 15.6l3.9-2.2c.8-.5.8-1.6 0-2.1z"/><path fill="#4285F4" d="M3.6 2.3c.3-.2.8-.2 1.2 0L17 8.4 13.4 12z"/><path fill="#EA4335" d="M13.4 12 17 15.6 4.8 21.7c-.4.2-.9.2-1.2 0z"/></svg>
-        <span><span class="hu">Google Play<small>hamarosan Androidra</small></span><span class="en">Google Play<small>coming soon for Android</small></span></span>
+        <span><small class="hu">Hamarosan a</small><small class="en">Coming soon on</small><b>Google Play</b></span>
       </a>
     </div>
-    <p class="apro"><span class="hu">Nincs regisztráció, nincs reklám.</span><span class="en">No sign-up, no ads.</span></p>
+    <p class="apro"><span class="hu">Nincs regisztráció, nincs reklám, nincs csevegés. Magyarul és angolul.</span><span class="en">No sign-up, no ads, no chat. In English and Hungarian.</span></p>
   </div>
   <div class="telefon">
     <div class="keret"><img class="kep" data-kep="1-osveny" alt=""></div>
@@ -219,7 +231,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
   <p class="hu">Kezdd el most a böngészőben, ingyen.</p>
   <p class="en">Start now in your browser, for free.</p>
   <div class="gombok">
-    <a class="gomb fo" data-jatek href="play.html?v=202611031106&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
+    <a class="gomb fo" data-jatek href="play.html?v=202611031121&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
   </div>
 </div>
 </main>
@@ -243,7 +255,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     document.title=l==='hu'?'BibleTravel – Utazás a Bibliában':'BibleTravel – A journey through the Bible';
     gombok.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-nyelv')===l);});
     document.querySelectorAll('img[data-kep]').forEach(function(i){i.src='kezdolap/'+l+'-'+i.getAttribute('data-kep')+'.jpg';});
-    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031106&lang='+l;});
+    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031121&lang='+l;});
   }
   var l='en'; /* az oldal mindig angolul nyilik; magyarra a gombbal lehet valtani */
   gombok.forEach(function(b){b.onclick=function(){allit(b.getAttribute('data-nyelv'));};});
