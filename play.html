@@ -2395,6 +2395,7 @@ function render(){
 // Olivia bemutatkozasa a legelso inditaskor.
 function renderIntro(){ var s=T(), lap=screen.lap||0;
   // Legelso lap: csak ket nagy zaszlo, felirat nelkul (Zsolt kerese, 2026-10-24). Utana mar a valasztott nyelven megy minden.
+  if(screen.lap==null&&URL_NYELV) screen.lap=0;
   if(screen.lap==null){
     view.innerHTML='<div class="nyelvlap">'+
       '<button type="button" class="nyelvzaszlo" data-elsonyelv="en" aria-label="English">'+zaszlo('en')+'</button>'+
@@ -2860,6 +2861,9 @@ function layoutPath(){
 // "Advent <ev>" kulonleges kartyakent a gyujtemenybe kerul, es jar hozza egy profilkep (Olivia sallal).
 // Tesztelni a bongeszoben lehet: play.html?advent=2026-12-09 (a megadott nap lesz a "ma").
 var ADV_TESZT=/[?&]advent=(\d{4})-(\d{1,2})-(\d{1,2})/.exec(location.search);
+// A kezdolaprol (bibletravel.co.uk) ?lang=hu / ?lang=en-nel jon: abban a nyelvben indul, es az elso zaszlos lapot kihagyja.
+var URL_NYELV=(/[?&]lang=(hu|en)\b/.exec(location.search)||[])[1]||null;
+if(URL_NYELV&&S.lang!==URL_NYELV){ S.lang=URL_NYELV; persist(); }
 var ADV_SOR=[14,9,20,3,16,8,1,22,10,5,18,12,0,23,7,15,2,19,11,6,21,4,13,17];
 var advValasztott=null, advKop=0, advAllas=null, advFriss=0;
 function advA(){ return C.advent||null; }
