@@ -1,7 +1,254 @@
-<!doctype html><html lang="hu"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<meta http-equiv="refresh" content="0; url=play.html?v=202611031056">
-<title>Bibliaút</title></head>
-<body><p>Betöltés… <a href="play.html?v=202611031056">Bibliaút megnyitása</a></p>
-<script>location.replace('play.html?v=202611031056');</script></body></html>
+<script>/* az appon belul (regi buildek tartalek cime) egyenesen a jatek nyiljon */ if(window.ReactNativeWebView) location.replace("play.html");</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BibleTravel</title>
+<meta name="description" content="BibleTravel – a free bilingual Bible journey game for children aged 7–14. Read a short story, answer questions, collect heroes.">
+<meta name="theme-color" content="#5B3FD1">
+<link rel="icon" href="kezdolap/ikon.png">
+<link rel="stylesheet" href="fonts/spectral.css">
+<style>
+:root{
+  --bg:#F3F1FF;--surface:#FFFFFF;--text:#1E1B3A;--muted:#6B6690;--line:#E3DFF5;
+  --brand:#5B3FD1;--brand2:#9B4DE0;--green:#2FA45A;--gold:#F2B33D;--ink:#FFFFFF;
+  --shadow:rgba(52,36,140,.16);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161327;--surface:#241F3B;--text:#F4F1FF;--muted:#B9B2D8;--line:#3A3360;
+  --brand:#A78BFA;--brand2:#E08BF7;--green:#4CC77A;--ink:#161327;--shadow:rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161327;--surface:#241F3B;--text:#F4F1FF;--muted:#B9B2D8;--line:#3A3360;
+  --brand:#A78BFA;--brand2:#E08BF7;--green:#4CC77A;--ink:#161327;--shadow:rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+h1,h2,h3{font-family:Spectral,Georgia,serif;line-height:1.15;text-wrap:balance;margin:0}
+a{color:var(--brand)}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:20px}
+
+/* felso sav */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.logo{display:flex;align-items:center;gap:10px;font:700 20px Spectral,Georgia,serif;color:var(--text);text-decoration:none}
+.logo img{width:40px;height:40px;border-radius:10px}
+.nyelv{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.nyelv button{font:700 13px system-ui;border:0;background:none;color:var(--muted);padding:7px 13px;cursor:pointer}
+.nyelv button.on{background:var(--brand);color:var(--ink)}
+
+/* nyito resz */
+.hos{display:flex;flex-direction:column;align-items:center;text-align:center;gap:36px;padding-block:24px 56px}
+.hos>div:first-child{display:flex;flex-direction:column;align-items:center;max-width:640px}
+.cimke{display:inline-block;font:700 12px system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);padding:6px 12px;border-radius:999px}
+.hos h1{font-size:clamp(40px,6.4vw,68px);margin:16px 0 8px}
+.hos h1 span{background:linear-gradient(120deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:34em;margin:0 auto 28px}
+.gombok{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:min(360px,100%)}
+.gomb{position:relative;display:flex;justify-content:center;align-items:center;gap:12px;text-align:center;padding-inline:64px!important;border-radius:16px;padding:14px 22px;text-decoration:none;font-weight:700;line-height:1.2}
+.gomb small{display:block;font-weight:500;font-size:12px;opacity:.85}
+.gomb.fo{padding-block:18px;font-size:19px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 20px var(--shadow)}
+.gomb.mas{background:var(--surface);color:var(--text);border:1.5px solid var(--line)}
+.gombok .gomb svg{position:absolute;left:28px;top:50%;transform:translateY(-50%)}
+.zaro .gombok .gomb svg{position:static;transform:none}
+.zaro .gomb.fo{padding-inline:28px!important}
+.zaro .gombok{margin:0 auto}
+.zaro .gomb.fo{padding-block:16px}
+.gomb.mas[aria-disabled="true"]{cursor:default}
+.apro{font-size:14px;color:var(--muted);margin-top:14px}
+.telefon{justify-self:center;position:relative;width:min(320px,80vw)}
+.telefon .keret{background:#14112A;border-radius:44px;padding:10px;box-shadow:0 30px 60px var(--shadow)}
+.telefon img.kep{display:block;width:100%;border-radius:34px}
+.telefon .galamb{position:absolute;width:42%;left:-26%;bottom:6%;filter:drop-shadow(0 10px 14px var(--shadow))}
+
+/* szamok */
+.szamok{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-block:8px 56px}
+.szam{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center}
+.szam b{display:block;font:700 34px Spectral,Georgia,serif;color:var(--brand);font-variant-numeric:tabular-nums}
+.szam span{font-size:14px;color:var(--muted)}
+
+/* szakaszok */
+section{padding-block:40px}
+section>h2{font-size:clamp(30px,4vw,42px);margin-bottom:10px;text-align:center}
+section>p.al{color:var(--muted);max-width:40em;margin:0 auto 28px;text-align:center}
+.lepesek{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:l}
+.lepes{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;text-align:center}
+.lepes::before{counter-increment:l;content:counter(l);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--brand);color:var(--ink);font:700 18px Spectral,Georgia,serif;margin:0 auto 12px}
+.lepes h3{font-size:22px;margin-bottom:6px}
+.lepes p{margin:0;color:var(--muted);font-size:15px}
+
+.kepek{display:flex;gap:16px;justify-content:safe center;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+.kepek figure{flex:0 0 min(240px,62vw);margin:0;scroll-snap-align:start}
+.kepek img{display:block;width:100%;border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 24px var(--shadow)}
+.kepek figcaption{font-size:14px;color:var(--muted);text-align:center;margin-top:8px}
+
+.miert{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.miert div{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px;text-align:center}
+.miert h3{font-size:20px;margin-bottom:4px}
+.miert p{margin:0;color:var(--muted);font-size:15px}
+
+.ige{text-align:center;padding-block:56px}
+.ige blockquote{font:italic 500 clamp(22px,3vw,30px)/1.4 Spectral,Georgia,serif;margin:0 auto;max-width:28em}
+.ige cite{display:block;font:700 12px system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-top:12px;font-style:normal}
+
+.zaro{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:28px;padding:36px 28px;text-align:center;margin-block:20px 40px}
+.zaro h2{font-size:clamp(28px,4vw,38px);margin-bottom:8px}
+.zaro p{margin:0 0 22px;opacity:.9}
+.zaro .gomb.fo{background:#fff;color:#4A2FC0}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+footer nav{justify-content:center}
+footer nav a{text-decoration:none;font-weight:600;color:var(--brand);padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+footer nav a:hover{border-color:var(--brand)}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+
+[data-l="hu"] .en,[data-l="en"] .hu{display:none!important}
+
+@media (max-width:820px){
+  .telefon .galamb{left:-14%}
+  .szamok{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lepesek,.miert{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body data-l="en">
+<div class="wrap">
+
+<header class="top">
+  <a class="logo" href="#"><img src="kezdolap/ikon.png" alt="">BibleTravel</a>
+  <div class="nyelv" role="group" aria-label="Language">
+    <button type="button" data-nyelv="en">English</button>
+    <button type="button" data-nyelv="hu">Magyar</button>
+  </div>
+</header>
+
+<main>
+<div class="hos">
+  <div>
+    <span class="cimke"><span class="hu">Ingyenes bibliai játék 7–14 éveseknek</span><span class="en">A free Bible game for ages 7–14</span></span>
+    <h1><span>BibleTravel</span></h1>
+    <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés, egy kincsesláda, és a hősök sorban a gyűjteménybe kerülnek. Magyarul és angolul.</p>
+    <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the heroes join your collection one by one. In English and Hungarian.</p>
+    <div class="gombok">
+      <a class="gomb fo" data-jatek href="play.html?v=202611031105&lang=en">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+        <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
+      </a>
+      <a class="gomb mas" aria-disabled="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.62c-.02-2.3 1.88-3.4 1.97-3.46-1.07-1.57-2.74-1.78-3.33-1.8-1.42-.14-2.77.83-3.49.83-.72 0-1.83-.81-3.01-.79-1.55.02-2.98.9-3.78 2.29-1.61 2.8-.41 6.94 1.16 9.21.77 1.11 1.68 2.36 2.88 2.31 1.16-.05 1.59-.75 2.99-.75 1.4 0 1.79.75 3.01.72 1.24-.02 2.03-1.13 2.79-2.25.88-1.29 1.24-2.53 1.26-2.6-.03-.01-2.42-.93-2.45-3.71zM14.08 5.86c.64-.77 1.07-1.85.95-2.92-.92.04-2.03.61-2.69 1.38-.59.68-1.11 1.77-.97 2.82 1.03.08 2.07-.52 2.71-1.28z"/></svg>
+        <span><span class="hu">App Store<small>hamarosan iPhone-ra és iPadre</small></span><span class="en">App Store<small>coming soon for iPhone and iPad</small></span></span>
+      </a>
+      <a class="gomb mas" aria-disabled="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 2.3 13.4 12 3.6 21.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1z"/><path fill="#FBBC04" d="m17 8.4-3.6 3.6L17 15.6l3.9-2.2c.8-.5.8-1.6 0-2.1z"/><path fill="#4285F4" d="M3.6 2.3c.3-.2.8-.2 1.2 0L17 8.4 13.4 12z"/><path fill="#EA4335" d="M13.4 12 17 15.6 4.8 21.7c-.4.2-.9.2-1.2 0z"/></svg>
+        <span><span class="hu">Google Play<small>hamarosan Androidra</small></span><span class="en">Google Play<small>coming soon for Android</small></span></span>
+      </a>
+    </div>
+    <p class="apro"><span class="hu">Nincs regisztráció, nincs reklám.</span><span class="en">No sign-up, no ads.</span></p>
+  </div>
+  <div class="telefon">
+    <div class="keret"><img class="kep" data-kep="1-osveny" alt=""></div>
+    <img class="galamb" src="kezdolap/olivia.png" alt="">
+  </div>
+</div>
+
+<div class="szamok">
+  <div class="szam"><b>8</b><span class="hu">modul</span><span class="en">modules</span></div>
+  <div class="szam"><b>418</b><span class="hu">bibliai történet</span><span class="en">Bible stories</span></div>
+  <div class="szam"><b>3</b><span class="hu">nehézségi szint</span><span class="en">difficulty levels</span></div>
+  <div class="szam"><b>2</b><span class="hu">nyelv: magyar, angol</span><span class="en">languages: English, Hungarian</span></div>
+</div>
+
+<section>
+  <h2 class="hu">Hogyan működik?</h2><h2 class="en">How does it work?</h2>
+  <p class="al hu">Napi néhány perc elég. A gyerek a saját tempójában halad végig az ösvényen.</p>
+  <p class="al en">A few minutes a day is enough. Children move along the path at their own pace.</p>
+  <div class="lepesek">
+    <div class="lepes"><h3 class="hu">Elolvas egy történetet</h3><h3 class="en">Read a story</h3>
+      <p class="hu">Rövid, érthető elbeszélés a Bibliából, három szinten: kezdő, középhaladó és haladó.</p>
+      <p class="en">A short, clear retelling from the Bible, on three levels: beginner, intermediate and advanced.</p></div>
+    <div class="lepes"><h3 class="hu">Válaszol a kérdésekre</h3><h3 class="en">Answer the questions</h3>
+      <p class="hu">Igaz vagy hamis, párosítás, sorrend, kiegészítés. Minden kérdés mellett ott az igevers.</p>
+      <p class="en">True or false, matching, ordering, fill in the gap. Every question comes with its Bible verse.</p></div>
+    <div class="lepes"><h3 class="hu">Gyűjt és fejlődik</h3><h3 class="en">Collect and grow</h3>
+      <p class="hu">Kincsesládák, talentumok, bibliai hősök kártyái, és Olívia, a galamb, aki együtt fejlődik a játékossal.</p>
+      <p class="en">Treasure chests, talents, Bible hero cards, and Olivia the dove, who grows along with the player.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="hu">Így néz ki</h2><h2 class="en">Take a look inside</h2>
+  <p class="al hu">Képek a játékból. Görgesd oldalra!</p>
+  <p class="al en">Screens from the game. Swipe sideways!</p>
+  <div class="kepek">
+    <figure><img data-kep="1-osveny" alt="" loading="lazy"><figcaption><span class="hu">Az ösvény</span><span class="en">The path</span></figcaption></figure>
+    <figure><img data-kep="2-tortenet" alt="" loading="lazy"><figcaption><span class="hu">A történet</span><span class="en">The story</span></figcaption></figure>
+    <figure><img data-kep="3-kerdes" alt="" loading="lazy"><figcaption><span class="hu">Egy kérdés</span><span class="en">A question</span></figcaption></figure>
+    <figure><img data-kep="4-gyujtemeny" alt="" loading="lazy"><figcaption><span class="hu">A gyűjtemény</span><span class="en">The collection</span></figcaption></figure>
+    <figure><img data-kep="5-statisztika" alt="" loading="lazy"><figcaption><span class="hu">Napi széria és naptár</span><span class="en">Daily streak and calendar</span></figcaption></figure>
+    <figure><img data-kep="6-hos" alt="" loading="lazy"><figcaption><span class="hu">Bibliai hősök</span><span class="en">Bible heroes</span></figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2 class="hu">Miért jó a gyerekeknek?</h2><h2 class="en">Why children love it</h2>
+  <p class="al hu">Szülőknek, hittanoktatóknak, gyülekezeteknek.</p>
+  <p class="al en">For parents, Sunday school teachers and churches.</p>
+  <div class="miert">
+    <div><h3 class="hu">Hű a Bibliához</h3><h3 class="en">Faithful to the Bible</h3>
+      <p class="hu">Mai, egyszerű nyelvű igeversek. Ahol a szöveg valamit nyitva hagy, azt a játék is kimondja.</p>
+      <p class="en">Bible verses in simple, modern language. Where the text leaves something open, the game says so.</p></div>
+    <div><h3 class="hu">Kétnyelvű</h3><h3 class="en">Bilingual</h3>
+      <p class="hu">Minden történet és kérdés magyarul és angolul is megvan, egy gombnyomással váltható.</p>
+      <p class="en">Every story and question exists in English and Hungarian, switchable with one tap.</p></div>
+    <div><h3 class="hu">Napi szokás</h3><h3 class="en">A daily habit</h3>
+      <p class="hu">Napi cél, széria, pajzs a kihagyott napokra, és widget a telefon kezdőképernyőjére.</p>
+      <p class="en">A daily goal, a streak, shields for missed days, and a widget for the phone's home screen.</p></div>
+    <div><h3 class="hu">Biztonságos</h3><h3 class="en">Safe</h3>
+      <p class="hu">Nincs regisztráció, nincs reklám, nincs csevegés. Több gyerek is játszhat egy készüléken.</p>
+      <p class="en">No sign-up, no ads, no chat. Several children can play on one device.</p></div>
+  </div>
+</section>
+
+<div class="ige">
+  <blockquote class="hu">Lábam előtt mécses a te igéd, ösvényemen világosság.</blockquote>
+  <blockquote class="en">Your word is a lamp for my feet, a light on my path.</blockquote>
+  <cite class="hu">Zsoltárok 119:105</cite><cite class="en">Psalm 119:105</cite>
+</div>
+
+<div class="zaro">
+  <h2 class="hu">Indulhat az utazás?</h2><h2 class="en">Ready for the journey?</h2>
+  <p class="hu">Kezdd el most a böngészőben, ingyen.</p>
+  <p class="en">Start now in your browser, for free.</p>
+  <div class="gombok">
+    <a class="gomb fo" data-jatek href="play.html?v=202611031105&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
+  </div>
+</div>
+</main>
+
+<footer>
+  <span>© 2026 BibleTravel</span>
+  <nav>
+    <a href="tamogatas.html"><span class="hu">Támogatás</span><span class="en">Support</span></a>
+    <a href="adatvedelem.html"><span class="hu">Adatvédelem</span><span class="en">Privacy</span></a>
+    <a href="https://his1313.com"><span class="hu">HIS1313 webshop</span><span class="en">HIS1313 shop</span></a>
+  </nav>
+</footer>
+</div>
+
+<script>
+(function(){
+  var gombok=document.querySelectorAll('[data-nyelv]');
+  function allit(l){
+    document.body.setAttribute('data-l',l);
+    document.documentElement.lang=l;
+    document.title=l==='hu'?'BibleTravel – Utazás a Bibliában':'BibleTravel – A journey through the Bible';
+    gombok.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-nyelv')===l);});
+    document.querySelectorAll('img[data-kep]').forEach(function(i){i.src='kezdolap/'+l+'-'+i.getAttribute('data-kep')+'.jpg';});
+    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031105&lang='+l;});
+  }
+  var l='en'; /* az oldal mindig angolul nyilik; magyarra a gombbal lehet valtani */
+  gombok.forEach(function(b){b.onclick=function(){allit(b.getAttribute('data-nyelv'));};});
+  allit(l);
+})();
+</script>
+</body>
+</html>
