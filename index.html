@@ -86,8 +86,8 @@ section>p.al{color:var(--muted);max-width:40em;margin:0 auto 28px;text-align:cen
 .lepes h3{font-size:22px;margin-bottom:6px}
 .lepes p{margin:0;color:var(--muted);font-size:15px}
 
-.kepek{display:flex;gap:16px;justify-content:safe center;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
-.kepek figure{flex:0 0 min(240px,62vw);margin:0;scroll-snap-align:start}
+.kepek{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px;max-width:820px;margin:0 auto}
+.kepek figure{margin:0}
 .kepek img{display:block;width:100%;border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 24px var(--shadow)}
 .kepek figcaption{font-size:14px;color:var(--muted);text-align:center;margin-top:8px}
 
@@ -119,6 +119,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
   .telefon .galamb{left:-14%}
   .szamok{grid-template-columns:repeat(2,minmax(0,1fr))}
   .lepesek,.miert{grid-template-columns:1fr}
+  .kepek{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
 }
 </style>
 </head>
@@ -140,7 +141,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     <h1><img src="kezdolap/ikon.png" alt=""><span>BibleTravel</span></h1>
     <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés és egy kincsesláda, és a bibliai hősök sorban a gyűjteményedbe kerülnek.</p>
     <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the Bible heroes join your collection one by one.</p>
-    <a class="jatekgomb" data-jatek href="play.html?v=202611031124&lang=en">
+    <a class="jatekgomb" data-jatek href="play.html?v=202611031130&lang=en">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
       <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
     </a>
@@ -188,8 +189,8 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 
 <section>
   <h2 class="hu">Így néz ki</h2><h2 class="en">Take a look inside</h2>
-  <p class="al hu">Képek a játékból. Görgesd oldalra!</p>
-  <p class="al en">Screens from the game. Swipe sideways!</p>
+  <p class="al hu">Képek a játékból.</p>
+  <p class="al en">Screens from the game.</p>
   <div class="kepek">
     <figure><img data-kep="1-osveny" alt="" loading="lazy"><figcaption><span class="hu">Az ösvény</span><span class="en">The path</span></figcaption></figure>
     <figure><img data-kep="2-tortenet" alt="" loading="lazy"><figcaption><span class="hu">A történet</span><span class="en">The story</span></figcaption></figure>
@@ -231,7 +232,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
   <p class="hu">Kezdd el most a böngészőben, ingyen.</p>
   <p class="en">Start now in your browser, for free.</p>
   <div class="gombok">
-    <a class="gomb fo" data-jatek href="play.html?v=202611031124&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
+    <a class="gomb fo" data-jatek href="play.html?v=202611031130&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
   </div>
 </div>
 </main>
@@ -255,7 +256,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     document.title=l==='hu'?'BibleTravel – Utazás a Bibliában':'BibleTravel – A journey through the Bible';
     gombok.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-nyelv')===l);});
     document.querySelectorAll('img[data-kep]').forEach(function(i){i.src='kezdolap/'+l+'-'+i.getAttribute('data-kep')+'.jpg';});
-    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031124&lang='+l;});
+    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611031130&lang='+l;});
   }
   var l='en'; /* az oldal mindig angolul nyilik; magyarra a gombbal lehet valtani */
   gombok.forEach(function(b){b.onclick=function(){allit(b.getAttribute('data-nyelv'));};});
