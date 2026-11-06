@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="img/app-icon.png">
 <link rel="icon" href="img/app-icon.png">
-<title>BibleTravel – A journey through the Bible</title>
+<title>BibleTravel for Kids – A journey through the Bible</title>
 <!-- A Spectral betu helyben van (docs/fonts), igy net nelkul is ez latszik, es nem megy keres a Google-hoz. -->
 <link rel="stylesheet" href="fonts/spectral.css">
 </head>
@@ -59,6 +59,10 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outl
 
 /* header */
 h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:700}
+/* "for Kids" jel a nev utan: napsarga betuk fekete korvonallal (Zsolt dontese, 2026-11-06). Betu: Baloo 2 (OFL), csak ezek a betuk. */
+@font-face{font-family:"BT Kids";src:url(fonts/baloo2-800-forkids.woff2) format("woff2");font-weight:800;font-display:block}
+h1.brand:has(.fkjel){white-space:nowrap;font-size:clamp(21px,6.2vw,28px)}
+.fkjel{font:800 .72em/1 "BT Kids","Baloo 2",system-ui,sans-serif;color:#FFC93C;-webkit-text-stroke:.08em #1A1A1A;paint-order:stroke fill;text-shadow:0 .07em 0 #1A1A1A;white-space:nowrap;letter-spacing:.01em;margin-left:.28em;display:inline-block}
 .sub{font-size:15px;color:var(--muted);margin:2px 0 0}
 .lvl{font-size:13px;font-weight:600;color:var(--gold);margin-top:4px}
 .hero{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 4px 12px var(--shadow);display:flex;gap:10px;align-items:flex-start}
@@ -939,6 +943,8 @@ img.bic{width:34px;height:34px;object-fit:contain;flex:none}img.bic.big{width:72
 .week .wd.c.s .cbox,.week .wd.c.s .cimg{filter:drop-shadow(0 0 6px var(--star))}
 .week .wd.c:not(.s) .cbox,.week .wd.c:not(.s) .cimg{filter:saturate(.35);opacity:.7}
 /* tap-to-open chest */
+/* Ladanyitas: a lada a kepernyo kozepen legyen, hogy kis kezzel is konnyu legyen rabokni (Zsolt kerese, 2026-11-06). */
+.ladakozep:not(.nyitva){min-height:100%;display:flex;flex-direction:column;justify-content:center;padding-top:0;padding-bottom:6vh}
 .tapchest{display:block;margin:6px auto 0;position:relative;width:200px;height:200px;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
 .tapchest .cbox{font-size:150px}
 .tapchest .cimg{width:170px!important;height:170px!important}
@@ -1176,6 +1182,9 @@ img.advikon{width:30px;height:30px;object-fit:contain}
   background:linear-gradient(180deg,#17803f,#0f5a2c);transition:opacity .5s ease-out;-webkit-tap-highlight-color:transparent}
 #intro.ki{opacity:0;pointer-events:none}
 #intro svg{width:min(62vw,46vh);height:auto;overflow:visible}
+#intro .irajz{position:relative;display:inline-block;line-height:0}
+#intro .ifk{position:absolute;right:-12%;bottom:4%;font-size:min(9vw,6.6vh);transform:rotate(-18deg) scale(.6);opacity:0;transition:opacity .5s ease-out,transform .5s cubic-bezier(.3,1.6,.5,1);margin:0;line-height:1}
+#intro.felirat .ifk{opacity:1;transform:rotate(-18deg) scale(1)}
 #intro .ut{fill:none;stroke:#f8f4ea;stroke-width:46;stroke-linecap:round}
 #intro .utarny{fill:none;stroke:#0d4a24;stroke-width:46;stroke-linecap:round;opacity:.55}
 #intro .potty{transform-box:fill-box;transform-origin:center;transform:scale(0)}
@@ -1190,7 +1199,7 @@ img.advikon{width:30px;height:30px;object-fit:contain}
 #intro.felirat .icim{opacity:1;transform:none}#intro.felirat .ialcim{opacity:.95}
 </style>
 <div id="intro" hidden>
-  <svg viewBox="100 40 820 920" aria-hidden="true">
+  <div class="irajz"><svg viewBox="100 40 820 920" aria-hidden="true">
     <g transform="translate(10,14)">
       <path class="utarny" d="M210 850 Q 430 800 560 700"/><path class="utarny" d="M560 700 Q 470 560 320 470"/>
       <path class="utarny" d="M320 470 Q 530 400 740 340"/><path class="utarny" d="M740 340 Q 680 230 500 150"/>
@@ -1203,7 +1212,7 @@ img.advikon{width:30px;height:30px;object-fit:contain}
     <circle class="potty" cx="740" cy="340" r="68" fill="#e1b566" stroke="#f8f4ea" stroke-width="9"/>
     <g class="potty"><circle cx="500" cy="150" r="124" fill="#e1b566" stroke="#f8f4ea" stroke-width="10"/>
       <path d="M500 78 V 222 M 446 130 H 554" stroke="#f8f4ea" stroke-width="32" stroke-linecap="round" fill="none"/></g>
-  </svg>
+  </svg><span class="fkjel ifk">for Kids</span></div>
   <div class="icim">BibleTravel</div>
   <div class="ialcim">A journey through the Bible</div>
 </div>
@@ -2596,7 +2605,7 @@ function renderHome(){
   var s=T(), html='';
   if(tab==='home'){
     var nx=nextNode();
-    html+='<div class="hero"><div class="hl"><h1 class="brand">'+esc(s.brand)+'</h1><p class="sub">'+esc(s.subtitle)+'</p><button type="button" class="lvl" data-tab="stats">'+ico('rosette')+esc(levelName())+'<b>· '+S.xp+' XP</b></button></div>'+
+    html+='<div class="hero"><div class="hl"><h1 class="brand">'+esc(s.brand)+'<span class="fkjel">for Kids</span></h1><p class="sub">'+esc(s.subtitle)+'</p><button type="button" class="lvl" data-tab="stats">'+ico('rosette')+esc(levelName())+'<b>· '+S.xp+' XP</b></button></div>'+
       '<div class="mw"><div class="bubble">'+esc(mascotLine(nx))+'</div>'+mascotHtml()+'<div class="stg">'+esc(s.stageNames[stage()])+'</div></div></div>'+
       whoHtml()+
       chipsHtml()+goalHtml()+wishHtml();
@@ -3150,7 +3159,7 @@ function renderWeek(){ var s=T(), r=screen.r, n=weekDays().filter(function(d){re
 function renderChest(){
   var s=T(), open=screen.taps>=3, d='';
   for(var i=0;i<3;i++) d+='<i class="'+(i<screen.taps?'f':'')+'"></i>';
-  var h='<div class="center"><h2>'+esc(screen.kind==='week'?s.weekChest:s.chestFound)+'</h2>';
+  var h='<div class="center ladakozep'+(open?' nyitva':'')+'"><h2>'+esc(screen.kind==='week'?s.weekChest:s.chestFound)+'</h2>';
   // Every tap shakes the chest, lifts the lid a bit more and throws out a few sparks; the third tap bursts it open.
   var cls=open?'opened':(screen.taps===0?'idle':'w'+(screen.taps%2+1)+' t'+screen.taps), parts='';
   if(screen.taps>0){ var n=open?14:5, coin=talentIco('fly'), star=starIco(3), glyphs=open?[coin,star,'✨',coin,star]:['✨',star,'✨']; for(var k=0;k<n;k++){ var a=(Math.PI*(open?2:1.2))*(k/n)+(open?0:Math.PI*-0.1)+(open?0:0), dist=open?90+Math.random()*70:50+Math.random()*30; var dx=(open?Math.cos(a):Math.cos(Math.PI+a))*dist, dy=(open?Math.sin(a):-Math.abs(Math.sin(a)))*dist-(open?0:30); parts+='<span class="p" style="--dx:'+dx.toFixed(0)+'px;--dy:'+dy.toFixed(0)+'px;--r:'+((Math.random()*160-80)|0)+'deg;animation-delay:'+(Math.random()*.15).toFixed(2)+'s">'+glyphs[k%glyphs.length]+'</span>'; } }
