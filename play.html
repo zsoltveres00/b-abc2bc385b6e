@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="img/app-icon.png">
 <link rel="icon" href="img/app-icon.png">
-<title>BibleTravel for Kids – A journey through the Bible</title>
+<title>BibleTravel – A journey through the Bible</title>
 <!-- A Spectral betu helyben van (docs/fonts), igy net nelkul is ez latszik, es nem megy keres a Google-hoz. -->
 <link rel="stylesheet" href="fonts/spectral.css">
 </head>
@@ -59,7 +59,7 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outl
 
 /* header */
 h1.brand{font-family:Spectral,Georgia,serif;font-size:28px;margin:0;font-weight:700}
-/* "for Kids" jel a nev utan: napsarga betuk fekete korvonallal (Zsolt dontese, 2026-11-06). Betu: Baloo 2 (OFL), csak ezek a betuk. */
+/* "for Kids" jel: 2026-11-06-an megtervezve, de Zsolt keresere egyelore NINCS hasznalatban (a CSS es a betu kesz, kesobb csak a span-t kell visszatenni). Betu: Baloo 2 (OFL), csak ezek a betuk. */
 @font-face{font-family:"BT Kids";src:url(fonts/baloo2-800-forkids.woff2) format("woff2");font-weight:800;font-display:block}
 h1.brand:has(.fkjel){white-space:nowrap;font-size:clamp(21px,6.2vw,28px)}
 .fkjel{font:800 .72em/1 "BT Kids","Baloo 2",system-ui,sans-serif;color:#FFC93C;-webkit-text-stroke:.08em #1A1A1A;paint-order:stroke fill;text-shadow:0 .07em 0 #1A1A1A;white-space:nowrap;letter-spacing:.01em;margin-left:.28em;display:inline-block}
@@ -1212,7 +1212,7 @@ img.advikon{width:30px;height:30px;object-fit:contain}
     <circle class="potty" cx="740" cy="340" r="68" fill="#e1b566" stroke="#f8f4ea" stroke-width="9"/>
     <g class="potty"><circle cx="500" cy="150" r="124" fill="#e1b566" stroke="#f8f4ea" stroke-width="10"/>
       <path d="M500 78 V 222 M 446 130 H 554" stroke="#f8f4ea" stroke-width="32" stroke-linecap="round" fill="none"/></g>
-  </svg><span class="fkjel ifk">for Kids</span></div>
+  </svg></div>
   <div class="icim">BibleTravel</div>
   <div class="ialcim">A journey through the Bible</div>
 </div>
@@ -2605,7 +2605,7 @@ function renderHome(){
   var s=T(), html='';
   if(tab==='home'){
     var nx=nextNode();
-    html+='<div class="hero"><div class="hl"><h1 class="brand">'+esc(s.brand)+'<span class="fkjel">for Kids</span></h1><p class="sub">'+esc(s.subtitle)+'</p><button type="button" class="lvl" data-tab="stats">'+ico('rosette')+esc(levelName())+'<b>· '+S.xp+' XP</b></button></div>'+
+    html+='<div class="hero"><div class="hl"><h1 class="brand">'+esc(s.brand)+'</h1><p class="sub">'+esc(s.subtitle)+'</p><button type="button" class="lvl" data-tab="stats">'+ico('rosette')+esc(levelName())+'<b>· '+S.xp+' XP</b></button></div>'+
       '<div class="mw"><div class="bubble">'+esc(mascotLine(nx))+'</div>'+mascotHtml()+'<div class="stg">'+esc(s.stageNames[stage()])+'</div></div></div>'+
       whoHtml()+
       chipsHtml()+goalHtml()+wishHtml();
