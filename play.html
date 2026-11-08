@@ -691,8 +691,8 @@ img.bic{width:34px;height:34px;object-fit:contain;flex:none}img.bic.big{width:72
 .sheet.show{transform:none}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim{transition:none}}
 .grab{width:36px;height:5px;border-radius:3px;background:var(--border);margin:0 auto 12px}
-.xclose{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;background:var(--bg);display:grid;place-items:center;border:1.5px solid var(--border);z-index:2}
-.xclose svg{width:16px;height:16px;fill:var(--text)}
+.xclose{position:absolute;right:10px;top:10px;width:48px;height:48px;border-radius:50%;background:var(--surface);display:grid;place-items:center;border:2px solid color-mix(in srgb,var(--brand) 45%,var(--border));box-shadow:0 2px 6px var(--shadow);z-index:2}
+.xclose svg{width:20px;height:20px;fill:var(--brand)}
 .sheet h4{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 8px}
 .mrow{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;font-size:16px;font-weight:600}
 /* Hibabejelento: a sorok kivalaszthatok, alattuk sajat szoveges mezo. */
@@ -1762,8 +1762,7 @@ function jelentesKapuLap(hiba){ var s=T(), h='<h4>'+esc(s.kapuCim)+'</h4><p clas
   if(S.szuloKod){ h+='<label class="szulolbl">'+esc(s.szuloKodKer)+'<input id="kapuva" class="field" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></label>'+(hiba?'<p class="szulohiba">'+esc(s.szuloKodRossz)+'</p>':''); }
   else { jelentesAB=[120+Math.floor(Math.random()*380),13+Math.floor(Math.random()*17)];
     h+='<label class="szulolbl">'+esc(s.szuloFeladat(jelentesAB[0],jelentesAB[1]))+'<input id="kapuva" class="field" type="number" inputmode="numeric" autocomplete="off"></label>'+(hiba?'<p class="szulohiba">'+esc(s.szuloRossz)+'</p>':''); }
-  h+='<button type="button" class="primary" data-kapucheck>'+esc(s.reportSend)+'</button>'+
-     '<button type="button" class="secondary" data-closesheet style="margin-top:10px">'+esc(s.megse)+'</button>';
+  h+='<button type="button" class="primary" data-kapucheck>'+esc(s.reportSend)+'</button>';
   openSheet(h); setTimeout(function(){ var f=document.getElementById('kapuva'); if(f) f.focus(); },80); }
 function jelentesKapuEllenoriz(){ var e=document.getElementById('kapuva'), v=e?String(e.value).trim():'';
   var jo=S.szuloKod?(v===S.szuloKod):(jelentesAB&&+v===jelentesAB[0]*jelentesAB[1]);
@@ -2319,8 +2318,7 @@ function feedbackSheet(){ var s=T(); reportGeneral=true; reportPick=null;
   var h='<h4>'+esc(s.fbTitle)+'</h4><p class="rhint" style="text-align:left">'+esc(s.fbHint)+'</p>';
   Object.keys(s.fbKinds).forEach(function(k){ h+='<button type="button" class="mrow rkind" data-reportkind="'+k+'">'+esc(s.fbKinds[k])+'<svg class="tick"><use href="#i-check"/></svg></button>'; });
   h+='<label class="rnote"><span>'+esc(s.fbNote)+'</span><textarea id="rnote" rows="4" maxlength="800" placeholder="'+esc(s.fbPh)+'"></textarea></label>'+
-     '<button type="button" class="primary" data-reportsend>'+esc(s.reportSend)+'</button>'+
-     '<button type="button" class="secondary" data-closesheet style="margin-top:10px">'+esc(s.megse)+'</button>';
+     '<button type="button" class="primary" data-reportsend>'+esc(s.reportSend)+'</button>';
   openSheet(h); }
 function reportSheet(){ var s=T(); reportGeneral=false; var tb=tortenetBejelentes(), q=tb?null:curQ(); if(!q&&!tb) return; reportPick=null;
   var kinds=tb?s.storyReportKinds:s.reportKinds;
@@ -2329,8 +2327,7 @@ function reportSheet(){ var s=T(); reportGeneral=false; var tb=tortenetBejelente
   // Sajat szoveg: ide barmit beirhat a bejelento, ha a sorok kozul egyik sem pontos.
   h+='<label class="rnote"><span>'+esc(s.reportNote)+'</span>'+
      '<textarea id="rnote" rows="3" maxlength="500" placeholder="'+esc(s.reportNotePh)+'"></textarea></label>'+
-     '<button type="button" class="primary" data-reportsend>'+esc(s.reportSend)+'</button>'+
-     '<button type="button" class="secondary" data-closesheet style="margin-top:10px">'+esc(s.megse)+'</button>';
+     '<button type="button" class="primary" data-reportsend>'+esc(s.reportSend)+'</button>';
   openSheet(h); }
 function qText(q){ return q&&q.hu?(S.lang==='hu'?q.hu.q:(q.en?q.en.q:q.hu.q)):''; }
 // A bejelentesbe a kerdes mellé a helyes megoldas es az igevers is bekerul,
