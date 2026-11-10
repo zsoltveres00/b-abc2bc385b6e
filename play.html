@@ -2112,6 +2112,8 @@ function testPassed(mi,b){ return !!S.tests[testKey(mi,b)]; }
 function blockDone(m,b){ var ps=blockParts(m,b); return ps.length>0&&ps.every(function(pi){ return partDone(m,m.parts[pi]); }); }
 function startTest(mi,b){
   if(hearts()<=0) return; var m=C.modules[mi], ps=blockParts(m,b); if(!ps.length) return;
+  // Visszaterve az osvenyre ide, a szintlepeshez ugorjon, ne a regebbi reszhez (Zsolt kerese, 2026-11-10).
+  S.lastAt={u:mi,p:ps[ps.length-1],t:b}; persist();
   var qs=[], per=Math.ceil(TEST_Q/ps.length)+1;
   ps.forEach(function(pi,k){ qs=qs.concat(drawQuestions(m,m.parts[pi],SLOTS+1+k,per)); });
   qs=shuffle(qs).slice(0,TEST_Q); if(!qs.length) return;
@@ -2778,8 +2780,13 @@ function modListaLap(){ var s=T(), la=S.lastAt, nx=nextNode(), itt=la&&la.u!=nul
   openSheet(h+'</div>'); }
 // Oda ugrunk vissza, ahol utoljara jatszott - nem mindig az elso modulra.
 function jumpCel(){ var n=null, la=S.lastAt;
-  if(la&&la.u!=null){ var ms='.node[data-slot^="'+la.u+',"]';
-    n=view.querySelector(ms+'.next')||view.querySelector(ms+'.open')||view.querySelector('.node[data-slot^="'+la.u+','+la.p+',"]'); }
+  if(la&&la.u!=null&&la.t!=null) n=view.querySelector('.testnode[data-testbtn="'+la.u+','+la.t+'"]');
+  // Elsosorban annal a resznel, amit utoljara jatszott: annak kovetkezo vagy utolso elvegzett allomasa
+  // (akkor is, ha egy regebbi reszt jatszott ujra), csak utana a modul elso nyitott allomasa (2026-11-10).
+  if(!n&&la&&la.u!=null&&la.p!=null){ var rs='.node[data-slot^="'+la.u+','+la.p+',"]', kesz=view.querySelectorAll(rs+'.done');
+    n=view.querySelector(rs+'.next')||view.querySelector(rs+'.open')||(kesz.length?kesz[kesz.length-1]:null); }
+  if(!n&&la&&la.u!=null){ var ms='.node[data-slot^="'+la.u+',"]';
+    n=view.querySelector(ms+'.next')||view.querySelector(ms+'.open'); }
   return n||view.querySelector('.node.next')||view.querySelector('.node.open'); }
 // A lila gomb nyila arra mutat, amerre a cel van: ha fent, felfele, ha lent, lefele (Zsolt kerese, 2026-10-25).
 function jumpIrany(){ var jb=document.querySelector('.jump'), n=jb&&jumpCel(); if(!n) return;
