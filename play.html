@@ -1652,7 +1652,7 @@ function ajanlatNap(nap){ var lehet=C.gifts.filter(function(g){ return !owns(g)&
   var k=dayKey(nap), h=0; for(var i=0;i<k.length;i++) h=(h*31+k.charCodeAt(i))>>>0; h=(h*1103515245+12345)>>>0; return lehet.length?lehet[h%lehet.length]:null; }
 function ertesitesLista(){ var s=T(), n=nApi(), most=Date.now(), ma=startOfDay(new Date()), ki=[], napiMa=studiedToday();
   var ritkit=[0,1,2,3,5,7], resz=kovetkezoReszNev();
-  function tesz(d,cim,szoveg){ if(d.getTime()>most+60000&&szabadIdo(d)) ki.push({ido:d.getTime(),cim:cim,szoveg:szoveg}); }
+  function tesz(d,cim,szoveg,cel){ if(d.getTime()>most+60000&&szabadIdo(d)) ki.push({ido:d.getTime(),cim:cim,szoveg:szoveg,cel:cel||null}); }
   for(var o=0;o<=7;o++){ var nap=addDays(ma,o), vas=dayKey(nap)===dayKey(addDays(weekStart(nap),6));
     // a fo uzenet (naponta egy)
     // Adventkor (dec. 1-24.) naponta egy emlekezteto a mai ajandekdobozra, ha meg nincs kinyitva; ez a nap fo uzenete.
@@ -1668,10 +1668,16 @@ function ertesitesLista(){ var s=T(), n=nApi(), most=Date.now(), ma=startOfDay(n
       else if(n.napi){ tesz(idopont(nap,n.ido),s.ntNapiCim,s.ntNapi(resz)); } }
     // vasarnap: lada (es a szuloi osszefoglalo), ezek a masodik helyet kapjak
     if(vas&&o<=7){ if(n.lada&&!S.weekChests[weekKey(nap)]) tesz(idopont(nap,10),s.ntLadaCim,s.ntLada);
-      if(n.szulo){ var napok=weekDays().filter(function(d){ return played(d)>0; }).length; tesz(idopont(nap,18),s.ntSzuloCim,s.ntSzulo(napok,S.streak||0,profilNev(PROFIL))); } } }
+      if(n.szulo){ var napok=weekDays().filter(function(d){ return played(d)>0; }).length; tesz(idopont(nap,18),s.ntSzuloCim,s.ntSzulo(napok,S.streak||0,profilNev(PROFIL)),'stats'); } } }
   // szivek: amikor mind visszatoltodott
   if(n.sziv&&hearts()<HEARTS&&S.heartLosses.length){ var tele=Math.max.apply(null,S.heartLosses)+REGEN; tesz(new Date(tele),s.ntSzivCim,s.ntSziv); }
   ki.sort(function(a,b){ return a.ido-b.ido; }); return ki.slice(0,40); }
+// Ertesitesre koppintva az App.js megmondja, hova vigyen: a heti szuloi osszefoglalo a Statisztikat nyitja,
+// ahol a heti tanulas es a naptar latszik, nem az osvenyt (Zsolt kerese, 2026-11-15). Feladat kozben nem szakitjuk meg.
+function ertesitesCel(cel){ window.__btCel=null; burokUzen({t:'cel-ok'});
+  if(cel!=='stats'||screen.name==='lesson'||screen.name==='intro') return false;
+  closeSheet(); screen={name:'home'}; lesson=null; tab='stats'; render(); var v=document.getElementById('view'); if(v) v.scrollTop=0; return true; }
+window.__ertesitesNyit=ertesitesCel;
 function utemez(){ if(!vanBurok()) return; burokUzen({t:'ertesitesek',lista:notifBe()?ertesitesLista():[]}); }
 // Az engedely kerdese: elobb Olivia kerdez, csak "igen" utan jon a telefon sajat ablaka.
 function ertesitesKerdes(){ var s=T(); if(!vanBurok()||S.notif) return;
@@ -3602,8 +3608,9 @@ if(S.placed==null&&!partsDoneAll()&&!S.xp) screen={name:'intro'};
 else { var kjVolt=false; try{ kjVolt=sessionStorage.getItem('bt-kj')==='1'; sessionStorage.removeItem('bt-kj'); }catch(e){}
   // Egy jatekosnal nincs mibol valasztani: egyenesen az osveny jon (Zsolt, 2026-10-16).
   if(!kjVolt&&PROFILOK.length>1) screen={name:'kijatszik'}; }
-render();
-if(screen.name==='home'&&!popBadges()) maybeTour('home');
+// Ha ertesitesre koppintva indult az app, oda megyunk, ahova az ertesites szol.
+if(!(window.__btCel&&ertesitesCel(window.__btCel))){ render();
+if(screen.name==='home'&&!popBadges()) maybeTour('home'); }
 setTimeout(utemez,1500);
 }
 </script>
