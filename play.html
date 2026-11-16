@@ -2404,7 +2404,7 @@ function viaWeek(fn){ if(screen.name!=='result'||screen.r.weekShown) return fals
   S.weekDay=ma; persist();
   screen.r.weekShown=true; weekNext=fn; screen={name:'week',r:screen.r}; render(); return true; }
 function openWeekChest(){ if(!weekChestEarned()) { goHome(); return; } var hny=ladaNyeremeny(true); screen={name:'chest',talents:hny.talents,mult:hny.mult,perc:hny.perc,bonus:weekComplete()?TALENTS_PER_CHEST:0,taps:0,key:weekKey(new Date()),kind:'week'}; render(); }
-function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges()) maybeTour(tab==='home'?'home':tab); }
+function goHome(){ screen={name:'home'}; lesson=null; render(); if(!popBadges()&&!adventUdv()) maybeTour(tab==='home'?'home':tab); }
 
 // ---------- rendering ----------
 var view=document.getElementById('view'), foot=document.getElementById('foot'), sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim');
@@ -2921,6 +2921,12 @@ var advValasztott=null, advKop=0, advAllas=null, advFriss=0;
 function advA(){ return C.advent||null; }
 function advNapja(a){ return new Date(a[0],a[1]-1,a[2]); }
 function advMa(){ return ADV_TESZT?new Date(+ADV_TESZT[1],+ADV_TESZT[2]-1,+ADV_TESZT[3]):startOfDay(new Date()); }
+// Adventkor évente egyszer (játékosonként) középen felugrik egy hívogató ablak, hogy mindenki észrevegye a naptárat (Zsolt kérése, 2026-11-16).
+function adventUdv(){ if(!adventAktiv()||screen.name!=='home'||sheet.classList.contains('show')) return false;
+  var a=advAll(); if(a.udv) return false; a.udv=1; persist(); var s=AS();
+  openSheet('<div class="bsheet on"><div class="bimg">'+(img('dove-advent','advolivia')||mascotHtml('big',null,'cheer')||'')+'</div><h3>'+esc(s.udvCim)+'</h3><p>'+esc(s.udv)+'</p>'+
+    '<button type="button" class="primary" style="margin-top:16px" data-advudv>'+esc(s.udvGomb)+'</button><button type="button" class="secondary" style="margin-top:8px" data-closesheet>'+esc(s.udvKesobb)+'</button></div>');
+  return true; }
 function adventAktiv(){ var A=advA(); if(!A) return false; var m=advMa(); return m>=advNapja(A.kezd)&&m<=advNapja(A.veg); }
 // Hanyadik adventi napnal tartunk (1-24); december 24. utan mind a 24 nyithato.
 function advHanyadik(){ var A=advA(); return Math.max(1,Math.min(24,Math.round((advMa()-advNapja(A.kezd))/86400000)+1)); }
@@ -2929,7 +2935,7 @@ function advDb(){ return Object.keys(advAll().ny).length; }
 function advKesz(){ var A=advA(); return !!(A&&S.advent&&S.advent.ev===A.ev&&Object.keys(S.advent.ny).length>=24); }
 function advPoz(n){ var c=ADV_SOR[n-1]; return (c%6*20)+'% '+(Math.floor(c/6)*100/3)+'%'; }
 function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
-  return hu?{tab:'Advent',cim:'ADVENT '+ev+' · A BETLEHEMI KÉP',mai:'MAI DOBOZ',vissza:'VISSZAMENŐLEG',kinyitva:'KINYITOTTAD',dec:function(n){return 'December '+n+'.';},
+  return hu?{tab:'Advent',udvCim:'Elkezdődött az advent!',udv:'Decemberben minden nap egy ajándékdoboz vár rád. Nyisd ki, olvasd el a nap rövid történetét, válaszolj három kérdésre, és rakd ki darabonként a betlehemi képet!',udvGomb:'Kinyitom a mai dobozt',udvKesobb:'Majd később',cim:'ADVENT '+ev+' · A BETLEHEMI KÉP',mai:'MAI DOBOZ',vissza:'VISSZAMENŐLEG',kinyitva:'KINYITOTTAD',dec:function(n){return 'December '+n+'.';},
     kopp:['Koppints rá háromszor!','Még kétszer!','Még egyszer!','Kinyílt!'],darab:function(n){return n+'. darab';},kirakos:function(n){return 'Kirakós: '+n+' / 24';},
     talentum:'talentum',szorzo:'szorzó a mai leckékre',tort:'A nap története · 3 kérdés',plusz:'+ extra ajándék',tortKesz:function(x){return 'A nap története kész · '+x+' megszerezve';},
     igeje:'a nap igéje',napTort:function(n){return 'DECEMBER '+n+'. · A NAP TÖRTÉNETE';},johet:'Jöhetnek a kérdések',kerdes:function(k){return k+'. KÉRDÉS A 3-BÓL';},tovabb:'Tovább',
@@ -2939,7 +2945,7 @@ function AS(){ var hu=S.lang==='hu', A=advA(), ev=A?A.ev:'';
     tipp:'Ha mind a 24 darab megvan, koppints a képre, és nagyban, elforgatva is megnézheted.',kesz:'Kész a kép! Koppints rá, és nagyban, elforgatva is megnézheted.',
     hiany:function(n){return 'Még '+n+' darab hiányzik. Ha mind megvan, nagyban is megnézheted.';},forgat:'Elforgatás',allo:'Álló nézet',bezar:'Bezárás',
     idoszak:'December 1-jétől január 6-áig. A kihagyott napok addig visszamenőleg is kinyithatók.',ntCim:'Ma is vár az adventi ajándékod!',ntSzoveg:'Nyisd ki a mai dobozt, és szerezd meg a betlehemi kép következő darabját!',ntPotCim:'Még pótolhatod!',ntPot:function(n){return 'Még '+n+' adventi ajándék vár rád. Január 6-ig kinyithatod őket.';},zarva:'még zárva',avZar:'Csak Advent '+ev+'-ban lehetett megszerezni: mind a 24 ajándékot ki kellett nyitni.'}
-  :{tab:'Advent',cim:'ADVENT '+ev+' · THE NATIVITY PICTURE',mai:"TODAY'S GIFT",vissza:'CATCH UP',kinyitva:'OPENED',dec:function(n){return 'December '+n;},
+  :{tab:'Advent',udvCim:'Advent has begun!',udv:'Every day in December a gift box is waiting for you. Open it, read the short story of the day, answer three questions and build the nativity picture piece by piece!',udvGomb:'Open today’s box',udvKesobb:'Maybe later',cim:'ADVENT '+ev+' · THE NATIVITY PICTURE',mai:"TODAY'S GIFT",vissza:'CATCH UP',kinyitva:'OPENED',dec:function(n){return 'December '+n;},
     kopp:['Tap it three times!','Two more!','One more!','It opened!'],darab:function(n){return 'Piece '+n;},kirakos:function(n){return 'Puzzle: '+n+' / 24';},
     talentum:'talents',szorzo:"multiplier on today's lessons",tort:"Today's story · 3 questions",plusz:'+ bonus gift',tortKesz:function(x){return "Today's story done · "+x+' earned';},
     igeje:"today's verse",napTort:function(n){return 'DECEMBER '+n+" · TODAY'S STORY";},johet:'On to the questions',kerdes:function(k){return 'QUESTION '+k+' OF 3';},tovabb:'Next',
@@ -3551,6 +3557,7 @@ document.getElementById('app').addEventListener('click',function(e){
   if(el.hasAttribute('data-repcopy')){
     var txt=(S.reports||[]).map(function(x){ return '- ['+(T().reportKinds[x.k]||T().storyReportKinds[x.k]||x.k)+'] '+x.q+(x.m?'  — '+x.m:'')+'  ('+x.hely+', '+x.mikor+')'; }).join(String.fromCharCode(10));
     try{ navigator.clipboard.writeText(txt); el.textContent=T().reportsCopied; }catch(x){ prompt(T().reportsCopy,txt); } return; }
+  if(el.hasAttribute('data-advudv')){ closeSheet(); screen={name:'home'}; lesson=null; tab='advent'; render(); maybeTour('advent'); return; }
   if(el.hasAttribute('data-notifigen')){ closeSheet(); burokUzen({t:'ertesites-engedely'}); return; }
   if(el.hasAttribute('data-notifnem')){ S.notif=Object.assign({},NOTIF_ALAP,{on:false}); persist(); closeSheet(); return; }
   if(d.notifon!=null){ if(d.notifon==='1'){ if(vanBurok()) burokUzen({t:'ertesites-engedely'}); else window.__ertesites(true); } else { S.notif=Object.assign({},nApi(),{on:false}); persist(); utemez(); render(); } return; }
@@ -3618,7 +3625,7 @@ else { var kjVolt=false; try{ kjVolt=sessionStorage.getItem('bt-kj')==='1'; sess
   if(!kjVolt&&PROFILOK.length>1) screen={name:'kijatszik'}; }
 // Ha ertesitesre koppintva indult az app, oda megyunk, ahova az ertesites szol.
 if(!(window.__btCel&&ertesitesCel(window.__btCel))){ render();
-if(screen.name==='home'&&!popBadges()) maybeTour('home'); }
+if(screen.name==='home'&&!popBadges()&&!adventUdv()) maybeTour('home'); }
 setTimeout(utemez,1500);
 }
 </script>
