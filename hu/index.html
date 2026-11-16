@@ -90,6 +90,14 @@ a{color:var(--brand)}
 .telefon{justify-self:center;position:relative;width:min(320px,80vw)}
 .telefon .keret{background:#14112A;border-radius:44px;padding:10px;box-shadow:0 30px 60px var(--shadow)}
 .telefon img.kep{display:block;width:100%;border-radius:34px}
+.telefon .keret{position:relative}
+.telefon video.kep{display:block;width:100%;height:auto;aspect-ratio:886/1920;object-fit:cover;border-radius:34px;background:#14112A}
+.telefon .hang{position:absolute;right:20px;bottom:20px;display:flex;align-items:center;gap:6px;padding:8px 14px 8px 10px;border:0;border-radius:999px;background:rgba(20,17,42,.78);color:#fff;font-family:inherit;font-weight:700;font-size:14px;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.telefon .hang svg{width:20px;height:20px;fill:currentColor}
+.telefon .hang .be{display:none}
+.telefon .hang[aria-pressed="true"] .be{display:block}
+.telefon .hang[aria-pressed="true"] .ki{display:none}
+.telefon .hang:focus-visible{outline:3px solid #F2C14E;outline-offset:2px}
 .telefon .galamb{position:absolute;width:40%;left:-18%;bottom:4%;filter:drop-shadow(0 10px 14px var(--shadow))}
 
 /* szamok */
@@ -168,7 +176,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     <h1><img src="../kezdolap/ikon.png" alt=""><span>BibleTravel</span><span class="fkjel">for Kids</span></h1>
     <p class="lead hu">Utazás a Bibliában, a teremtéstől a Jelenésekig. Minden nap egy rövid történet, néhány kérdés és egy kincsesláda, és a bibliai hősök sorban a gyűjteményedbe kerülnek.</p>
     <p class="lead en">A journey through the Bible, from Creation to Revelation. Each day brings a short story, a few questions and a treasure chest, and the Bible heroes join your collection one by one.</p>
-    <a class="jatekgomb" data-jatek href="../play.html?v=202611161248&lang=en">
+    <a class="jatekgomb" data-jatek href="../play.html?v=202611161308&lang=en">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
       <span><span class="hu">Játssz most<small>a böngészőben, letöltés nélkül</small></span><span class="en">Play now<small>in your browser, no download</small></span></span>
     </a>
@@ -185,7 +193,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     <p class="apro"><span class="hu">Nincs regisztráció, nincs reklám, nincs csevegés. Magyarul és angolul.</span><span class="en">No sign-up, no ads, no chat. In English and Hungarian.</span></p>
   </div>
   <div class="telefon">
-    <div class="keret"><img class="kep" data-kep="1-osveny" alt=""></div>
+    <div class="keret"><video class="kep" data-video muted playsinline autoplay loop preload="auto" aria-label="BibleTravel for Kids"></video><button type="button" class="hang" data-hang aria-pressed="false"><svg class="ki" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="m16 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><svg class="be" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span class="hu">Hang</span><span class="en">Sound</span></button></div>
     <img class="galamb" src="../kezdolap/olivia.png" alt="">
   </div>
 </div>
@@ -259,7 +267,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
   <p class="hu">Kezdd el most a böngészőben, ingyen.</p>
   <p class="en">Start now in your browser, for free.</p>
   <div class="gombok">
-    <a class="gomb fo" data-jatek href="../play.html?v=202611161248&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
+    <a class="gomb fo" data-jatek href="../play.html?v=202611161308&lang=en"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span><span class="hu">Játssz most</span><span class="en">Play now</span></span></a>
   </div>
 </div>
 </main>
@@ -283,7 +291,21 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
     document.title=l==='hu'?'Bibliaút – BibleTravel for Kids | Ingyenes bibliai játék gyerekeknek':'BibleTravel for Kids – A journey through the Bible';
     gombok.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-nyelv')===l);});
     document.querySelectorAll('img[data-kep]').forEach(function(i){i.src='../kezdolap/'+l+'-'+i.getAttribute('data-kep')+'.jpg';});
-    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611161248&lang='+l;});
+    document.querySelectorAll('a[data-jatek]').forEach(function(a){a.href='play.html?v=202611161308&lang='+l;});
+    video(document,l);
+  }
+  // A bemutato video a telefonkeretben: hang nelkul indul (a bongeszok csak igy engedik), a gombbal szol a zene.
+  // A kepek helyet az Olivia-kep cimebol vesszuk, igy a /hu/ lapon es a webshopban is jo.
+  function video(d,l){
+    var g=d.querySelector('img.galamb'), pre=g?g.getAttribute('src').replace(/olivia\.png$/,''):'kezdolap/';
+    d.querySelectorAll('video[data-video]').forEach(function(v){
+      if(v.getAttribute('data-l')===l) return; v.setAttribute('data-l',l);
+      v.poster=pre+l+'-1-osveny.jpg'; v.src=pre+l+'-video.mp4'; v.load();
+      var p=v.play(); if(p&&p.catch) p.catch(function(){});
+    });
+    d.querySelectorAll('[data-hang]').forEach(function(b){ b.onclick=function(){
+      var v=d.querySelector('video[data-video]'); if(!v) return; v.muted=!v.muted;
+      b.setAttribute('aria-pressed',v.muted?'false':'true'); if(!v.muted){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } }; });
   }
   var l='hu'; /* az oldal mindig angolul nyilik; magyarra a gombbal lehet valtani */
   gombok.forEach(function(b){b.onclick=function(){allit(b.getAttribute('data-nyelv'));};});
