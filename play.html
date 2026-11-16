@@ -2928,7 +2928,7 @@ function advNapja(a){ return new Date(a[0],a[1]-1,a[2]); }
 function advMa(){ return ADV_TESZT?new Date(+ADV_TESZT[1],+ADV_TESZT[2]-1,+ADV_TESZT[3]):startOfDay(new Date()); }
 // Adventkor évente egyszer (játékosonként) középen felugrik egy hívogató ablak, hogy mindenki észrevegye a naptárat (Zsolt kérése, 2026-11-16).
 function adventUdv(){ if(!adventAktiv()||screen.name!=='home'||sheet.classList.contains('show')) return false;
-  var a=advAll(); if(a.udv) return false; a.udv=1; persist(); var s=AS();
+  var a=advAll(); if(a.udv&&!ADV_TESZT) return false; a.udv=1; /* tesztcimen (?advent=...) minden betolteskor elojon, hogy meg lehessen nezni */ persist(); var s=AS();
   openSheet('<div class="bsheet on"><div class="bimg">'+(img('dove-advent','advolivia')||mascotHtml('big',null,'cheer')||'')+'</div><h3>'+esc(s.udvCim)+'</h3><p>'+esc(s.udv)+'</p>'+
     '<button type="button" class="primary" style="margin-top:14px" data-advudv>'+esc(s.udvGomb)+'</button><button type="button" class="secondary" style="margin-top:8px" data-closesheet>'+esc(s.udvKesobb)+'</button></div>','kozepsheet');
   return true; }
